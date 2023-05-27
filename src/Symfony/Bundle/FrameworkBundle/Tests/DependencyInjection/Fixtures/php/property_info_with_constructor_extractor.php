@@ -9,12 +9,4 @@ $container->loadFromExtension('framework', [
         'enabled' => true,
         'with_constructor_extractor' => true,
     ],
-    'validation' => [
-        'email_validation_mode' => 'html5',
-        'auto_mapping' => [
-            'App\\' => ['foo', 'bar'],
-            'Symfony\\' => ['a', 'b'],
-            'Foo\\',
-        ],
-    ],
 ]);
