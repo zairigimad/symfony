@@ -298,6 +298,7 @@
         <xsd:attribute name="enable-attributes" type="xsd:boolean" />
         <xsd:attribute name="static-method" type="xsd:boolean" />
         <xsd:attribute name="translation-domain" type="xsd:string" />
+        <xsd:attribute name="disable-translation" type="xsd:boolean" />
         <xsd:attribute name="strict-email" type="xsd:boolean" />
         <xsd:attribute name="email-validation-mode" type="email-validation-mode" />
     </xsd:complexType>

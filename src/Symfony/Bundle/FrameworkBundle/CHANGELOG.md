@@ -10,6 +10,7 @@ CHANGELOG
  * Add new `framework.property_info.with_constructor_extractor` option to allow enabling or disabling the constructor extractor integration
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
  * Add `RateLimiterFactoryInterface` as an alias of the `limiter` service
+ * Add `framework.validation.disable_translation` option
 
 7.2
 ---
