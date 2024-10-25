@@ -490,7 +490,7 @@ trait RedisTrait
                 continue;
             }
 
-            $cursor = null;
+            $cursor = 0;
             do {
                 $keys = $host instanceof \Predis\ClientInterface ? $host->scan($cursor, 'MATCH', $pattern, 'COUNT', 1000) : $host->scan($cursor, $pattern, 1000);
                 if (isset($keys[1]) && \is_array($keys[1])) {
