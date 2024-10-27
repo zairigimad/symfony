@@ -7,6 +7,29 @@ in 5.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v5.4.0...v5.4.1
 
+* 5.4.45 (2024-10-27)
+
+ * bug #58669 [Cache] Revert "Initialize RedisAdapter cursor to 0" (nicolas-grekas)
+ * bug #58649 [TwigBridge] ensure compatibility with Twig 3.15 (xabbuh)
+ * bug #58661 [Cache] Initialize RedisAdapter cursor to 0 (thomas-hiron)
+ * bug #58593 [Mime] fix encoding issue with UTF-8 addresses containing doubles spaces (0xb4lint)
+ * bug #58615 [Validator] [Choice] Fix callback option if not array returned (symfonyaml)
+ * bug #58618 [DependencyInjection] Fix linting factories implemented via __callStatic (KevinVanSonsbeek)
+ * bug #58619 [HttpFoundation][Lock] Ensure compatibility with ext-mongodb v2 (GromNaN)
+ * bug #58627 Minor fixes around `parse_url()` checks (nicolas-grekas)
+ * bug #58617 [DependencyInjection] Fix replacing abstract arguments with bindings (nicolas-grekas)
+ * bug #58613 Symfony 5.4 LTS will get security fixes until Feb 2029 thanks to Ibexa' sponsoring (nicolas-grekas)
+ * bug #58523 [DoctrineBridge] fix: DoctrineTokenProvider not oracle compatible (jjjb03)
+ * bug #58492 [MonologBridge] Fix PHP deprecation with `preg_match()` (simoheinonen)
+ * bug #58449 [Form] Support intl.use_exceptions/error_level in NumberToLocalizedStringTransformer (bram123)
+ * bug #58459 [FrameworkBundle] Fix displayed stack trace when session is used on stateless routes (nicolas-grekas)
+ * bug #58376 [HttpKernel] Correctly merge `max-age`/`s-maxage` and `Expires` headers (aschempp)
+ * bug #58299 [DependencyInjection] Fix `XmlFileLoader` not respecting when env for services (Bradley Zeggelaar)
+ * bug #58332 [Console] Suppress `proc_open` errors within `Terminal::readFromProcess` (fritzmg)
+ * bug #58404 [TwigBridge] Remove usage of `Node()` instantiations (fabpot)
+ * bug #58393 [Dotenv] Default value can be empty (HypeMC)
+ * bug #58372 Tweak error/exception handler registration (nicolas-grekas)
+
 * 5.4.44 (2024-09-21)
 
  * bug #58327 [FrameworkBundle] Do not access the container when the kernel is shut down (jderusse)
