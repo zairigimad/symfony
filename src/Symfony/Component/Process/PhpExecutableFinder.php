@@ -33,17 +33,16 @@ class PhpExecutableFinder
     {
         if ($php = getenv('PHP_BINARY')) {
             if (!is_executable($php)) {
-                if (!\function_exists('exec')) {
+                if (!\function_exists('exec') || \strlen($php) !== strcspn($php, '/'.\DIRECTORY_SEPARATOR)) {
                     return false;
                 }
 
-                $command = '\\' === \DIRECTORY_SEPARATOR ? 'where' : 'command -v --';
-                $execResult = exec($command.' '.escapeshellarg($php));
-                if ($php = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) {
-                    if (!is_executable($php)) {
-                        return false;
-                    }
-                } else {
+                $command = '\\' === \DIRECTORY_SEPARATOR ? 'where %s 2> NUL' : 'command -v -- %s';
+                $execResult = exec(\sprintf($command, escapeshellarg($php)));
+                if (!$php = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) {
+                    return false;
+                }
+                if (!is_executable($php)) {
                     return false;
                 }
             }

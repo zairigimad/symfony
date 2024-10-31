@@ -69,6 +69,9 @@ class ExecutableFinder
         $suffixes = array_merge($suffixes, $this->suffixes);
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
+                if ('' === $dir) {
+                    $dir = '.';
+                }
                 if (@is_file($file = $dir.\DIRECTORY_SEPARATOR.$name.$suffix) && ('\\' === \DIRECTORY_SEPARATOR || @is_executable($file))) {
                     return $file;
                 }
@@ -79,12 +82,12 @@ class ExecutableFinder
             }
         }
 
-        if (!\function_exists('exec')) {
+        if (!\function_exists('exec') || \strlen($name) !== strcspn($name, '/'.\DIRECTORY_SEPARATOR)) {
             return $default;
         }
 
-        $command = '\\' === \DIRECTORY_SEPARATOR ? 'where' : 'command -v --';
-        $execResult = @exec($command.' '.escapeshellarg($name));
+        $command = '\\' === \DIRECTORY_SEPARATOR ? 'where %s 2> NUL' : 'command -v -- %s';
+        $execResult = exec(\sprintf($command, escapeshellarg($name)));
 
         if (($executablePath = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) && @is_executable($executablePath)) {
             return $executablePath;
