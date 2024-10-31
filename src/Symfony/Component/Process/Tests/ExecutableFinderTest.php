@@ -111,6 +111,9 @@ class ExecutableFinderTest extends TestCase
         }
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testFindBatchExecutableOnWindows()
     {
         if (\ini_get('open_basedir')) {
@@ -136,6 +139,24 @@ class ExecutableFinderTest extends TestCase
         unlink($target.'.BAT');
 
         $this->assertSamePath($target.'.BAT', $result);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testEmptyDirInPath()
+    {
+        putenv(sprintf('PATH=%s:', \dirname(\PHP_BINARY)));
+
+        touch('executable');
+        chmod('executable', 0700);
+
+        $finder = new ExecutableFinder();
+        $result = $finder->find('executable');
+
+        $this->assertSame('./executable', $result);
+
+        unlink('executable');
     }
 
     private function assertSamePath($expected, $tested)

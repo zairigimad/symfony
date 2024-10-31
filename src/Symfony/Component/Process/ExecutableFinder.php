@@ -60,6 +60,9 @@ class ExecutableFinder
         }
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
+                if ('' === $dir) {
+                    $dir = '.';
+                }
                 if (@is_file($file = $dir.\DIRECTORY_SEPARATOR.$name.$suffix) && ('\\' === \DIRECTORY_SEPARATOR || @is_executable($file))) {
                     return $file;
                 }
