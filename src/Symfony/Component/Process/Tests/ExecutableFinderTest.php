@@ -157,7 +157,7 @@ class ExecutableFinderTest extends TestCase
             $finder = new ExecutableFinder();
             $result = $finder->find('executable');
 
-            $this->assertSame('./executable', $result);
+            $this->assertSame(sprintf('.%sexecutable', \DIRECTORY_SEPARATOR), $result);
         } finally {
             unlink('executable');
         }
