@@ -125,18 +125,20 @@ class ExecutableFinderTest extends TestCase
 
         $target = tempnam(sys_get_temp_dir(), 'example-windows-executable');
 
-        touch($target);
-        touch($target.'.BAT');
+        try {
+            touch($target);
+            touch($target.'.BAT');
 
-        $this->assertFalse(is_executable($target));
+            $this->assertFalse(is_executable($target));
 
-        putenv('PATH='.sys_get_temp_dir());
+            putenv('PATH='.sys_get_temp_dir());
 
-        $finder = new ExecutableFinder();
-        $result = $finder->find(basename($target), false);
-
-        unlink($target);
-        unlink($target.'.BAT');
+            $finder = new ExecutableFinder();
+            $result = $finder->find(basename($target), false);
+        } finally {
+            unlink($target);
+            unlink($target.'.BAT');
+        }
 
         $this->assertSamePath($target.'.BAT', $result);
     }
@@ -148,15 +150,17 @@ class ExecutableFinderTest extends TestCase
     {
         putenv(sprintf('PATH=%s:', \dirname(\PHP_BINARY)));
 
-        touch('executable');
-        chmod('executable', 0700);
+        try {
+            touch('executable');
+            chmod('executable', 0700);
 
-        $finder = new ExecutableFinder();
-        $result = $finder->find('executable');
+            $finder = new ExecutableFinder();
+            $result = $finder->find('executable');
 
-        $this->assertSame('./executable', $result);
-
-        unlink('executable');
+            $this->assertSame('./executable', $result);
+        } finally {
+            unlink('executable');
+        }
     }
 
     public function testFindBuiltInCommandOnWindows()
