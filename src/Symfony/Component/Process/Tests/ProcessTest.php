@@ -1692,6 +1692,17 @@ class ProcessTest extends TestCase
         $this->assertSame(\SIGTERM, $process->getTermSignal());
     }
 
+    public function testPathResolutionOnWindows()
+    {
+        if ('\\' !== \DIRECTORY_SEPARATOR) {
+            $this->markTestSkipped('This test is for Windows platform only');
+        }
+
+        $process = $this->getProcess(['where']);
+
+        $this->assertSame('C:\\Windows\\system32\\where.EXE', $process->getCommandLine());
+    }
+
     private function getProcess(string|array $commandline, ?string $cwd = null, ?array $env = null, mixed $input = null, ?int $timeout = 60): Process
     {
         if (\is_string($commandline)) {
