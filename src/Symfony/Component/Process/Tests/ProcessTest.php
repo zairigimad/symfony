@@ -1436,7 +1436,12 @@ class ProcessTest extends TestCase
     {
         $p = new Process(['/usr/bin/php']);
 
-        $expected = '\\' === \DIRECTORY_SEPARATOR ? '"/usr/bin/php"' : "'/usr/bin/php'";
+        $expected = '\\' === \DIRECTORY_SEPARATOR ? '/usr/bin/php' : "'/usr/bin/php'";
+        $this->assertSame($expected, $p->getCommandLine());
+
+        $p = new Process(['cd', '/d']);
+
+        $expected = '\\' === \DIRECTORY_SEPARATOR ? 'cd /d' : "'cd' '/d'";
         $this->assertSame($expected, $p->getCommandLine());
     }
 
