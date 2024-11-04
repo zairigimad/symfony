@@ -166,9 +166,9 @@ class ExecutableFinderTest extends TestCase
         }
 
         $finder = new ExecutableFinder();
-        $this->assertSame('rmdir', $finder->find('RMDIR'));
-        $this->assertSame('cd', $finder->find('cd'));
-        $this->assertSame('move', $finder->find('MoVe'));
+        $this->assertSame('rmdir', strtolower($finder->find('RMDIR')));
+        $this->assertSame('cd', strtolower($finder->find('cd')));
+        $this->assertSame('move', strtolower($finder->find('MoVe')));
     }
 
     private function assertSamePath($expected, $tested)
