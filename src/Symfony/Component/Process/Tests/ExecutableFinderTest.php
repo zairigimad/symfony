@@ -146,7 +146,7 @@ class ExecutableFinderTest extends TestCase
      */
     public function testEmptyDirInPath()
     {
-        putenv(sprintf('PATH=%s:', \dirname(\PHP_BINARY)));
+        putenv(sprintf('PATH=%s%s', \dirname(\PHP_BINARY), \PATH_SEPARATOR));
 
         touch('executable');
         chmod('executable', 0700);
