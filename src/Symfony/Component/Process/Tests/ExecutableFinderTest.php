@@ -159,6 +159,18 @@ class ExecutableFinderTest extends TestCase
         unlink('executable');
     }
 
+    public function testFindBuiltInCommandOnWindows()
+    {
+        if ('\\' !== \DIRECTORY_SEPARATOR) {
+            $this->markTestSkipped('Can be only tested on windows');
+        }
+
+        $finder = new ExecutableFinder();
+        $this->assertSame('rmdir', $finder->find('RMDIR'));
+        $this->assertSame('cd', $finder->find('cd'));
+        $this->assertSame('move', $finder->find('MoVe'));
+    }
+
     private function assertSamePath($expected, $tested)
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
