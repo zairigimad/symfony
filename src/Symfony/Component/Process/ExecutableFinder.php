@@ -29,14 +29,6 @@ class ExecutableFinder
 
     private array $suffixes = [];
 
-    public function __construct()
-    {
-        // Set common extensions on Windows.
-        if ('\\' === \DIRECTORY_SEPARATOR) {
-            $this->suffixes = ['.exe', '.bat', '.cmd', '.com'];
-        }
-    }
-
     /**
      * Replaces default suffixes of executable.
      */
@@ -75,11 +67,12 @@ class ExecutableFinder
             $extraDirs
         );
 
-        $suffixes = [''];
-        if ('\\' === \DIRECTORY_SEPARATOR && $pathExt = getenv('PATHEXT')) {
-            $suffixes = array_merge(explode(\PATH_SEPARATOR, $pathExt), $suffixes);
+        $suffixes = $this->suffixes;
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            $pathExt = getenv('PATHEXT');
+            $suffixes = array_merge($suffixes, $pathExt ? explode(\PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com']);
         }
-        $suffixes = array_merge($suffixes, $this->suffixes);
+        $suffixes = '' !== pathinfo($name, PATHINFO_EXTENSION) ? array_merge([''], $suffixes) : array_merge($suffixes, ['']);
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
                 if ('' === $dir) {
@@ -95,12 +88,11 @@ class ExecutableFinder
             }
         }
 
-        if (!\function_exists('exec') || \strlen($name) !== strcspn($name, '/'.\DIRECTORY_SEPARATOR)) {
+        if ('\\' === \DIRECTORY_SEPARATOR || !\function_exists('exec') || \strlen($name) !== strcspn($name, '/'.\DIRECTORY_SEPARATOR)) {
             return $default;
         }
 
-        $command = '\\' === \DIRECTORY_SEPARATOR ? 'where %s 2> NUL' : 'command -v -- %s';
-        $execResult = exec(\sprintf($command, escapeshellarg($name)));
+        $execResult = exec('command -v -- '.escapeshellarg($name));
 
         if (($executablePath = substr($execResult, 0, strpos($execResult, \PHP_EOL) ?: null)) && @is_executable($executablePath)) {
             return $executablePath;
