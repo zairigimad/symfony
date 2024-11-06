@@ -7,6 +7,32 @@ in 7.2 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.2.0...v7.2.1
 
+* 7.2.0-BETA2 (2024-11-06)
+
+ * bug #58776 [DependencyInjection][HttpClient][Routing] Reject URIs that contain invalid characters (nicolas-grekas)
+ * bug #58772 [DoctrineBridge] Backport detection fix of Xml/Yaml driver in DoctrineExtension (MatTheCat)
+ * bug #58706 [TwigBridge] use reproducible variable names in the default domain node visitor (xabbuh)
+ * security #cve-2024-51736 [Process] Use PATH before CD to load the shell on Windows (nicolas-grekas)
+ * security #cve-2024-50342 [HttpClient] Filter private IPs before connecting when Host == IP (nicolas-grekas)
+ * security #cve-2024-50345 [HttpFoundation] Reject URIs that contain invalid characters (nicolas-grekas)
+ * security #cve-2024-50340 [Runtime] Do not read from argv on non-CLI SAPIs (wouterj)
+ * bug #58765 [VarDumper] fix detecting anonymous exception classes on Windows and PHP 7 (xabbuh)
+ * bug #58757 [RateLimiter] Fix DateInterval normalization (danydev)
+ * bug #58764 [Mime] Don't require passing the encoder name to `TextPart` (javiereguiluz)
+ * bug #58712 [HttpFoundation] Fix support for `\SplTempFileObject` in `BinaryFileResponse` (elementaire)
+ * bug #58762 [WebProfilerBundle] re-add missing profiler shortcuts on profiler homepage (xabbuh)
+ * bug #58754 [Security] Store original token in token storage when implicitly exiting impersonation (wouterj)
+ * bug #58753 [Cache] Fix clear() when using Predis (nicolas-grekas)
+ * bug #58713 [Config] Handle Phar absolute path in `FileLocator` (alexandre-daubois)
+ * bug #58728 [WebProfilerBundle] Re-add missing Profiler shortcuts on Profiler homepage (welcoMattic)
+ * bug #58739 [WebProfilerBoundle] form data collector check passed and resolved options are defined (vltrof)
+ * bug #58752 [Process] Fix escaping /X arguments on Windows (nicolas-grekas)
+ * bug #58735 [Process] Return built-in cmd.exe commands directly in ExecutableFinder (Seldaek)
+ * bug #58723 [Process] Properly deal with not-found executables on Windows (nicolas-grekas)
+ * bug #58711 [Process] Fix handling empty path found in the PATH env var with ExecutableFinder (nicolas-grekas)
+ * bug #58704 [HttpClient] fix for HttpClientDataCollector fails if proc_open is disabled via php.ini (ZaneCEO)
+ * bug #58703 [TwigBridge] Use INTERNAL_VAR_NAME instead of getVarName (pan93412)
+
 * 7.2.0-BETA1 (2024-10-27)
 
  * feature #58467 [PhpUnitBridge] support `ClockMock` and `DnsMock` with PHPUnit 10+ (xabbuh)
