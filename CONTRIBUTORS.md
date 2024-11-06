@@ -853,6 +853,7 @@ The Symfony Connect username in parenthesis allows to get more information
  - Robert-Jan de Dreu
  - Fabrice Bernhard (fabriceb)
  - Matthijs van den Bos (matthijs)
+ - Markus S. (staabm)
  - Bhavinkumar Nakrani (bhavin4u)
  - Jaik Dean (jaikdean)
  - Krzysztof Piasecki (krzysztek)
@@ -946,6 +947,7 @@ The Symfony Connect username in parenthesis allows to get more information
  - Julien Boudry
  - vitaliytv
  - Franck RANAIVO-HARISOA (franckranaivo)
+ - Yi-Jyun Pan
  - Egor Taranov
  - Andreas Hennings
  - Arnaud Frézet
@@ -1474,7 +1476,6 @@ The Symfony Connect username in parenthesis allows to get more information
  - Marcos Gómez Vilches (markitosgv)
  - Matthew Davis (mdavis1982)
  - Paulo Ribeiro (paulo)
- - Markus S. (staabm)
  - Marc Laporte
  - Michał Jusięga
  - Kay Wei
@@ -1544,7 +1545,6 @@ The Symfony Connect username in parenthesis allows to get more information
  - Mihail Krasilnikov (krasilnikovm)
  - Uladzimir Tsykun
  - iamvar
- - Yi-Jyun Pan
  - Amaury Leroux de Lens (amo__)
  - Rene de Lima Barbosa (renedelima)
  - Christian Jul Jensen
@@ -1615,6 +1615,7 @@ The Symfony Connect username in parenthesis allows to get more information
  - ttomor
  - Mei Gwilym (meigwilym)
  - Michael H. Arieli
+ - Miloš Milutinović
  - Jitendra Adhikari (adhocore)
  - Nicolas Martin (cocorambo)
  - Tom Panier (neemzy)
@@ -2941,6 +2942,7 @@ The Symfony Connect username in parenthesis allows to get more information
  - Walther Lalk
  - Adam
  - Ivo
+ - vltrof
  - Ismo Vuorinen
  - Markus Staab
  - Valentin
@@ -3588,10 +3590,12 @@ The Symfony Connect username in parenthesis allows to get more information
  - Sean Templeton
  - Willem Mouwen
  - db306
+ - Dr. Gianluigi &quot;Zane&quot; Zanettini
  - Michaël VEROUX
  - Julia
  - Lin Lu
  - arduanov
+ - Valmonzo
  - sualko
  - Marc Bennewitz
  - Fabien
