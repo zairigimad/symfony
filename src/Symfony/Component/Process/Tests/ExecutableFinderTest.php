@@ -123,7 +123,7 @@ class ExecutableFinderTest extends TestCase
             $this->markTestSkipped('Can be only tested on windows');
         }
 
-        $target = tempnam(sys_get_temp_dir(), 'example-windows-executable');
+        $target = str_replace('.tmp', '_tmp', tempnam(sys_get_temp_dir(), 'example-windows-executable'));
 
         try {
             touch($target);
