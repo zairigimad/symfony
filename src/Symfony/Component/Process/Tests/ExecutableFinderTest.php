@@ -123,7 +123,8 @@ class ExecutableFinderTest extends TestCase
             $this->markTestSkipped('Can be only tested on windows');
         }
 
-        $target = str_replace('.tmp', '_tmp', tempnam(sys_get_temp_dir(), 'example-windows-executable'));
+        $tempDir = realpath(sys_get_temp_dir());
+        $target = str_replace('.tmp', '_tmp', tempnam($tempDir, 'example-windows-executable'));
 
         try {
             touch($target);
@@ -131,7 +132,7 @@ class ExecutableFinderTest extends TestCase
 
             $this->assertFalse(is_executable($target));
 
-            putenv('PATH='.sys_get_temp_dir());
+            putenv('PATH='.$tempDir);
 
             $finder = new ExecutableFinder();
             $result = $finder->find(basename($target), false);
