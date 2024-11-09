@@ -121,7 +121,21 @@ class Connection
             return $redis;
         }
 
-        $redis->connect($host, $port);
+        @$redis->connect($host, $port);
+
+        $error = null;
+        set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+
+        try {
+            $isConnected = $redis->isConnected();
+        } finally {
+            restore_error_handler();
+        }
+
+        if (!$isConnected) {
+            throw new InvalidArgumentException('Redis connection failed: '.(preg_match('/^Redis::p?connect\(\): (.*)/', $error ?? $redis->getLastError() ?? '', $matches) ? \sprintf(' (%s)', $matches[1]) : ''));
+        }
+
         $redis->setOption(\Redis::OPT_SERIALIZER, $serializer);
 
         if (null !== $auth && !$redis->auth($auth)) {
