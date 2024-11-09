@@ -33,7 +33,7 @@ $typeResolver->resolve('bool'); // returns a "bool" Type instance
 $type = Type::list(Type::nullable(Type::bool()));
 
 // Type instances have several helper methods
-$type->getBaseType() // returns an "array" Type instance
+$type->getBaseType(); // returns an "array" Type instance
 $type->getCollectionKeyType(); // returns an "int" Type instance
 $type->getCollectionValueType()->isNullable(); // returns true
 ```
