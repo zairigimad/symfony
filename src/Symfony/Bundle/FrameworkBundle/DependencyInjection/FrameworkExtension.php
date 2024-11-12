@@ -219,6 +219,10 @@ class FrameworkExtension extends Extension
             throw new \LogicException('Requiring the "symfony/symfony" package is unsupported; replace it with standalone components instead.');
         }
 
+        if (!ContainerBuilder::willBeAvailable('symfony/validator', Validation::class, ['symfony/framework-bundle', 'symfony/form'])) {
+            $container->setParameter('validator.translation_domain', 'validators');
+        }
+
         $loader->load('web.php');
         $loader->load('services.php');
         $loader->load('fragment_renderer.php');
@@ -479,8 +483,6 @@ class FrameworkExtension extends Extension
             if (ContainerBuilder::willBeAvailable('symfony/validator', Validation::class, ['symfony/framework-bundle', 'symfony/form'])) {
                 $this->writeConfigEnabled('validation', true, $config['validation']);
             } else {
-                $container->setParameter('validator.translation_domain', 'validators');
-
                 $container->removeDefinition('form.type_extension.form.validator');
                 $container->removeDefinition('form.type_guesser.validator');
             }
