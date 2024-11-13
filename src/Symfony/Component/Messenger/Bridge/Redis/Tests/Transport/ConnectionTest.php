@@ -106,7 +106,7 @@ class ConnectionTest extends TestCase
 
         $this->assertEquals(
             Connection::fromDsn('redis://localhost/queue/group1/consumer1', ['consumer' => 'specific-consumer'], $this->createRedisMock()),
-            Connection::fromDsn('redis://localhost/queue/group1/consumer1', [], $this->createRedisMock()))
+            Connection::fromDsn('redis://localhost/queue/group1/consumer1', [], $this->createRedisMock())
         );
     }
 
@@ -439,8 +439,7 @@ class ConnectionTest extends TestCase
                 'delete_after_ack' => true,
                 'host' => '/var/run/redis/redis.sock',
                 'port' => 0,
-                'user' => 'user',
-                'pass' => 'password',
+                'auth' => ['user', 'password'],
             ], $redis),
             Connection::fromDsn('redis://user:password@/var/run/redis/redis.sock', ['stream' => 'queue', 'delete_after_ack' => true], $redis)
         );
@@ -460,7 +459,7 @@ class ConnectionTest extends TestCase
                 'delete_after_ack' => true,
                 'host' => '/var/run/redis/redis.sock',
                 'port' => 0,
-                'pass' => 'password',
+                'auth' => 'password',
             ], $redis),
             Connection::fromDsn('redis://password@/var/run/redis/redis.sock', ['stream' => 'queue', 'delete_after_ack' => true], $redis)
         );
@@ -480,7 +479,7 @@ class ConnectionTest extends TestCase
                 'delete_after_ack' => true,
                 'host' => '/var/run/redis/redis.sock',
                 'port' => 0,
-                'user' => 'user',
+                'auth' => 'user',
             ], $redis),
             Connection::fromDsn('redis://user:@/var/run/redis/redis.sock', ['stream' => 'queue', 'delete_after_ack' => true], $redis)
         );
@@ -494,7 +493,7 @@ class ConnectionTest extends TestCase
             ->willReturn(true);
         $redis->expects($this->any())
             ->method('isConnected')
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnOnConsecutiveCalls(false, true, true);
 
         return $redis;
     }
