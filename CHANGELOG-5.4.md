@@ -7,6 +7,14 @@ in 5.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v5.4.0...v5.4.1
 
+* 5.4.47 (2024-11-13)
+
+ * security #cve-2024-50342 [HttpClient] Resolve hostnames in NoPrivateNetworkHttpClient (nicolas-grekas)
+ * security #cve-2024-51996 [Security] Check owner of persisted remember-me cookie (jderusse)
+ * bug #58799 [String] Fix some spellings in `EnglishInflector` (alexandre-daubois)
+ * bug #58791 [RateLimiter] handle error results of DateTime::modify() (xabbuh)
+ * bug #58800 [PropertyInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+
 * 5.4.46 (2024-11-06)
 
  * bug #58772 [DoctrineBridge] Backport detection fix of Xml/Yaml driver in DoctrineExtension (MatTheCat)
