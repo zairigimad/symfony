@@ -92,7 +92,7 @@ class ConnectionTest extends TestCase
                 'host' => 'localhost',
                 'port' => 6379,
                 'serializer' => 2,
-            ], $this->createRedisMock(),
+            ], $this->createRedisMock()),
             Connection::fromDsn('redis://localhost/queue/group1/consumer1?serializer=2', [], $this->createRedisMock())
         );
     }
