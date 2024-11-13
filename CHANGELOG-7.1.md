@@ -7,6 +7,22 @@ in 7.1 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.1.0...v7.1.1
 
+* 7.1.8 (2024-11-13)
+
+ * security #cve-2024-50342 [HttpClient] Resolve hostnames in NoPrivateNetworkHttpClient (nicolas-grekas)
+ * security #cve-2024-51996 [Security] Check owner of persisted remember-me cookie (jderusse)
+ * bug #58799 [String] Fix some spellings in `EnglishInflector` (alexandre-daubois)
+ * bug #58823 [TwigBridge] Fix emojify as function in Undefined Handler (smnandre)
+ * bug #56868 [Serializer] fixed object normalizer for a class with `cancel` method (er1z)
+ * bug #58601 [RateLimiter] Fix bucket size reduced when previously created with bigger size (Orkin)
+ * bug #58659 [AssetMapper] Fix `JavaScriptImportPathCompiler` regex for non-latin characters (GregRbs92)
+ * bug #58658 [Twitter][Notifier] Fix post INIT upload (matyo91)
+ * bug #58705 [Serializer] Revert Default groups (mtarld)
+ * bug #58763 [Messenger][RateLimiter] fix additional message handled when using a rate limiter (Jean-Beru)
+ * bug #58791 [RateLimiter] handle error results of DateTime::modify() (xabbuh)
+ * bug #58804 [Serializer][TypeInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+ * bug #58800 [PropertyInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+
 * 7.1.7 (2024-11-06)
 
  * bug #58772 [DoctrineBridge] Backport detection fix of Xml/Yaml driver in DoctrineExtension (MatTheCat)
