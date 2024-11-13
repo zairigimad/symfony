@@ -38,9 +38,9 @@ use PHPStan\PhpDocParser\ParserConfig;
 use Symfony\Component\TypeInfo\Exception\InvalidArgumentException;
 use Symfony\Component\TypeInfo\Exception\UnsupportedException;
 use Symfony\Component\TypeInfo\Type;
+use Symfony\Component\TypeInfo\Type\BuiltinType;
 use Symfony\Component\TypeInfo\Type\CollectionType;
 use Symfony\Component\TypeInfo\Type\GenericType;
-use Symfony\Component\TypeInfo\Type\ObjectType;
 use Symfony\Component\TypeInfo\TypeContext\TypeContext;
 use Symfony\Component\TypeInfo\TypeIdentifier;
 
@@ -93,6 +93,8 @@ final class StringTypeResolver implements TypeResolverInterface
 
     private function getTypeFromNode(TypeNode $node, ?TypeContext $typeContext): Type
     {
+        $typeIsCollectionObject = fn (Type $type): bool => $type->isIdentifiedBy(\Traversable::class) || $type->isIdentifiedBy(\ArrayAccess::class);
+
         if ($node instanceof CallableTypeNode) {
             return Type::callable();
         }
@@ -170,7 +172,7 @@ final class StringTypeResolver implements TypeResolverInterface
                 default => $this->resolveCustomIdentifier($node->name, $typeContext),
             };
 
-            if ($type instanceof ObjectType && (is_a($type->getClassName(), \Traversable::class, true) || is_a($type->getClassName(), \ArrayAccess::class, true))) {
+            if ($typeIsCollectionObject($type)) {
                 return Type::collection($type);
             }
 
@@ -185,7 +187,7 @@ final class StringTypeResolver implements TypeResolverInterface
             $type = $this->getTypeFromNode($node->type, $typeContext);
 
             // handle integer ranges as simple integers
-            if ($type->isA(TypeIdentifier::INT)) {
+            if ($type->isIdentifiedBy(TypeIdentifier::INT)) {
                 return $type;
             }
 
@@ -194,10 +196,10 @@ final class StringTypeResolver implements TypeResolverInterface
             if ($type instanceof CollectionType) {
                 $asList = $type->isList();
                 $keyType = $type->getCollectionKeyType();
+                $type = $type->getWrappedType();
 
-                $type = $type->getType();
                 if ($type instanceof GenericType) {
-                    $type = $type->getType();
+                    $type = $type->getWrappedType();
                 }
 
                 if (1 === \count($variableTypes)) {
@@ -207,12 +209,16 @@ final class StringTypeResolver implements TypeResolverInterface
                 }
             }
 
-            if ($type instanceof ObjectType && (is_a($type->getClassName(), \Traversable::class, true) || is_a($type->getClassName(), \ArrayAccess::class, true))) {
+            if ($typeIsCollectionObject($type)) {
                 return match (\count($variableTypes)) {
                     1 => Type::collection($type, $variableTypes[0]),
                     2 => Type::collection($type, $variableTypes[1], $variableTypes[0]),
                     default => Type::collection($type),
                 };
+            }
+
+            if ($type instanceof BuiltinType && $type->getTypeIdentifier() !== TypeIdentifier::ARRAY && $type->getTypeIdentifier() !== TypeIdentifier::ITERABLE) {
+                return $type;
             }
 
             return Type::generic($type, ...$variableTypes);
