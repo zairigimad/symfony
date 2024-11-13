@@ -7,6 +7,25 @@ in 7.2 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.2.0...v7.2.1
 
+* 7.2.0-RC1 (2024-11-13)
+
+ * feature #58852 [TypeInfo] Remove ``@experimental`` tag (mtarld)
+ * feature #57630 [TypeInfo] Redesign Type methods and nullability (mtarld)
+ * security #cve-2024-50342 [HttpClient] Resolve hostnames in NoPrivateNetworkHttpClient (nicolas-grekas)
+ * security #cve-2024-51996 [Security] Check owner of persisted remember-me cookie (jderusse)
+ * bug #58799 [String] Fix some spellings in `EnglishInflector` (alexandre-daubois)
+ * bug #58823 [TwigBridge] Fix emojify as function in Undefined Handler (smnandre)
+ * bug #56868 [Serializer] fixed object normalizer for a class with `cancel` method (er1z)
+ * feature #58483 [Messenger] Extend SQS visibility timeout for messages that are still being processed (valtzu)
+ * bug #58601 [RateLimiter] Fix bucket size reduced when previously created with bigger size (Orkin)
+ * bug #58659 [AssetMapper] Fix `JavaScriptImportPathCompiler` regex for non-latin characters (GregRbs92)
+ * bug #58658 [Twitter][Notifier] Fix post INIT upload (matyo91)
+ * bug #58705 [Serializer] Revert Default groups (mtarld)
+ * bug #58763 [Messenger][RateLimiter] fix additional message handled when using a rate limiter (Jean-Beru)
+ * bug #58791 [RateLimiter] handle error results of DateTime::modify() (xabbuh)
+ * bug #58804 [Serializer][TypeInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+ * bug #58800 [PropertyInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+
 * 7.2.0-BETA2 (2024-11-06)
 
  * bug #58776 [DependencyInjection][HttpClient][Routing] Reject URIs that contain invalid characters (nicolas-grekas)
