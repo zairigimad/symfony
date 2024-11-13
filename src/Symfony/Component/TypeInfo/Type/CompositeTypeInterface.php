@@ -19,8 +19,6 @@ use Symfony\Component\TypeInfo\Type;
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
  *
  * @template T of Type
- *
- * @experimental
  */
 interface CompositeTypeInterface
 {

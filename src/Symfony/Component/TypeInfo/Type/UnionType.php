@@ -22,8 +22,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  * @template T of Type
  *
  * @implements CompositeTypeInterface<T>
- *
- * @experimental
  */
 class UnionType extends Type implements CompositeTypeInterface
 {

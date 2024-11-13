@@ -22,8 +22,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  *
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>
- *
- * @internal
  */
 final class ReflectionTypeResolver implements TypeResolverInterface
 {

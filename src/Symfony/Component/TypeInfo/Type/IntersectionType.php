@@ -21,8 +21,6 @@ use Symfony\Component\TypeInfo\Type;
  * @template T of ObjectType|GenericType<ObjectType>|CollectionType<GenericType<ObjectType>>
  *
  * @implements CompositeTypeInterface<T>
- *
- * @experimental
  */
 final class IntersectionType extends Type implements CompositeTypeInterface
 {

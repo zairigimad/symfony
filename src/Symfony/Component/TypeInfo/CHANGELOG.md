@@ -12,6 +12,8 @@ CHANGELOG
  * Remove `Type::getBaseType()`, `Type::asNonNullable()` and `Type::__call()` methods
  * Remove `CompositeTypeTrait`
  * Add `PhpDocAwareReflectionTypeResolver` resolver
+ * The type resolvers are not marked as `@internal` anymore
+ * The component is not marked as `@experimental` anymore
 
 7.1
 ---

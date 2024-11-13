@@ -19,8 +19,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  *
  * @template T of TypeIdentifier
- *
- * @experimental
  */
 final class BuiltinType extends Type
 {

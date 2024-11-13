@@ -19,8 +19,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  *
  * @template T of class-string
- *
- * @experimental
  */
 class ObjectType extends Type
 {

@@ -29,8 +29,6 @@ use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
  * Resolves type on reflection prioriziting PHP documentation.
  *
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
- *
- * @internal
  */
 final readonly class PhpDocAwareReflectionTypeResolver implements TypeResolverInterface
 {

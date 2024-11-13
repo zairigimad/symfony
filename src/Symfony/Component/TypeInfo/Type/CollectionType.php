@@ -24,8 +24,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  * @template T of BuiltinType<TypeIdentifier::ARRAY>|BuiltinType<TypeIdentifier::ITERABLE>|ObjectType|GenericType
  *
  * @implements WrappingTypeInterface<T>
- *
- * @experimental
  */
 final class CollectionType extends Type implements WrappingTypeInterface
 {

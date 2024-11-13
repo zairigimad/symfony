@@ -23,8 +23,6 @@ use Symfony\Component\TypeInfo\TypeIdentifier;
  * @extends UnionType<T|BuiltinType<TypeIdentifier::NULL>>
  *
  * @implements WrappingTypeInterface<T>
- *
- * @experimental
  */
 final class NullableType extends UnionType implements WrappingTypeInterface
 {
