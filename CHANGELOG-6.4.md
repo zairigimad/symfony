@@ -7,6 +7,19 @@ in 6.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v6.4.0...v6.4.1
 
+* 6.4.15 (2024-11-13)
+
+ * security #cve-2024-50342 [HttpClient] Resolve hostnames in NoPrivateNetworkHttpClient (nicolas-grekas)
+ * security #cve-2024-51996 [Security] Check owner of persisted remember-me cookie (jderusse)
+ * bug #58799 [String] Fix some spellings in `EnglishInflector` (alexandre-daubois)
+ * bug #56868 [Serializer] fixed object normalizer for a class with `cancel` method (er1z)
+ * bug #58601 [RateLimiter] Fix bucket size reduced when previously created with bigger size (Orkin)
+ * bug #58659 [AssetMapper] Fix `JavaScriptImportPathCompiler` regex for non-latin characters (GregRbs92)
+ * bug #58658 [Twitter][Notifier] Fix post INIT upload (matyo91)
+ * bug #58763 [Messenger][RateLimiter] fix additional message handled when using a rate limiter (Jean-Beru)
+ * bug #58791 [RateLimiter] handle error results of DateTime::modify() (xabbuh)
+ * bug #58800 [PropertyInfo] fix support for phpstan/phpdoc-parser 2 (xabbuh)
+
 * 6.4.14 (2024-11-06)
 
  * bug #58772 [DoctrineBridge] Backport detection fix of Xml/Yaml driver in DoctrineExtension (MatTheCat)
