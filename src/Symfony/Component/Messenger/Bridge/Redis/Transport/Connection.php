@@ -130,7 +130,7 @@ class Connection
                         }
 
                         try {
-                            if (\extension_loaded('redis') && version_compare(phpversion('redis'), '6.0.0', '>=')) {
+                            if (\extension_loaded('redis') && version_compare(phpversion('redis'), '6.0.0-dev', '>=')) {
                                 $params = [
                                     'host' => $host,
                                     'port' => $port,
