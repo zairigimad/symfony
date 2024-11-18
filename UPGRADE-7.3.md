@@ -191,3 +191,8 @@ VarDumper
 
  * Deprecate `ResourceCaster::castCurl()`, `ResourceCaster::castGd()` and `ResourceCaster::castOpensslX509()`
  * Mark all casters as `@internal`
+
+AssetMapper
+-----------
+
+ * `ImportMapRequireCommand` now takes `projectDir` as a required third constructor argument
