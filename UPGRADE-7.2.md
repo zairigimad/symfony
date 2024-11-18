@@ -112,6 +112,15 @@ TwigBridge
 
  * Deprecate passing a tag to the constructor of `FormThemeNode`
 
+TypeInfo
+--------
+
+ * Rename `Type::isA()` to `Type::isIdentifiedBy()` and `Type::is()` to `Type::isSatisfiedBy()`
+ * Remove `Type::__call()`
+ * Remove `Type::getBaseType()`, use `WrappingTypeInterface::getWrappedType()` instead
+ * Remove `Type::asNonNullable()`, use `NullableType::getWrappedType()` instead
+ * Remove `CompositeTypeTrait`
+
 Webhook
 -------
 
