@@ -278,6 +278,19 @@ class FrameworkExtension extends Extension
         $this->readConfigEnabled('profiler', $container, $config['profiler']);
         $this->readConfigEnabled('workflows', $container, $config['workflows']);
 
+        // csrf depends on session or stateless token ids being registered
+        if (null === $config['csrf_protection']['enabled']) {
+            $this->writeConfigEnabled('csrf_protection', ($config['csrf_protection']['stateless_token_ids'] || $this->readConfigEnabled('session', $container, $config['session'])) && !class_exists(FullStack::class) && ContainerBuilder::willBeAvailable('symfony/security-csrf', CsrfTokenManagerInterface::class, ['symfony/framework-bundle']), $config['csrf_protection']);
+        }
+
+        if (null === $config['form']['enabled']) {
+            $this->writeConfigEnabled('form', !class_exists(FullStack::class) && ContainerBuilder::willBeAvailable('symfony/form', Form::class, ['symfony/framework-bundle']), $config['form']);
+        }
+
+        if (null === $config['form']['csrf_protection']['enabled']) {
+            $this->writeConfigEnabled('form.csrf_protection', $config['csrf_protection']['enabled'], $config['form']['csrf_protection']);
+        }
+
         // A translator must always be registered (as support is included by
         // default in the Form and Validator component). If disabled, an identity
         // translator will be used and everything will still work as expected.
@@ -466,10 +479,6 @@ class FrameworkExtension extends Extension
             $container->removeDefinition('test.session.listener');
         }
 
-        // csrf depends on session being registered
-        if (null === $config['csrf_protection']['enabled']) {
-            $this->writeConfigEnabled('csrf_protection', $config['csrf_protection']['stateless_token_ids'] || $this->readConfigEnabled('session', $container, $config['session']) && !class_exists(FullStack::class) && ContainerBuilder::willBeAvailable('symfony/security-csrf', CsrfTokenManagerInterface::class, ['symfony/framework-bundle']), $config['csrf_protection']);
-        }
         $this->registerSecurityCsrfConfiguration($config['csrf_protection'], $container, $loader);
 
         // form depends on csrf being registered
@@ -753,10 +762,6 @@ class FrameworkExtension extends Extension
     private function registerFormConfiguration(array $config, ContainerBuilder $container, PhpFileLoader $loader): void
     {
         $loader->load('form.php');
-
-        if (null === $config['form']['csrf_protection']['enabled']) {
-            $this->writeConfigEnabled('form.csrf_protection', $config['csrf_protection']['enabled'], $config['form']['csrf_protection']);
-        }
 
         if ($this->readConfigEnabled('form.csrf_protection', $container, $config['form']['csrf_protection'])) {
             if (!$container->hasDefinition('security.csrf.token_generator')) {

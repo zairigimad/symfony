@@ -10,7 +10,7 @@
         <framework:enabled-locale>fr</framework:enabled-locale>
         <framework:enabled-locale>en</framework:enabled-locale>
         <framework:csrf-protection />
-        <framework:form>
+        <framework:form enabled="true">
             <framework:csrf-protection field-name="_csrf"/>
         </framework:form>
         <framework:esi enabled="true" />

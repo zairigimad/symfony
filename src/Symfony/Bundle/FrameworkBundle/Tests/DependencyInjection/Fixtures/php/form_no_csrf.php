@@ -6,6 +6,7 @@ $container->loadFromExtension('framework', [
     'handle_all_throwables' => true,
     'php_errors' => ['log' => true],
     'form' => [
+        'enabled' => true,
         'csrf_protection' => [
             'enabled' => false,
         ],
