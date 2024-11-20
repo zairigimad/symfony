@@ -6,7 +6,6 @@ $container->loadFromExtension('framework', [
     'enabled_locales' => ['fr', 'en'],
     'csrf_protection' => true,
     'form' => [
-        'enabled' => true,
         'csrf_protection' => [
             'field_name' => '_csrf',
         ],

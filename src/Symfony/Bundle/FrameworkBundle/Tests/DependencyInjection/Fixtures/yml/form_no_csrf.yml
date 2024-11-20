@@ -5,6 +5,5 @@ framework:
     php_errors:
         log: true
     form:
-        enabled: true
         csrf_protection:
             enabled: false
