@@ -12,7 +12,6 @@ Cache
 -----
 
  * `igbinary_serialize()` is not used by default when the igbinary extension is installed
- * Deprecate making `cache.app` adapter taggable, use the `cache.app.taggable` adapter instead
 
 Console
 -------
