@@ -466,9 +466,9 @@ class FrameworkExtension extends Extension
             $container->removeDefinition('test.session.listener');
         }
 
-        // csrf depends on session being registered
+        // csrf depends on session or stateless token ids being registered
         if (null === $config['csrf_protection']['enabled']) {
-            $this->writeConfigEnabled('csrf_protection', $config['csrf_protection']['stateless_token_ids'] || $this->readConfigEnabled('session', $container, $config['session']) && !class_exists(FullStack::class) && ContainerBuilder::willBeAvailable('symfony/security-csrf', CsrfTokenManagerInterface::class, ['symfony/framework-bundle']), $config['csrf_protection']);
+            $this->writeConfigEnabled('csrf_protection', ($config['csrf_protection']['stateless_token_ids'] || $this->readConfigEnabled('session', $container, $config['session'])) && !class_exists(FullStack::class) && ContainerBuilder::willBeAvailable('symfony/security-csrf', CsrfTokenManagerInterface::class, ['symfony/framework-bundle']), $config['csrf_protection']);
         }
         $this->registerSecurityCsrfConfiguration($config['csrf_protection'], $container, $loader);
 
