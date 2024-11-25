@@ -100,7 +100,8 @@ final class AmpResponseV4 implements ResponseInterface, StreamableInterface
         $onProgress = $options['on_progress'] ?? static function () {};
         $onProgress = $this->onProgress = static function () use (&$info, $onProgress, $resolve) {
             $info['total_time'] = microtime(true) - $info['start_time'];
-            $onProgress((int) $info['size_download'], ((int) (1 + $info['download_content_length']) ?: 1) - 1, (array) $info, $resolve);
+            $info['resolve'] = $resolve;
+            $onProgress((int) $info['size_download'], ((int) (1 + $info['download_content_length']) ?: 1) - 1, (array) $info);
         };
 
         $pauseDeferred = new Deferred();
@@ -432,6 +433,17 @@ final class AmpResponseV4 implements ResponseInterface, StreamableInterface
                     }
                 }
             }
+
+            $info += [
+                'connect_time' => 0.0,
+                'pretransfer_time' => 0.0,
+                'starttransfer_time' => 0.0,
+                'total_time' => 0.0,
+                'namelookup_time' => 0.0,
+                'primary_ip' => '',
+                'primary_port' => 0,
+                'start_time' => microtime(true),
+            ];
 
             $pushDeferred->resolve();
             $logger?->debug(\sprintf('Accepting pushed response: "%s %s"', $info['http_method'], $info['url']));
