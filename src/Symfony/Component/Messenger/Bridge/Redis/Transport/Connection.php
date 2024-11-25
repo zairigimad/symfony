@@ -140,7 +140,7 @@ class Connection
                                     'readTimeout' => $options['read_timeout'],
                                 ];
 
-                                $sentinel = new \RedisSentinel($params);
+                                $sentinel = @new \RedisSentinel($params);
                             } else {
                                 $sentinel = @new $sentinelClass($host, $port, $options['timeout'], $options['persistent_id'], $options['retry_interval'], $options['read_timeout']);
                             }
