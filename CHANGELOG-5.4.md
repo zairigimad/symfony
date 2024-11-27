@@ -7,6 +7,31 @@ in 5.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v5.4.0...v5.4.1
 
+* 5.4.48 (2024-11-27)
+
+ * bug #59013 [HttpClient] Fix checking for private IPs before connecting (nicolas-grekas)
+ * bug #58562 [HttpClient] Close gracefull when the server closes the connection abruptly (discordier)
+ * bug #59007 [Dotenv] read runtime config from composer.json in debug dotenv command (xabbuh)
+ * bug #58963 [PropertyInfo] Fix write visibility for Asymmetric Visibility and Virtual Properties (xabbuh, pan93412)
+ * bug #58983 [Translation] [Bridge][Lokalise] Fix empty keys array in PUT, DELETE requests causing Lokalise API error (DominicLuidold)
+ * bug #58959 [PropertyInfo] consider write property visibility to decide whether a property is writable (xabbuh)
+ * bug #58964 [TwigBridge] do not add child nodes to EmptyNode instances (xabbuh)
+ * bug #58822 [DependencyInjection] Fix checking for interfaces in ContainerBuilder::getReflectionClass() (donquixote)
+ * bug #58865 Dynamically fix compatibility with doctrine/data-fixtures v2 (greg0ire)
+ * bug #58921 [HttpKernel] Ensure `HttpCache::getTraceKey()` does not throw exception (lyrixx)
+ * bug #58908 [DoctrineBridge] don't call `EntityManager::initializeObject()` with scalar values (xabbuh)
+ * bug #58924 [HttpClient] Fix empty hosts in option "resolve" (nicolas-grekas)
+ * bug #58915 [HttpClient] Fix option "resolve" with IPv6 addresses (nicolas-grekas)
+ * bug #58919 [WebProfilerBundle] Twig deprecations (mazodude)
+ * bug #58914 [HttpClient] Fix option "bindto" with IPv6 addresses (nicolas-grekas)
+ * bug #58875 [HttpClient] Removed body size limit (Carl Julian Sauter)
+ * bug #58860 [HttpClient] Fix catching some invalid Location headers (nicolas-grekas)
+ * bug #58836 Work around `parse_url()` bug (bis) (nicolas-grekas)
+ * bug #58818 [Messenger] silence PHP warnings issued by `Redis::connect()` (xabbuh)
+ * bug #58828 [PhpUnitBridge] fix dumping tests to skip with data providers (xabbuh)
+ * bug #58842 [Routing] Fix: lost priority when defining hosts in configuration (BeBlood)
+ * bug #58850 [HttpClient] fix PHP 7.2 compatibility (xabbuh)
+
 * 5.4.47 (2024-11-13)
 
  * security #cve-2024-50342 [HttpClient] Resolve hostnames in NoPrivateNetworkHttpClient (nicolas-grekas)
