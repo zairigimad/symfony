@@ -33,6 +33,9 @@ jobs:
             mode: low-deps
           - php: '8.3'
           - php: '8.4'
+            # brotli and zstd extensions are optional, when not present the commands will be used instead,
+            # we must test both scenarios
+            extensions: amqp,apcu,brotli,igbinary,intl,mbstring,memcached,redis,relay,zstd
             #mode: experimental
       fail-fast: false
 
@@ -52,6 +55,12 @@ jobs:
           php-version: "${{ matrix.php }}"
           extensions: "${{ matrix.extensions || env.extensions }}"
           tools: flex
+
+      - name: Install optional commands
+        if: matrix.php == '8.4'
+        run: |
+          sudo apt-get update
+          sudo apt-get install zopfli
 
       - name: Configure environment
         run: |

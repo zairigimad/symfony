@@ -15,6 +15,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration;
 use Symfony\Bundle\FullStack;
+use Symfony\Component\AssetMapper\Compressor\CompressorInterface;
 use Symfony\Component\Cache\Adapter\DoctrineAdapter;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -141,6 +142,11 @@ class ConfigurationTest extends TestCase
             'vendor_dir' => '%kernel.project_dir%/assets/vendor',
             'importmap_script_attributes' => [],
             'exclude_dotfiles' => true,
+            'precompress' => [
+                'enabled' => false,
+                'formats' => [],
+                'extensions' => interface_exists(CompressorInterface::class) ? CompressorInterface::DEFAULT_EXTENSIONS : [],
+            ],
         ];
 
         $this->assertEquals($defaultConfig, $config['asset_mapper']);
@@ -847,6 +853,11 @@ class ConfigurationTest extends TestCase
                 'vendor_dir' => '%kernel.project_dir%/assets/vendor',
                 'importmap_script_attributes' => [],
                 'exclude_dotfiles' => true,
+                'precompress' => [
+                    'enabled' => false,
+                    'formats' => [],
+                    'extensions' => interface_exists(CompressorInterface::class) ? CompressorInterface::DEFAULT_EXTENSIONS : [],
+                ],
             ],
             'cache' => [
                 'pools' => [],

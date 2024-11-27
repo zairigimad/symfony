@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+7.3
+---
+
+ * Add support for assets pre-compression
+
 7.2
 ---
 
