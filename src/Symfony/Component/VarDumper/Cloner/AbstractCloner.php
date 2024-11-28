@@ -24,6 +24,8 @@ abstract class AbstractCloner implements ClonerInterface
     public static array $defaultCasters = [
         '__PHP_Incomplete_Class' => ['Symfony\Component\VarDumper\Caster\Caster', 'castPhpIncompleteClass'],
 
+        'AddressInfo' => ['Symfony\Component\VarDumper\Caster\AddressInfoCaster', 'castAddressInfo'],
+
         'Symfony\Component\VarDumper\Caster\CutStub' => ['Symfony\Component\VarDumper\Caster\StubCaster', 'castStub'],
         'Symfony\Component\VarDumper\Caster\CutArrayStub' => ['Symfony\Component\VarDumper\Caster\StubCaster', 'castCutArray'],
         'Symfony\Component\VarDumper\Caster\ConstStub' => ['Symfony\Component\VarDumper\Caster\StubCaster', 'castStub'],
