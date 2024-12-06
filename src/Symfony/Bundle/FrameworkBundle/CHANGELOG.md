@@ -5,6 +5,7 @@ CHANGELOG
 ---
 
  * Add support for assets pre-compression
+ * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`
 
 7.2
 ---
