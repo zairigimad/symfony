@@ -17,6 +17,7 @@ use Seld\JsonLint\JsonParser;
 use Symfony\Bundle\FullStack;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\AssetMapper\AssetMapper;
+use Symfony\Component\AssetMapper\Compressor\CompressorInterface;
 use Symfony\Component\Cache\Adapter\DoctrineAdapter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
@@ -923,6 +924,29 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('vendor_dir')
                             ->info('The directory to store JavaScript vendors.')
                             ->defaultValue('%kernel.project_dir%/assets/vendor')
+                        ->end()
+                        ->arrayNode('precompress')
+                            ->info('Precompress assets with Brotli, Zstandard and gzip.')
+                            ->canBeEnabled()
+                            ->fixXmlConfig('format')
+                            ->fixXmlConfig('extension')
+                            ->children()
+                                ->arrayNode('formats')
+                                    ->info('Array of formats to enable. "brotli", "zstandard" and "gzip" are supported. Defaults to all formats supported by the system. The entire list must be provided.')
+                                    ->prototype('scalar')->end()
+                                    ->performNoDeepMerging()
+                                    ->validate()
+                                        ->ifTrue(static fn (array $v) => array_diff($v, ['brotli', 'zstandard', 'gzip']))
+                                        ->thenInvalid('Unsupported format: "brotli", "zstandard" and "gzip" are supported.')
+                                    ->end()
+                                ->end()
+                                ->arrayNode('extensions')
+                                    ->info('Array of extensions to compress. The entire list must be provided, no merging occurs.')
+                                    ->prototype('scalar')->end()
+                                    ->performNoDeepMerging()
+                                    ->defaultValue(interface_exists(CompressorInterface::class) ? CompressorInterface::DEFAULT_EXTENSIONS : [])
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()

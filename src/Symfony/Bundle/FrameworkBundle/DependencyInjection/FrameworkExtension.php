@@ -32,6 +32,7 @@ use Symfony\Bundle\MercureBundle\MercureBundle;
 use Symfony\Component\Asset\PackageInterface;
 use Symfony\Component\AssetMapper\AssetMapper;
 use Symfony\Component\AssetMapper\Compiler\AssetCompilerInterface;
+use Symfony\Component\AssetMapper\Compressor\CompressorInterface;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -1372,6 +1373,26 @@ class FrameworkExtension extends Extension
             ->replaceArgument(3, $config['importmap_polyfill'])
             ->replaceArgument(4, $config['importmap_script_attributes'])
         ;
+
+        if (interface_exists(CompressorInterface::class)) {
+            $compressors = [];
+            foreach ($config['precompress']['formats'] as $format) {
+                $compressors[$format] = new Reference("asset_mapper.compressor.$format");
+            }
+
+            $container->getDefinition('asset_mapper.compressor')->replaceArgument(0, $compressors ?: null);
+
+            if ($config['precompress']['enabled']) {
+                $container
+                    ->getDefinition('asset_mapper.local_public_assets_filesystem')
+                    ->addArgument(new Reference('asset_mapper.compressor'))
+                    ->addArgument($config['precompress']['extensions'])
+                ;
+            }
+        } else {
+            $container->removeDefinition('asset_mapper.compressor');
+            $container->removeDefinition('asset_mapper.assets.command.compress');
+        }
     }
 
     /**
