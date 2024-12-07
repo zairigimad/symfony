@@ -12,7 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\FrameworkBundle\Command\TranslationUpdateCommand;
+use Symfony\Bundle\FrameworkBundle\Command\TranslationExtractCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\Container;
@@ -26,7 +26,7 @@ use Symfony\Component\Translation\Reader\TranslationReader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Writer\TranslationWriter;
 
-class TranslationUpdateCommandTest extends TestCase
+class TranslationExtractCommandTest extends TestCase
 {
     private Filesystem $fs;
     private string $translationDir;
@@ -163,9 +163,9 @@ class TranslationUpdateCommandTest extends TestCase
             }
         }
 
-        $command = $this->createMock(TranslationUpdateCommand::class);
+        $command = $this->createMock(TranslationExtractCommand::class);
 
-        $method = new \ReflectionMethod(TranslationUpdateCommand::class, 'filterDuplicateTransPaths');
+        $method = new \ReflectionMethod(TranslationExtractCommand::class, 'filterDuplicateTransPaths');
 
         $filteredTransPaths = $method->invoke($command, $transPaths);
 
@@ -193,7 +193,7 @@ class TranslationUpdateCommandTest extends TestCase
             ->method('set');
 
         // Calling private method
-        $translationUpdate = $this->createMock(TranslationUpdateCommand::class);
+        $translationUpdate = $this->createMock(TranslationExtractCommand::class);
         $reflection = new \ReflectionObject($translationUpdate);
         $method = $reflection->getMethod('removeNoFillTranslations');
         $method->invokeArgs($translationUpdate, [$operation]);
@@ -301,7 +301,7 @@ class TranslationUpdateCommandTest extends TestCase
             ->method('getContainer')
             ->willReturn($container);
 
-        $command = new TranslationUpdateCommand($writer, $loader, $extractor, 'en', $this->translationDir.'/translations', $this->translationDir.'/templates', $transPaths, $codePaths);
+        $command = new TranslationExtractCommand($writer, $loader, $extractor, 'en', $this->translationDir.'/translations', $this->translationDir.'/templates', $transPaths, $codePaths);
 
         $application = new Application($kernel);
         $application->add($command);
