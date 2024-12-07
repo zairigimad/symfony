@@ -75,7 +75,10 @@ return static function (ContainerConfigurator $container) {
             ->tag('notifier.channel', ['channel' => 'email'])
 
         ->set('notifier.channel.push', PushChannel::class)
-            ->args([service('texter.transports'), service('messenger.default_bus')->ignoreOnInvalid()])
+            ->args([
+                service('texter.transports'),
+                abstract_arg('message bus'),
+            ])
             ->tag('notifier.channel', ['channel' => 'push'])
 
         ->set('notifier.channel.desktop', DesktopChannel::class)
