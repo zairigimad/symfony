@@ -32,7 +32,6 @@ return static function (ContainerConfigurator $container) {
                 tagged_locator('json_encoder.normalizer'),
                 service('json_encoder.encode.property_metadata_loader'),
                 param('.json_encoder.encoders_dir'),
-                false,
             ])
         ->set('json_encoder.decoder', JsonDecoder::class)
             ->args([
@@ -113,7 +112,6 @@ return static function (ContainerConfigurator $container) {
                 service('json_encoder.decode.property_metadata_loader'),
                 param('.json_encoder.encoders_dir'),
                 param('.json_encoder.decoders_dir'),
-                false,
                 service('logger')->ignoreOnInvalid(),
             ])
             ->tag('kernel.cache_warmer')
