@@ -2714,7 +2714,7 @@ class FrameworkExtension extends Extension
             $container->removeDefinition('notifier.channel.email');
         }
 
-        foreach (['texter', 'chatter', 'notifier.channel.chat', 'notifier.channel.email', 'notifier.channel.sms'] as $serviceId) {
+        foreach (['texter', 'chatter', 'notifier.channel.chat', 'notifier.channel.email', 'notifier.channel.sms', 'notifier.channel.push'] as $serviceId) {
             if (!$container->hasDefinition($serviceId)) {
                 continue;
             }
