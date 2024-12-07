@@ -36,6 +36,7 @@ jobs:
             # brotli and zstd extensions are optional, when not present the commands will be used instead,
             # we must test both scenarios
             extensions: amqp,apcu,brotli,igbinary,intl,mbstring,memcached,redis,relay,zstd
+          - php: '8.5'
             #mode: experimental
       fail-fast: false
 

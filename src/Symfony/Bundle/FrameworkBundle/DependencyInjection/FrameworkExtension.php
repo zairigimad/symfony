@@ -311,10 +311,17 @@ class FrameworkExtension extends Extension
             }
         }
 
+        $emptySecretHint = '"framework.secret" option';
         if (isset($config['secret'])) {
             $container->setParameter('kernel.secret', $config['secret']);
+            $usedEnvs = [];
+            $container->resolveEnvPlaceholders($config['secret'], null, $usedEnvs);
+
+            if ($usedEnvs) {
+                $emptySecretHint = \sprintf('"%s" env var%s', implode('", "', $usedEnvs), 1 === \count($usedEnvs) ? '' : 's');
+            }
         }
-        $container->parameterCannotBeEmpty('kernel.secret', 'A non-empty value for the parameter "kernel.secret" is required. Did you forget to configure the "framework.secret" option?');
+        $container->parameterCannotBeEmpty('kernel.secret', 'A non-empty value for the parameter "kernel.secret" is required. Did you forget to configure the '.$emptySecretHint.'?');
 
         $container->setParameter('kernel.http_method_override', $config['http_method_override']);
         $container->setParameter('kernel.trust_x_sendfile_type_header', $config['trust_x_sendfile_type_header']);
