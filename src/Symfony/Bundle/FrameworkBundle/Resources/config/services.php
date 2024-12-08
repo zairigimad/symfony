@@ -195,6 +195,7 @@ return static function (ContainerConfigurator $container) {
                 tagged_iterator('container.env_var_loader'),
             ])
             ->tag('container.env_var_processor')
+            ->tag('kernel.reset', ['method' => 'reset'])
 
         ->set('slugger', AsciiSlugger::class)
             ->args([
