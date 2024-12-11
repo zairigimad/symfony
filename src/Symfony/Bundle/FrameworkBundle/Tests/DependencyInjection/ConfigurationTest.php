@@ -22,6 +22,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\JsonEncoder\JsonEncoder;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -971,7 +972,7 @@ class ConfigurationTest extends TestCase
                 'enabled' => !class_exists(FullStack::class) && class_exists(RemoteEvent::class),
             ],
             'json_encoder' => [
-                'enabled' => false,
+                'enabled' => !class_exists(FullStack::class) && class_exists(JsonEncoder::class),
                 'paths' => [],
             ],
         ];

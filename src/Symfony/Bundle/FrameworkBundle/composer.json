@@ -69,6 +69,7 @@
         "symfony/workflow": "^6.4|^7.0",
         "symfony/yaml": "^6.4|^7.0",
         "symfony/property-info": "^6.4|^7.0",
+        "symfony/json-encoder": "^7.3",
         "symfony/uid": "^6.4|^7.0",
         "symfony/web-link": "^6.4|^7.0",
         "symfony/webhook": "^7.2",
