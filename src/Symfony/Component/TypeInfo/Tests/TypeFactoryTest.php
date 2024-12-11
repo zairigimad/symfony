@@ -195,6 +195,7 @@ class TypeFactoryTest extends TestCase
     {
         $this->assertEquals(new NullableType(new BuiltinType(TypeIdentifier::INT)), Type::nullable(Type::int()));
         $this->assertEquals(new NullableType(new BuiltinType(TypeIdentifier::INT)), Type::nullable(Type::nullable(Type::int())));
+        $this->assertEquals(new BuiltinType(TypeIdentifier::MIXED), Type::nullable(Type::mixed()));
 
         $this->assertEquals(
             new NullableType(new UnionType(new BuiltinType(TypeIdentifier::INT), new BuiltinType(TypeIdentifier::STRING))),
