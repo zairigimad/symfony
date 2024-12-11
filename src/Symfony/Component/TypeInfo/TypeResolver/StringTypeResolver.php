@@ -246,14 +246,16 @@ final class StringTypeResolver implements TypeResolverInterface
                 try {
                     new \ReflectionClass($className);
                     self::$classExistCache[$className] = true;
-
-                    return Type::object($className);
                 } catch (\Throwable) {
                 }
             }
         }
 
         if (self::$classExistCache[$className]) {
+            if (is_subclass_of($className, \UnitEnum::class)) {
+                return Type::enum($className);
+            }
+
             return Type::object($className);
         }
 
