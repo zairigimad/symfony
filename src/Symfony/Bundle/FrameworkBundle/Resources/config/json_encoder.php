@@ -45,49 +45,51 @@ return static function (ContainerConfigurator $container) {
         ->alias(JsonDecoder::class, 'json_encoder.decoder')
 
         // metadata
-        ->stack('json_encoder.encode.property_metadata_loader', [
-            inline_service(EncodeAttributePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                    tagged_locator('json_encoder.normalizer'),
-                    service('type_info.resolver'),
-                ]),
-            inline_service(EncodeDateTimeTypePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                ]),
-            inline_service(GenericTypePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                    service('type_info.type_context_factory'),
-                ]),
-            inline_service(PropertyMetadataLoader::class)
-                ->args([
-                    service('type_info.resolver'),
-                ]),
-        ])
+        ->set('json_encoder.encode.property_metadata_loader', PropertyMetadataLoader::class)
+            ->args([
+                service('type_info.resolver'),
+            ])
+        ->set('.json_encoder.encode.property_metadata_loader.generic', GenericTypePropertyMetadataLoader::class)
+            ->decorate('json_encoder.encode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+                service('type_info.type_context_factory'),
+            ])
+        ->set('.json_encoder.encode.property_metadata_loader.date_time', EncodeDateTimeTypePropertyMetadataLoader::class)
+            ->decorate('json_encoder.encode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+            ])
+        ->set('.json_encoder.encode.property_metadata_loader.attribute', EncodeAttributePropertyMetadataLoader::class)
+            ->decorate('json_encoder.encode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+                tagged_locator('json_encoder.normalizer'),
+                service('type_info.resolver'),
+            ])
 
-        ->stack('json_encoder.decode.property_metadata_loader', [
-            inline_service(DecodeAttributePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                    tagged_locator('json_encoder.denormalizer'),
-                    service('type_info.resolver'),
-                ]),
-            inline_service(DecodeDateTimeTypePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                ]),
-            inline_service(GenericTypePropertyMetadataLoader::class)
-                ->args([
-                    service('.inner'),
-                    service('type_info.type_context_factory'),
-                ]),
-            inline_service(PropertyMetadataLoader::class)
-                ->args([
-                    service('type_info.resolver'),
-                ]),
-        ])
+        ->set('json_encoder.decode.property_metadata_loader', PropertyMetadataLoader::class)
+            ->args([
+                service('type_info.resolver'),
+            ])
+        ->set('.json_encoder.decode.property_metadata_loader.generic', GenericTypePropertyMetadataLoader::class)
+            ->decorate('json_encoder.decode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+                service('type_info.type_context_factory'),
+            ])
+        ->set('.json_encoder.decode.property_metadata_loader.date_time', DecodeDateTimeTypePropertyMetadataLoader::class)
+            ->decorate('json_encoder.decode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+            ])
+        ->set('.json_encoder.decode.property_metadata_loader.attribute', DecodeAttributePropertyMetadataLoader::class)
+            ->decorate('json_encoder.decode.property_metadata_loader')
+            ->args([
+                service('.inner'),
+                tagged_locator('json_encoder.normalizer'),
+                service('type_info.resolver'),
+            ])
 
         // normalizers/denormalizers
         ->set('json_encoder.normalizer.date_time', DateTimeNormalizer::class)
