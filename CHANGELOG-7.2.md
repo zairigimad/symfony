@@ -7,6 +7,18 @@ in 7.2 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.2.0...v7.2.1
 
+* 7.2.1 (2024-12-11)
+
+ * bug #59145 [TypeInfo] Make `Type::nullable` method no-op on every nullable type (mtarld)
+ * bug #59122 [Notifier] fix desktop channel bus abstract arg (raphael-geffroy)
+ * bug #59124 [FrameworkBundle] fix: notifier push channel bus abstract arg (raphael-geffroy)
+ * bug #59069 [Console] Fix division by 0 error (Rindula)
+ * bug #59086 [FrameworkBundle] Make uri_signer lazy and improve error when kernel.secret is empty (nicolas-grekas)
+ * bug #59099 [sendgrid-mailer] Fix null check on region (AUDUL)
+ * bug #59070 [PropertyInfo] evaluate access flags for properties with asymmetric visibility (xabbuh)
+ * bug #59062 [HttpClient] Always set CURLOPT_CUSTOMREQUEST to the correct HTTP method in CurlHttpClient (KurtThiemann)
+ * bug #59059 [TwigBridge] generate conflict-free variable names (xabbuh)
+
 * 7.2.0 (2024-11-29)
 
  * bug #59023 [HttpClient] Fix streaming and redirecting with NoPrivateNetworkHttpClient (nicolas-grekas)
