@@ -56,6 +56,8 @@ return (new PhpCsFixer\Config())
             ->notPath('Symfony/Component/ErrorHandler/Tests/DebugClassLoaderTest.php')
             // stop removing spaces on the end of the line in strings
             ->notPath('Symfony/Component/Messenger/Tests/Command/FailedMessagesShowCommandTest.php')
+            // disable to not apply `native_function_invocation` rule, as we explicitly break it for testability reason, ref https://github.com/symfony/symfony/pull/59195
+            ->notPath('Symfony/Component/Mailer/Transport/NativeTransportFactory.php')
             // auto-generated proxies
             ->notPath('Symfony/Component/Cache/Traits/RelayProxy.php')
             ->notPath('Symfony/Component/Cache/Traits/Redis5Proxy.php')
