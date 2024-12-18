@@ -2032,6 +2032,10 @@ class FrameworkExtension extends Extension
         foreach ($config['paths'] as $namespace => $path) {
             $loader->registerClasses($encodableDefinition, $namespace, $path);
         }
+
+        if (\PHP_VERSION_ID >= 80400) {
+            $container->removeDefinition('.json_encoder.cache_warmer.lazy_ghost');
+        }
     }
 
     private function registerPropertyInfoConfiguration(ContainerBuilder $container, PhpFileLoader $loader): void
