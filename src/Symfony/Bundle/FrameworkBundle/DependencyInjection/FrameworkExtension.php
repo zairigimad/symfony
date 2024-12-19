@@ -126,6 +126,8 @@ use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Notifier\Bridge as NotifierBridge;
+use Symfony\Component\Notifier\Bridge\FakeChat\FakeChatTransportFactory;
+use Symfony\Component\Notifier\Bridge\FakeSms\FakeSmsTransportFactory;
 use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Notifier;
 use Symfony\Component\Notifier\Recipient\Recipient;
@@ -2902,8 +2904,6 @@ class FrameworkExtension extends Extension
             NotifierBridge\Engagespot\EngagespotTransportFactory::class => 'notifier.transport_factory.engagespot',
             NotifierBridge\Esendex\EsendexTransportFactory::class => 'notifier.transport_factory.esendex',
             NotifierBridge\Expo\ExpoTransportFactory::class => 'notifier.transport_factory.expo',
-            NotifierBridge\FakeChat\FakeChatTransportFactory::class => 'notifier.transport_factory.fake-chat',
-            NotifierBridge\FakeSms\FakeSmsTransportFactory::class => 'notifier.transport_factory.fake-sms',
             NotifierBridge\Firebase\FirebaseTransportFactory::class => 'notifier.transport_factory.firebase',
             NotifierBridge\FortySixElks\FortySixElksTransportFactory::class => 'notifier.transport_factory.forty-six-elks',
             NotifierBridge\FreeMobile\FreeMobileTransportFactory::class => 'notifier.transport_factory.free-mobile',
@@ -2991,20 +2991,26 @@ class FrameworkExtension extends Extension
             $container->removeDefinition($classToServices[NotifierBridge\Mercure\MercureTransportFactory::class]);
         }
 
-        if (ContainerBuilder::willBeAvailable('symfony/fake-chat-notifier', NotifierBridge\FakeChat\FakeChatTransportFactory::class, ['symfony/framework-bundle', 'symfony/notifier', 'symfony/mailer'])) {
-            $container->getDefinition($classToServices[NotifierBridge\FakeChat\FakeChatTransportFactory::class])
-                ->replaceArgument(0, new Reference('mailer'))
-                ->replaceArgument(1, new Reference('logger'))
+        // don't use ContainerBuilder::willBeAvailable() as these are not needed in production
+        if (class_exists(FakeChatTransportFactory::class)) {
+            $container->getDefinition('notifier.transport_factory.fake-chat')
+                ->replaceArgument(0, new Reference('mailer', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
+                ->replaceArgument(1, new Reference('logger', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
                 ->addArgument(new Reference('event_dispatcher', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
                 ->addArgument(new Reference('http_client', ContainerBuilder::NULL_ON_INVALID_REFERENCE));
+        } else {
+            $container->removeDefinition('notifier.transport_factory.fake-chat');
         }
 
-        if (ContainerBuilder::willBeAvailable('symfony/fake-sms-notifier', NotifierBridge\FakeSms\FakeSmsTransportFactory::class, ['symfony/framework-bundle', 'symfony/notifier', 'symfony/mailer'])) {
-            $container->getDefinition($classToServices[NotifierBridge\FakeSms\FakeSmsTransportFactory::class])
-                ->replaceArgument(0, new Reference('mailer'))
-                ->replaceArgument(1, new Reference('logger'))
+        // don't use ContainerBuilder::willBeAvailable() as these are not needed in production
+        if (class_exists(FakeSmsTransportFactory::class)) {
+            $container->getDefinition('notifier.transport_factory.fake-sms')
+                ->replaceArgument(0, new Reference('mailer', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
+                ->replaceArgument(1, new Reference('logger', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
                 ->addArgument(new Reference('event_dispatcher', ContainerBuilder::NULL_ON_INVALID_REFERENCE))
                 ->addArgument(new Reference('http_client', ContainerBuilder::NULL_ON_INVALID_REFERENCE));
+        } else {
+            $container->removeDefinition('notifier.transport_factory.fake-sms');
         }
 
         if (ContainerBuilder::willBeAvailable('symfony/bluesky-notifier', NotifierBridge\Bluesky\BlueskyTransportFactory::class, ['symfony/framework-bundle', 'symfony/notifier'])) {
