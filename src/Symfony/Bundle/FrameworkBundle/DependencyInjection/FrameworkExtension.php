@@ -2026,15 +2026,6 @@ class FrameworkExtension extends Extension
         $container->setParameter('.json_encoder.decoders_dir', '%kernel.cache_dir%/json_encoder/decoder');
         $container->setParameter('.json_encoder.lazy_ghosts_dir', '%kernel.cache_dir%/json_encoder/lazy_ghost');
 
-        $encodableDefinition = (new Definition())
-            ->setAbstract(true)
-            ->addTag('container.excluded')
-            ->addTag('json_encoder.encodable');
-
-        foreach ($config['paths'] as $namespace => $path) {
-            $loader->registerClasses($encodableDefinition, $namespace, $path);
-        }
-
         if (\PHP_VERSION_ID >= 80400) {
             $container->removeDefinition('.json_encoder.cache_warmer.lazy_ghost');
         }
