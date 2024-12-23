@@ -23,11 +23,11 @@ use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyBackedEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\ClassicDummy;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNameAttributes;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNormalizerAttributes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithOtherDummies;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithUnionProperties;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Normalizer\BooleanStringNormalizer;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Normalizer\DoubleIntAndCastToStringNormalizer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithValueTransformerAttributes;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\BooleanToStringValueTransformer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\DoubleIntAndCastToStringValueTransformer;
 use Symfony\Component\JsonEncoder\Tests\ServiceContainer;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
@@ -59,8 +59,8 @@ class EncoderGeneratorTest extends TestCase
             new DateTimeTypePropertyMetadataLoader(new AttributePropertyMetadataLoader(
                 new PropertyMetadataLoader(TypeResolver::create()),
                 new ServiceContainer([
-                    DoubleIntAndCastToStringNormalizer::class => new DoubleIntAndCastToStringNormalizer(),
-                    BooleanStringNormalizer::class => new BooleanStringNormalizer(),
+                    DoubleIntAndCastToStringValueTransformer::class => new DoubleIntAndCastToStringValueTransformer(),
+                    BooleanToStringValueTransformer::class => new BooleanToStringValueTransformer(),
                 ]),
                 TypeResolver::create(),
             )),
@@ -103,7 +103,7 @@ class EncoderGeneratorTest extends TestCase
         yield ['object', Type::object(DummyWithNameAttributes::class)];
         yield ['nullable_object', Type::nullable(Type::object(DummyWithNameAttributes::class))];
         yield ['object_in_object', Type::object(DummyWithOtherDummies::class)];
-        yield ['object_with_normalizer', Type::object(DummyWithNormalizerAttributes::class)];
+        yield ['object_with_value_transformer', Type::object(DummyWithValueTransformerAttributes::class)];
 
         yield ['union', Type::union(Type::int(), Type::list(Type::enum(DummyBackedEnum::class)), Type::object(DummyWithNameAttributes::class))];
         yield ['object_with_union', Type::object(DummyWithUnionProperties::class)];

@@ -1,6 +1,6 @@
 <?php
 
-return static function (mixed $data, \Psr\Container\ContainerInterface $normalizers, array $options): \Traversable {
+return static function (mixed $data, \Psr\Container\ContainerInterface $valueTransformers, array $options): \Traversable {
     yield '{"name":';
     yield \json_encode($data->name);
     yield ',"otherDummyOne":{"@id":';

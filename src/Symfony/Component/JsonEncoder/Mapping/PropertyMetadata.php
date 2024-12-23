@@ -23,14 +23,14 @@ use Symfony\Component\TypeInfo\Type;
 final class PropertyMetadata
 {
     /**
-     * @param list<string|\Closure> $normalizers
-     * @param list<string|\Closure> $denormalizers
+     * @param list<string|\Closure> $toJsonValueTransformers
+     * @param list<string|\Closure> $toNativeValueTransformers
      */
     public function __construct(
         private string $name,
         private Type $type,
-        private array $normalizers = [],
-        private array $denormalizers = [],
+        private array $toJsonValueTransformers = [],
+        private array $toNativeValueTransformers = [],
     ) {
     }
 
@@ -41,7 +41,7 @@ final class PropertyMetadata
 
     public function withName(string $name): self
     {
-        return new self($name, $this->type, $this->normalizers, $this->denormalizers);
+        return new self($name, $this->type, $this->toJsonValueTransformers, $this->toNativeValueTransformers);
     }
 
     public function getType(): Type
@@ -51,58 +51,58 @@ final class PropertyMetadata
 
     public function withType(Type $type): self
     {
-        return new self($this->name, $type, $this->normalizers, $this->denormalizers);
+        return new self($this->name, $type, $this->toJsonValueTransformers, $this->toNativeValueTransformers);
     }
 
     /**
      * @return list<string|\Closure>
      */
-    public function getNormalizers(): array
+    public function getToJsonValueTransformer(): array
     {
-        return $this->normalizers;
+        return $this->toJsonValueTransformers;
     }
 
     /**
-     * @param list<string|\Closure> $normalizers
+     * @param list<string|\Closure> $toJsonValueTransformers
      */
-    public function withNormalizers(array $normalizers): self
+    public function withToJsonValueTransformers(array $toJsonValueTransformers): self
     {
-        return new self($this->name, $this->type, $normalizers, $this->denormalizers);
+        return new self($this->name, $this->type, $toJsonValueTransformers, $this->toNativeValueTransformers);
     }
 
-    public function withAdditionalNormalizer(string|\Closure $normalizer): self
+    public function withAdditionalToJsonValueTransformer(string|\Closure $toJsonValueTransformer): self
     {
-        $normalizers = $this->normalizers;
+        $toJsonValueTransformers = $this->toJsonValueTransformers;
 
-        $normalizers[] = $normalizer;
-        $normalizers = array_values(array_unique($normalizers));
+        $toJsonValueTransformers[] = $toJsonValueTransformer;
+        $toJsonValueTransformers = array_values(array_unique($toJsonValueTransformers));
 
-        return $this->withNormalizers($normalizers);
+        return $this->withToJsonValueTransformers($toJsonValueTransformers);
     }
 
     /**
      * @return list<string|\Closure>
      */
-    public function getDenormalizers(): array
+    public function getToNativeValueTransformers(): array
     {
-        return $this->denormalizers;
+        return $this->toNativeValueTransformers;
     }
 
     /**
-     * @param list<string|\Closure> $denormalizers
+     * @param list<string|\Closure> $toNativeValueTransformers
      */
-    public function withDenormalizers(array $denormalizers): self
+    public function withToNativeValueTransformers(array $toNativeValueTransformers): self
     {
-        return new self($this->name, $this->type, $this->normalizers, $denormalizers);
+        return new self($this->name, $this->type, $this->toJsonValueTransformers, $toNativeValueTransformers);
     }
 
-    public function withAdditionalDenormalizer(string|\Closure $denormalizer): self
+    public function withAdditionalToNativeValueTransformer(string|\Closure $toNativeValueTransformer): self
     {
-        $denormalizers = $this->denormalizers;
+        $toNativeValueTransformers = $this->toNativeValueTransformers;
 
-        $denormalizers[] = $denormalizer;
-        $denormalizers = array_values(array_unique($denormalizers));
+        $toNativeValueTransformers[] = $toNativeValueTransformer;
+        $toNativeValueTransformers = array_values(array_unique($toNativeValueTransformers));
 
-        return $this->withDenormalizers($denormalizers);
+        return $this->withToNativeValueTransformers($toNativeValueTransformers);
     }
 }

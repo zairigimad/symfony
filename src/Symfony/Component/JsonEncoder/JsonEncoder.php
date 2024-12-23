@@ -14,13 +14,13 @@ namespace Symfony\Component\JsonEncoder;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\JsonEncoder\Encode\EncoderGenerator;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\DateTimeNormalizer;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\NormalizerInterface;
 use Symfony\Component\JsonEncoder\Mapping\Encode\AttributePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\Encode\DateTimeTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\GenericTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
+use Symfony\Component\JsonEncoder\ValueTransformer\DateTimeToStringValueTransformer;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
 use Symfony\Component\TypeInfo\TypeResolver\StringTypeResolver;
@@ -38,7 +38,7 @@ final class JsonEncoder implements EncoderInterface
     private EncoderGenerator $encoderGenerator;
 
     public function __construct(
-        private ContainerInterface $normalizers,
+        private ContainerInterface $valueTransformers,
         PropertyMetadataLoaderInterface $propertyMetadataLoader,
         string $encodersDir,
     ) {
@@ -49,33 +49,33 @@ final class JsonEncoder implements EncoderInterface
     {
         $path = $this->encoderGenerator->generate($type, $options);
 
-        return new Encoded((require $path)($data, $this->normalizers, $options));
+        return new Encoded((require $path)($data, $this->valueTransformers, $options));
     }
 
     /**
-     * @param array<string, NormalizerInterface> $normalizers
+     * @param array<string, ValueTransformerInterface> $valueTransformers
      */
-    public static function create(array $normalizers = [], ?string $encodersDir = null): self
+    public static function create(array $valueTransformers = [], ?string $encodersDir = null): self
     {
         $encodersDir ??= sys_get_temp_dir().'/json_encoder/encoder';
-        $normalizers += [
-            'json_encoder.normalizer.date_time' => new DateTimeNormalizer(),
+        $valueTransformers += [
+            'json_encoder.value_transformer.date_time_to_string' => new DateTimeToStringValueTransformer(),
         ];
 
-        $normalizersContainer = new class($normalizers) implements ContainerInterface {
+        $valueTransformersContainer = new class($valueTransformers) implements ContainerInterface {
             public function __construct(
-                private array $normalizers,
+                private array $valueTransformers,
             ) {
             }
 
             public function has(string $id): bool
             {
-                return isset($this->normalizers[$id]);
+                return isset($this->valueTransformers[$id]);
             }
 
-            public function get(string $id): NormalizerInterface
+            public function get(string $id): ValueTransformerInterface
             {
-                return $this->normalizers[$id];
+                return $this->valueTransformers[$id];
             }
         };
 
@@ -85,13 +85,13 @@ final class JsonEncoder implements EncoderInterface
             new DateTimeTypePropertyMetadataLoader(
                 new AttributePropertyMetadataLoader(
                     new PropertyMetadataLoader(TypeResolver::create()),
-                    $normalizersContainer,
+                    $valueTransformersContainer,
                     TypeResolver::create(),
                 ),
             ),
             $typeContextFactory,
         );
 
-        return new self($normalizersContainer, $propertyMetadataLoader, $encodersDir);
+        return new self($valueTransformersContainer, $propertyMetadataLoader, $encodersDir);
     }
 }

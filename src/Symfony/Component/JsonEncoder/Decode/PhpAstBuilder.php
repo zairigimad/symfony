@@ -85,7 +85,7 @@ final class PhpAstBuilder
                 'static' => true,
                 'params' => [
                     new Param($this->builder->var('stream'), type: new Identifier('mixed')),
-                    new Param($this->builder->var('denormalizers'), type: new FullyQualified(ContainerInterface::class)),
+                    new Param($this->builder->var('valueTransformers'), type: new FullyQualified(ContainerInterface::class)),
                     new Param($this->builder->var('instantiator'), type: new FullyQualified(LazyInstantiator::class)),
                     new Param($this->builder->var('options'), type: new Identifier('array')),
                 ],
@@ -113,7 +113,7 @@ final class PhpAstBuilder
             'static' => true,
             'params' => [
                 new Param($this->builder->var('string'), type: new Identifier('string|\\Stringable')),
-                new Param($this->builder->var('denormalizers'), type: new FullyQualified(ContainerInterface::class)),
+                new Param($this->builder->var('valueTransformers'), type: new FullyQualified(ContainerInterface::class)),
                 new Param($this->builder->var('instantiator'), type: new FullyQualified(Instantiator::class)),
                 new Param($this->builder->var('options'), type: new Identifier('array')),
             ],
@@ -290,7 +290,7 @@ final class PhpAstBuilder
                     'params' => $params,
                     'uses' => [
                         new ClosureUse($this->builder->var('options')),
-                        new ClosureUse($this->builder->var('denormalizers')),
+                        new ClosureUse($this->builder->var('valueTransformers')),
                         new ClosureUse($this->builder->var('instantiator')),
                         new ClosureUse($this->builder->var('providers'), byRef: true),
                     ],
@@ -352,7 +352,7 @@ final class PhpAstBuilder
                     'params' => $iterableClosureParams,
                     'uses' => [
                         new ClosureUse($this->builder->var('options')),
-                        new ClosureUse($this->builder->var('denormalizers')),
+                        new ClosureUse($this->builder->var('valueTransformers')),
                         new ClosureUse($this->builder->var('instantiator')),
                         new ClosureUse($this->builder->var('providers'), byRef: true),
                     ],
@@ -390,7 +390,7 @@ final class PhpAstBuilder
                     'params' => $params,
                     'uses' => [
                         new ClosureUse($this->builder->var('options')),
-                        new ClosureUse($this->builder->var('denormalizers')),
+                        new ClosureUse($this->builder->var('valueTransformers')),
                         new ClosureUse($this->builder->var('instantiator')),
                         new ClosureUse($this->builder->var('providers'), byRef: true),
                     ],
@@ -490,7 +490,7 @@ final class PhpAstBuilder
                             new ClosureUse($this->builder->var('stream')),
                             new ClosureUse($this->builder->var('data')),
                             new ClosureUse($this->builder->var('options')),
-                            new ClosureUse($this->builder->var('denormalizers')),
+                            new ClosureUse($this->builder->var('valueTransformers')),
                             new ClosureUse($this->builder->var('instantiator')),
                             new ClosureUse($this->builder->var('providers'), byRef: true),
                         ],
@@ -530,7 +530,7 @@ final class PhpAstBuilder
                     'params' => $params,
                     'uses' => [
                         new ClosureUse($this->builder->var('options')),
-                        new ClosureUse($this->builder->var('denormalizers')),
+                        new ClosureUse($this->builder->var('valueTransformers')),
                         new ClosureUse($this->builder->var('instantiator')),
                         new ClosureUse($this->builder->var('providers'), byRef: true),
                     ],

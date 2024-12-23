@@ -6,5 +6,4 @@ class DummyWithDateTimes
 {
     public \DateTimeInterface $interface;
     public \DateTimeImmutable $immutable;
-    public \DateTime $mutable;
 }

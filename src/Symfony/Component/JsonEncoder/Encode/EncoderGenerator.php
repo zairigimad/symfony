@@ -151,23 +151,23 @@ final class EncoderGenerator
             foreach ($propertiesMetadata as $encodedName => $propertyMetadata) {
                 $propertyAccessor = new PropertyDataAccessor($accessor, $propertyMetadata->getName());
 
-                foreach ($propertyMetadata->getNormalizers() as $normalizer) {
-                    if (\is_string($normalizer)) {
-                        $normalizerServiceAccessor = new FunctionDataAccessor('get', [new ScalarDataAccessor($normalizer)], new VariableDataAccessor('normalizers'));
-                        $propertyAccessor = new FunctionDataAccessor('normalize', [$propertyAccessor, new VariableDataAccessor('options')], $normalizerServiceAccessor);
+                foreach ($propertyMetadata->getToJsonValueTransformer() as $valueTransformer) {
+                    if (\is_string($valueTransformer)) {
+                        $valueTransformerServiceAccessor = new FunctionDataAccessor('get', [new ScalarDataAccessor($valueTransformer)], new VariableDataAccessor('valueTransformers'));
+                        $propertyAccessor = new FunctionDataAccessor('transform', [$propertyAccessor, new VariableDataAccessor('options')], $valueTransformerServiceAccessor);
 
                         continue;
                     }
 
                     try {
-                        $functionReflection = new \ReflectionFunction($normalizer);
+                        $functionReflection = new \ReflectionFunction($valueTransformer);
                     } catch (\ReflectionException $e) {
                         throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
                     }
 
-                    $functionName = !$functionReflection->getClosureScopeClass()
+                    $functionName = !$functionReflection->getClosureCalledClass()
                         ? $functionReflection->getName()
-                        : \sprintf('%s::%s', $functionReflection->getClosureScopeClass()->getName(), $functionReflection->getName());
+                        : \sprintf('%s::%s', $functionReflection->getClosureCalledClass()->getName(), $functionReflection->getName());
                     $arguments = $functionReflection->isUserDefined() ? [$propertyAccessor, new VariableDataAccessor('options')] : [$propertyAccessor];
 
                     $propertyAccessor = new FunctionDataAccessor($functionName, $arguments);

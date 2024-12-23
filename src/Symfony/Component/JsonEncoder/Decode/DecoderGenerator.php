@@ -136,23 +136,23 @@ final class DecoderGenerator
                     'name' => $propertyMetadata->getName(),
                     'value' => $this->createDataModel($propertyMetadata->getType(), $options, $context),
                     'accessor' => function (DataAccessorInterface $accessor) use ($propertyMetadata): DataAccessorInterface {
-                        foreach ($propertyMetadata->getDenormalizers() as $denormalizer) {
-                            if (\is_string($denormalizer)) {
-                                $denormalizerServiceAccessor = new FunctionDataAccessor('get', [new ScalarDataAccessor($denormalizer)], new VariableDataAccessor('denormalizers'));
-                                $accessor = new FunctionDataAccessor('denormalize', [$accessor, new VariableDataAccessor('options')], $denormalizerServiceAccessor);
+                        foreach ($propertyMetadata->getToNativeValueTransformers() as $valueTransformer) {
+                            if (\is_string($valueTransformer)) {
+                                $valueTransformerServiceAccessor = new FunctionDataAccessor('get', [new ScalarDataAccessor($valueTransformer)], new VariableDataAccessor('valueTransformers'));
+                                $accessor = new FunctionDataAccessor('transform', [$accessor, new VariableDataAccessor('options')], $valueTransformerServiceAccessor);
 
                                 continue;
                             }
 
                             try {
-                                $functionReflection = new \ReflectionFunction($denormalizer);
+                                $functionReflection = new \ReflectionFunction($valueTransformer);
                             } catch (\ReflectionException $e) {
                                 throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
                             }
 
-                            $functionName = !$functionReflection->getClosureScopeClass()
+                            $functionName = !$functionReflection->getClosureCalledClass()
                                 ? $functionReflection->getName()
-                                : \sprintf('%s::%s', $functionReflection->getClosureScopeClass()->getName(), $functionReflection->getName());
+                                : \sprintf('%s::%s', $functionReflection->getClosureCalledClass()->getName(), $functionReflection->getName());
                             $arguments = $functionReflection->isUserDefined() ? [$accessor, new VariableDataAccessor('options')] : [$accessor];
 
                             $accessor = new FunctionDataAccessor($functionName, $arguments);

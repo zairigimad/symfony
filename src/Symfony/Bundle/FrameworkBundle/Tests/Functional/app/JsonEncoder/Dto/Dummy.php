@@ -11,11 +11,11 @@
 
 namespace Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\Dto;
 
-use Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\RangeNormalizer;
-use Symfony\Component\JsonEncoder\Attribute\Denormalizer;
+use Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\RangeToStringValueTransformer;
+use Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\StringToRangeValueTransformer;
 use Symfony\Component\JsonEncoder\Attribute\EncodedName;
 use Symfony\Component\JsonEncoder\Attribute\JsonEncodable;
-use Symfony\Component\JsonEncoder\Attribute\Normalizer;
+use Symfony\Component\JsonEncoder\Attribute\ValueTransformer;
 
 /**
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
@@ -24,11 +24,9 @@ use Symfony\Component\JsonEncoder\Attribute\Normalizer;
 class Dummy
 {
     #[EncodedName('@name')]
-    #[Normalizer('strtoupper')]
-    #[Denormalizer('strtolower')]
+    #[ValueTransformer(toJsonValue: 'strtoupper', toNativeValue: 'strtolower')]
     public string $name = 'dummy';
 
-    #[Normalizer(RangeNormalizer::class)]
-    #[Denormalizer(RangeNormalizer::class)]
+    #[ValueTransformer(toJsonValue: RangeToStringValueTransformer::class, toNativeValue: StringToRangeValueTransformer::class)]
     public array $range = [10, 20];
 }

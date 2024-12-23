@@ -12,21 +12,21 @@
 namespace Symfony\Component\JsonEncoder\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\DateTimeNormalizer;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\NormalizerInterface;
 use Symfony\Component\JsonEncoder\Exception\MaxDepthException;
 use Symfony\Component\JsonEncoder\JsonEncoder;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyBackedEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\ClassicDummy;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithDateTimes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNameAttributes;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNormalizerAttributes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNullableProperties;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithPhpDoc;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithUnionProperties;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithValueTransformerAttributes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\SelfReferencingDummy;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Normalizer\BooleanStringNormalizer;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Normalizer\DoubleIntAndCastToStringNormalizer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\BooleanToStringValueTransformer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\DoubleIntAndCastToStringValueTransformer;
+use Symfony\Component\JsonEncoder\ValueTransformer\DateTimeToStringValueTransformer;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\TypeInfo\Type;
 
 class JsonEncoderTest extends TestCase
@@ -126,20 +126,20 @@ class JsonEncoderTest extends TestCase
         $this->assertEncoded('{"@id":10,"name":"dummy name"}', $dummy, Type::object(DummyWithNameAttributes::class));
     }
 
-    public function testEncodeObjectWithNormalizer()
+    public function testEncodeObjectWithValueTransformer()
     {
-        $dummy = new DummyWithNormalizerAttributes();
+        $dummy = new DummyWithValueTransformerAttributes();
         $dummy->id = 10;
         $dummy->active = true;
 
         $this->assertEncoded(
             '{"id":"20","active":"true","name":"dummy","range":"10..20"}',
             $dummy,
-            Type::object(DummyWithNormalizerAttributes::class),
+            Type::object(DummyWithValueTransformerAttributes::class),
             options: ['scale' => 1],
-            normalizers: [
-                BooleanStringNormalizer::class => new BooleanStringNormalizer(),
-                DoubleIntAndCastToStringNormalizer::class => new DoubleIntAndCastToStringNormalizer(),
+            valueTransformers: [
+                BooleanToStringValueTransformer::class => new BooleanToStringValueTransformer(),
+                DoubleIntAndCastToStringValueTransformer::class => new DoubleIntAndCastToStringValueTransformer(),
             ],
         );
     }
@@ -161,19 +161,15 @@ class JsonEncoderTest extends TestCase
 
     public function testEncodeObjectWithDateTimes()
     {
-        $mutableDate = new \DateTime('2024-11-20');
-        $immutableDate = \DateTimeImmutable::createFromMutable($mutableDate);
-
         $dummy = new DummyWithDateTimes();
-        $dummy->interface = $immutableDate;
-        $dummy->immutable = $immutableDate;
-        $dummy->mutable = $mutableDate;
+        $dummy->interface = new \DateTimeImmutable('2024-11-20');
+        $dummy->immutable = new \DateTimeImmutable('2025-11-20');
 
         $this->assertEncoded(
-            '{"interface":"2024-11-20","immutable":"2024-11-20","mutable":"2024-11-20"}',
+            '{"interface":"2024-11-20","immutable":"2025-11-20"}',
             $dummy,
             Type::object(DummyWithDateTimes::class),
-            options: [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'],
+            options: [DateTimeToStringValueTransformer::FORMAT_KEY => 'Y-m-d'],
         );
     }
 
@@ -222,12 +218,12 @@ class JsonEncoderTest extends TestCase
     }
 
     /**
-     * @param array<string, mixed>               $options
-     * @param array<string, NormalizerInterface> $normalizers
+     * @param array<string, mixed>                     $options
+     * @param array<string, ValueTransformerInterface> $valueTransformers
      */
-    private function assertEncoded(string $expected, mixed $data, Type $type, array $options = [], array $normalizers = []): void
+    private function assertEncoded(string $expected, mixed $data, Type $type, array $options = [], array $valueTransformers = []): void
     {
-        $encoder = JsonEncoder::create(encodersDir: $this->encodersDir, normalizers: $normalizers);
+        $encoder = JsonEncoder::create(encodersDir: $this->encodersDir, valueTransformers: $valueTransformers);
         $this->assertSame($expected, (string) $encoder->encode($data, $type, $options));
     }
 }

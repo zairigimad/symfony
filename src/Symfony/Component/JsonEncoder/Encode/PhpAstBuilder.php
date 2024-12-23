@@ -78,7 +78,7 @@ final class PhpAstBuilder
             'static' => true,
             'params' => [
                 new Param($this->builder->var('data'), type: new Identifier('mixed')),
-                new Param($this->builder->var('normalizers'), type: new FullyQualified(ContainerInterface::class)),
+                new Param($this->builder->var('valueTransformers'), type: new FullyQualified(ContainerInterface::class)),
                 new Param($this->builder->var('options'), type: new Identifier('array')),
             ],
             'returnType' => new FullyQualified(\Traversable::class),

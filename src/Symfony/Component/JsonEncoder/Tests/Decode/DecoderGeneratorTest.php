@@ -19,16 +19,16 @@ use Symfony\Component\JsonEncoder\Mapping\Decode\DateTimeTypePropertyMetadataLoa
 use Symfony\Component\JsonEncoder\Mapping\GenericTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Denormalizer\BooleanStringDenormalizer;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Denormalizer\DivideStringAndCastToIntDenormalizer;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyBackedEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\ClassicDummy;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNameAttributes;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNormalizerAttributes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNullableProperties;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithOtherDummies;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithUnionProperties;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithValueTransformerAttributes;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\DivideStringAndCastToIntValueTransformer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\StringToBooleanValueTransformer;
 use Symfony\Component\JsonEncoder\Tests\ServiceContainer;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
@@ -60,8 +60,8 @@ class DecoderGeneratorTest extends TestCase
             new DateTimeTypePropertyMetadataLoader(new AttributePropertyMetadataLoader(
                 new PropertyMetadataLoader(TypeResolver::create()),
                 new ServiceContainer([
-                    DivideStringAndCastToIntDenormalizer::class => new DivideStringAndCastToIntDenormalizer(),
-                    BooleanStringDenormalizer::class => new BooleanStringDenormalizer(),
+                    DivideStringAndCastToIntValueTransformer::class => new DivideStringAndCastToIntValueTransformer(),
+                    StringToBooleanValueTransformer::class => new StringToBooleanValueTransformer(),
                 ]),
                 TypeResolver::create(),
             )),
@@ -107,7 +107,7 @@ class DecoderGeneratorTest extends TestCase
         yield ['nullable_object', Type::nullable(Type::object(ClassicDummy::class))];
         yield ['object_in_object', Type::object(DummyWithOtherDummies::class)];
         yield ['object_with_nullable_properties', Type::object(DummyWithNullableProperties::class)];
-        yield ['object_with_denormalizer', Type::object(DummyWithNormalizerAttributes::class)];
+        yield ['object_with_value_transformer', Type::object(DummyWithValueTransformerAttributes::class)];
 
         yield ['union', Type::union(Type::int(), Type::list(Type::enum(DummyBackedEnum::class)), Type::object(DummyWithNameAttributes::class))];
         yield ['object_with_union', Type::object(DummyWithUnionProperties::class)];
