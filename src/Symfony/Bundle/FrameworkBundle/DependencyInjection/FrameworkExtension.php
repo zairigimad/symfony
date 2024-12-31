@@ -49,6 +49,7 @@ use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\ResourceCheckerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\DataCollector\CommandDataCollector;
 use Symfony\Component\Console\Debug\CliRequest;
@@ -608,6 +609,9 @@ class FrameworkExtension extends Extension
             ->addTag('assets.package');
         $container->registerForAutoconfiguration(AssetCompilerInterface::class)
             ->addTag('asset_mapper.compiler');
+        $container->registerAttributeForAutoconfiguration(AsCommand::class, static function (ChildDefinition $definition, AsCommand $attribute, \ReflectionClass $reflector): void {
+            $definition->addTag('console.command', ['command' => $attribute->name, 'description' => $attribute->description ?? $reflector->getName()]);
+        });
         $container->registerForAutoconfiguration(Command::class)
             ->addTag('console.command');
         $container->registerForAutoconfiguration(ResourceCheckerInterface::class)
