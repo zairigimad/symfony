@@ -7,6 +7,30 @@ in 7.2 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.2.0...v7.2.1
 
+* 7.2.2 (2024-12-31)
+
+ * bug #59304 [PropertyInfo] Remove ``@internal`` from `PropertyReadInfo` and `PropertyWriteInfo` (Dario Guarracino)
+ * bug #59252 [Stopwatch] bug #54854  undefined key error when trying to fetch a mis… (Alex Niedre)
+ * bug #59278 [SecurityBundle] Do not replace authenticators service by their traceable version (MatTheCat)
+ * bug #59228 [HttpFoundation] Avoid mime type guess with temp files in `BinaryFileResponse` (alexandre-daubois)
+ * bug #59318 [Finder] Fix using `==` as default operator in `DateComparator` (MatTheCat)
+ * bug #59321 [HtmlSanitizer] reject URLs containing whitespaces (xabbuh)
+ * bug #59310 [Validator] the "max" option can be zero (xabbuh)
+ * bug #59271 [TypeInfo] Fix PHPDoc resolving of union with mixed (mtarld)
+ * bug #59269 [Security/Csrf] Trust "Referer" at the same level as "Origin" (nicolas-grekas)
+ * bug #59250 [HttpClient] Fix a typo in NoPrivateNetworkHttpClient (Jontsa)
+ * bug #59103 [Messenger] ensure exception on rollback does not hide previous exception (nikophil)
+ * bug #59226 [FrameworkBundle] require the writer to implement getFormats() in the translation:extract (xabbuh)
+ * bug #59213 [FrameworkBundle] don't require fake notifier transports to be installed as non-dev dependencies (xabbuh)
+ * bug #59113 [FrameworkBundle][Translation] fix translation lint compatibility with the `PseudoLocalizationTranslator` (xabbuh)
+ * bug #59060 [Validator] set the violation path only if the `errorPath` option is set (xabbuh)
+ * bug #59066 Fix resolve enum in string type resolver (DavidBadura)
+ * bug #59156 [PropertyInfo]  Fix interface handling in PhpStanTypeHelper (mtarld)
+ * bug #59160 [BeanstalkMessenger] Round delay to an integer to avoid deprecation warning (plantas)
+ * bug #59012 [PropertyInfo] Fix interface handling in `PhpStanTypeHelper` (janedbal)
+ * bug #59134 [HttpKernel] Denormalize request data using the csv format when using "#[MapQueryString]" or "#[MapRequestPayload]" (except for content data) (ovidiuenache)
+ * bug #59140 [WebProfilerBundle] fix: white-space in highlighted code (chr-hertel)
+
 * 7.2.1 (2024-12-11)
 
  * bug #59145 [TypeInfo] Make `Type::nullable` method no-op on every nullable type (mtarld)
