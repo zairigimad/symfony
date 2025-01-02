@@ -1976,8 +1976,12 @@ abstract class FrameworkExtensionTestCase extends TestCase
         ];
         $this->assertSame([$defaultOptions, 4], $container->getDefinition('http_client.transport')->getArguments());
 
+        $this->assertTrue($container->getDefinition('http_client')->hasTag('kernel.reset'));
+
         $this->assertTrue($container->hasDefinition('foo'), 'should have the "foo" service.');
-        $this->assertSame(ScopingHttpClient::class, $container->getDefinition('foo')->getClass());
+        $definition = $container->getDefinition('foo');
+        $this->assertSame(ScopingHttpClient::class, $definition->getClass());
+        $this->assertTrue($definition->hasTag('kernel.reset'));
     }
 
     public function testScopedHttpClientWithoutQueryOption()
