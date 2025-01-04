@@ -145,6 +145,11 @@ final class Transport
                         }
                     }
 
+                    parse_str(substr($dsn, $offset + 1), $query);
+                    if ($period = $query['retry_period'] ?? 0) {
+                        return [new $class($args, (int) $period), $offset + \strlen('retry_period='.$period) + 1];
+                    }
+
                     return [new $class($args), $offset];
                 }
             }
