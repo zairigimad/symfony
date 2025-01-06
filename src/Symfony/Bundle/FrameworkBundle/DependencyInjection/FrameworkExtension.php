@@ -2926,6 +2926,7 @@ class FrameworkExtension extends Extension
             NotifierBridge\Lox24\Lox24TransportFactory::class => 'notifier.transport_factory.lox24',
             NotifierBridge\Mailjet\MailjetTransportFactory::class => 'notifier.transport_factory.mailjet',
             NotifierBridge\Mastodon\MastodonTransportFactory::class => 'notifier.transport_factory.mastodon',
+            NotifierBridge\Matrix\MatrixTransportFactory::class => 'notifier.transport_factory.matrix',
             NotifierBridge\Mattermost\MattermostTransportFactory::class => 'notifier.transport_factory.mattermost',
             NotifierBridge\Mercure\MercureTransportFactory::class => 'notifier.transport_factory.mercure',
             NotifierBridge\MessageBird\MessageBirdTransportFactory::class => 'notifier.transport_factory.message-bird',
