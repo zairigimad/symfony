@@ -8,6 +8,12 @@ Read more about this in the [Symfony documentation](https://symfony.com/doc/7.3/
 
 If you're upgrading from a version below 7.1, follow the [7.2 upgrade guide](UPGRADE-7.2.md) first.
 
+FrameworkBundle
+---------------
+
+ * Not setting the `framework.property_info.with_constructor_extractor` option explicitly is deprecated
+   because its default value will change in version 8.0
+
 Serializer
 ----------
 

@@ -7,6 +7,7 @@ CHANGELOG
  * Add support for assets pre-compression
  * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`
  * Add JsonEncoder services and configuration
+ * Add new `framework.property_info.with_constructor_extractor` option to allow enabling or disabling the constructor extractor integration
 
 7.2
 ---

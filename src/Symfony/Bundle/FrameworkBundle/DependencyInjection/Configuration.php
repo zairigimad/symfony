@@ -1226,7 +1226,22 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('property_info')
                     ->info('Property info configuration')
                     ->{$enableIfStandalone('symfony/property-info', PropertyInfoExtractorInterface::class)}()
+                    ->children()
+                        ->booleanNode('with_constructor_extractor')
+                            ->info('Registers the constructor extractor.')
+                        ->end()
+                    ->end()
                 ->end()
+            ->end()
+            ->validate()
+                ->ifTrue(fn ($v) => $v['property_info']['enabled'] && !isset($v['property_info']['with_constructor_extractor']))
+                ->then(function ($v) {
+                    $v['property_info']['with_constructor_extractor'] = false;
+
+                    trigger_deprecation('symfony/property-info', '7.3', 'Not setting the "with_constructor_extractor" option explicitly is deprecated because its default value will change in version 8.0.');
+
+                    return $v;
+                })
             ->end()
         ;
     }

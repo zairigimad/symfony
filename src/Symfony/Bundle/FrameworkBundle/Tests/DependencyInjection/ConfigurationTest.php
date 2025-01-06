@@ -808,7 +808,7 @@ class ConfigurationTest extends TestCase
             ],
             'property_info' => [
                 'enabled' => !class_exists(FullStack::class),
-            ],
+            ] + (!class_exists(FullStack::class) ? ['with_constructor_extractor' => false] : []),
             'router' => [
                 'enabled' => false,
                 'default_uri' => null,
