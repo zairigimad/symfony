@@ -54,7 +54,6 @@ class UnusedTagsPass implements CompilerPassInterface
         'html_sanitizer',
         'http_client.client',
         'json_encoder.denormalizer',
-        'json_encoder.encodable',
         'json_encoder.normalizer',
         'kernel.cache_clearer',
         'kernel.cache_warmer',

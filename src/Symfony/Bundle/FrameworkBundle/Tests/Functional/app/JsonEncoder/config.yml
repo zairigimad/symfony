@@ -18,4 +18,9 @@ services:
         alias: json_encoder.decoder
         public: true
 
+    json_encoder.cache_warmer.encoder_decoder.alias:
+        alias: .json_encoder.cache_warmer.encoder_decoder
+        public: true
+
+    Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\Dto\Dummy: ~
     Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\RangeNormalizer: ~
