@@ -110,7 +110,7 @@ abstract class AbstractDescriptorTestCase extends TestCase
     /** @dataProvider getDescribeContainerDefinitionWithArgumentsShownTestData */
     public function testDescribeContainerDefinitionWithArgumentsShown(Definition $definition, $expectedDescription)
     {
-        $this->assertDescription($expectedDescription, $definition, ['show_arguments' => true]);
+        $this->assertDescription($expectedDescription, $definition, []);
     }
 
     public static function getDescribeContainerDefinitionWithArgumentsShownTestData(): array
@@ -307,7 +307,7 @@ abstract class AbstractDescriptorTestCase extends TestCase
             'public' => ['show_hidden' => false],
             'tag1' => ['show_hidden' => true, 'tag' => 'tag1'],
             'tags' => ['group_by' => 'tags', 'show_hidden' => true],
-            'arguments' => ['show_hidden' => false, 'show_arguments' => true],
+            'arguments' => ['show_hidden' => false],
         ];
 
         $data = [];

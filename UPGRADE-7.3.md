@@ -13,6 +13,7 @@ FrameworkBundle
 
  * Not setting the `framework.property_info.with_constructor_extractor` option explicitly is deprecated
    because its default value will change in version 8.0
+ * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
 
 Serializer
 ----------
