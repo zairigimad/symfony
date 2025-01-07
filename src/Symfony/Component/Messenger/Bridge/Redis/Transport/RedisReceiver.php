@@ -19,6 +19,7 @@ use Symfony\Component\Messenger\Transport\Receiver\KeepaliveReceiverInterface;
 use Symfony\Component\Messenger\Transport\Receiver\MessageCountAwareInterface;
 use Symfony\Component\Messenger\Transport\Serialization\PhpSerializer;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
+use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 
 /**
  * @author Alexander Schranz <alexander@sulu.io>
@@ -76,7 +77,12 @@ class RedisReceiver implements KeepaliveReceiverInterface, MessageCountAwareInte
             throw $exception;
         }
 
-        return [$envelope->with(new RedisReceivedStamp($message['id']))];
+        return [$envelope
+            ->withoutAll(TransportMessageIdStamp::class)
+            ->with(
+                new RedisReceivedStamp($message['id']),
+                new TransportMessageIdStamp($message['id'])
+            )];
     }
 
     public function ack(Envelope $envelope): void
