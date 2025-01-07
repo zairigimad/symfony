@@ -107,7 +107,7 @@ return static function (ContainerConfigurator $container) {
         // cache
         ->set('.json_encoder.cache_warmer.encoder_decoder', EncoderDecoderCacheWarmer::class)
             ->args([
-                tagged_iterator('json_encoder.encodable'),
+                abstract_arg('encodable class names'),
                 service('json_encoder.encode.property_metadata_loader'),
                 service('json_encoder.decode.property_metadata_loader'),
                 param('.json_encoder.encoders_dir'),
@@ -118,7 +118,7 @@ return static function (ContainerConfigurator $container) {
 
         ->set('.json_encoder.cache_warmer.lazy_ghost', LazyGhostCacheWarmer::class)
             ->args([
-                tagged_iterator('json_encoder.encodable'),
+                abstract_arg('encodable class names'),
                 param('.json_encoder.lazy_ghosts_dir'),
             ])
             ->tag('kernel.cache_warmer')
