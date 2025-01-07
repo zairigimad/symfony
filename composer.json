@@ -203,6 +203,9 @@
         ]
     },
     "autoload-dev": {
+        "psr-4": {
+            "Symfony\\Bridge\\PhpUnit\\": "src/Symfony/Bridge/PhpUnit/"
+        },
         "files": [
             "src/Symfony/Component/Clock/Resources/now.php",
             "src/Symfony/Component/VarDumper/Resources/functions/dump.php"
