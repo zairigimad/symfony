@@ -342,10 +342,10 @@ TXT
         ];
     }
 
-    public function testShowArgumentsNotProvidedShouldTriggerDeprecation()
+    public function testShowArgumentsProvidedShouldTriggerDeprecation()
     {
         static::bootKernel(['test_case' => 'ContainerDebug', 'root_config' => 'config.yml', 'debug' => true]);
-        $path = sprintf('%s/%sDeprecations.log', static::$kernel->getContainer()->getParameter('kernel.build_dir'), static::$kernel->getContainer()->getParameter('kernel.container_class'));
+        $path = \sprintf('%s/%sDeprecations.log', static::$kernel->getContainer()->getParameter('kernel.build_dir'), static::$kernel->getContainer()->getParameter('kernel.container_class'));
         @unlink($path);
 
         $application = new Application(static::$kernel);
