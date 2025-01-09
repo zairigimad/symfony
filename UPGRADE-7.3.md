@@ -19,3 +19,9 @@ Serializer
 ----------
 
  * Deprecate the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
+
+VarDumper
+---------
+
+ * Deprecate `ResourceCaster::castCurl()`, `ResourceCaster::castGd()` and `ResourceCaster::castOpensslX509()`
+ * Mark all casters as `@internal`
