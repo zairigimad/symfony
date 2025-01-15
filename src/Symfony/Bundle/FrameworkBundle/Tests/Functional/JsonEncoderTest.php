@@ -12,6 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\Dto\Dummy;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\JsonEncoder\DecoderInterface;
 use Symfony\Component\JsonEncoder\EncoderInterface;
 use Symfony\Component\TypeInfo\Type;
@@ -21,10 +22,13 @@ use Symfony\Component\TypeInfo\Type;
  */
 class JsonEncoderTest extends AbstractWebTestCase
 {
-    public function testEncode()
+    protected function setUp(): void
     {
         static::bootKernel(['test_case' => 'JsonEncoder']);
+    }
 
+    public function testEncode()
+    {
         /** @var EncoderInterface $encoder */
         $encoder = static::getContainer()->get('json_encoder.encoder.alias');
 
@@ -33,8 +37,6 @@ class JsonEncoderTest extends AbstractWebTestCase
 
     public function testDecode()
     {
-        static::bootKernel(['test_case' => 'JsonEncoder']);
-
         /** @var DecoderInterface $decoder */
         $decoder = static::getContainer()->get('json_encoder.decoder.alias');
 
@@ -43,5 +45,23 @@ class JsonEncoderTest extends AbstractWebTestCase
         $expected->range = [0, 1];
 
         $this->assertEquals($expected, $decoder->decode('{"@name": "DUMMY", "range": "0..1"}', Type::object(Dummy::class)));
+    }
+
+    public function testWarmupEncodableClasses()
+    {
+        /** @var Filesystem $fs */
+        $fs = static::getContainer()->get('filesystem');
+
+        $encodersDir = \sprintf('%s/json_encoder/encoder/', static::getContainer()->getParameter('kernel.cache_dir'));
+
+        // clear already created encoders
+        if ($fs->exists($encodersDir)) {
+            $fs->remove($encodersDir);
+        }
+
+        static::getContainer()->get('json_encoder.cache_warmer.encoder_decoder.alias')->warmUp(static::getContainer()->getParameter('kernel.cache_dir'));
+
+        $this->assertFileExists($encodersDir);
+        $this->assertCount(1, glob($encodersDir.'/*'));
     }
 }

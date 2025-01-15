@@ -100,6 +100,7 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
+use Symfony\Component\JsonEncoder\Attribute\JsonEncodable;
 use Symfony\Component\JsonEncoder\Decode\Denormalizer\DenormalizerInterface as JsonEncoderDenormalizerInterface;
 use Symfony\Component\JsonEncoder\DecoderInterface as JsonEncoderDecoderInterface;
 use Symfony\Component\JsonEncoder\Encode\Normalizer\NormalizerInterface as JsonEncoderNormalizerInterface;
@@ -745,6 +746,10 @@ class FrameworkExtension extends Extension
                 }
             );
         }
+        $container->registerAttributeForAutoconfiguration(JsonEncodable::class, static function (ChildDefinition $definition): void {
+            $definition->addTag('json_encoder.encodable');
+            $definition->addTag('container.excluded');
+        });
 
         if (!$container->getParameter('kernel.debug')) {
             // remove tagged iterator argument for resource checkers
