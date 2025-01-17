@@ -48,11 +48,11 @@ return static function (ContainerConfigurator $container) {
             ->tag('property_info.access_extractor', ['priority' => -1000])
             ->tag('property_info.initializable_extractor', ['priority' => -1000])
 
+        ->alias(PropertyReadInfoExtractorInterface::class, 'property_info.reflection_extractor')
+        ->alias(PropertyWriteInfoExtractorInterface::class, 'property_info.reflection_extractor')
+
         ->set('property_info.constructor_extractor', ConstructorExtractor::class)
             ->args([[]])
             ->tag('property_info.type_extractor', ['priority' => -999])
-
-        ->alias(PropertyReadInfoExtractorInterface::class, 'property_info.reflection_extractor')
-        ->alias(PropertyWriteInfoExtractorInterface::class, 'property_info.reflection_extractor')
     ;
 };
