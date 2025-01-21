@@ -3117,6 +3117,7 @@ class FrameworkExtension extends Extension
             $loader->load('notifier_webhook.php');
 
             $webhookRequestParsers = [
+                NotifierBridge\Smsbox\Webhook\SmsboxRequestParser::class => 'notifier.webhook.request_parser.smsbox',
                 NotifierBridge\Sweego\Webhook\SweegoRequestParser::class => 'notifier.webhook.request_parser.sweego',
                 NotifierBridge\Twilio\Webhook\TwilioRequestParser::class => 'notifier.webhook.request_parser.twilio',
                 NotifierBridge\Vonage\Webhook\VonageRequestParser::class => 'notifier.webhook.request_parser.vonage',
