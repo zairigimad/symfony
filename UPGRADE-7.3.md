@@ -42,6 +42,29 @@ Serializer
 
  * Deprecate the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
 
+Validator
+---------
+
+ * Deprecate passing an array of options to the constructors of the constraint classes, pass each option as a dedicated argument instead
+
+   Before:
+
+   ```php
+   new NotNull([
+       'groups' => ['foo', 'bar'],
+       'message' => 'a custom constraint violation message',
+   ])
+   ```
+
+   After:
+
+   ```php
+   new NotNull(
+       groups: ['foo', 'bar'],
+       message: 'a custom constraint violation message',
+   )
+   ```
+
 VarDumper
 ---------
 
