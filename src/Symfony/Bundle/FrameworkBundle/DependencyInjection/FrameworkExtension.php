@@ -750,8 +750,11 @@ class FrameworkExtension extends Extension
                 }
             );
         }
-        $container->registerAttributeForAutoconfiguration(JsonEncodable::class, static function (ChildDefinition $definition): void {
-            $definition->addTag('json_encoder.encodable');
+        $container->registerAttributeForAutoconfiguration(JsonEncodable::class, static function (ChildDefinition $definition, JsonEncodable $attribute): void {
+            $definition->addTag('json_encoder.encodable', [
+                'object' => $attribute->asObject,
+                'list' => $attribute->asList,
+            ]);
             $definition->addTag('container.excluded');
         });
 
