@@ -98,6 +98,12 @@ Validator
    )
    ```
 
+TypeInfo
+--------
+
+ * Deprecate constructing a `CollectionType` instance as a list that is not an array
+ * Deprecate the third `$asList` argument of `TypeFactoryTrait::iterable()`, use `TypeFactoryTrait::list()` instead
+
 VarDumper
 ---------
 
