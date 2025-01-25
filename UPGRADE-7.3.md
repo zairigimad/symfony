@@ -30,6 +30,8 @@ Console
    });
    ```
 
+ * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
+
 FrameworkBundle
 ---------------
 
