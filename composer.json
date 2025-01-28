@@ -83,6 +83,7 @@
         "symfony/http-foundation": "self.version",
         "symfony/http-kernel": "self.version",
         "symfony/intl": "self.version",
+        "symfony/json-path": "self.version",
         "symfony/json-streamer": "self.version",
         "symfony/ldap": "self.version",
         "symfony/lock": "self.version",
