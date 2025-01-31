@@ -39,6 +39,12 @@ FrameworkBundle
    because its default value will change in version 8.0
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
 
+
+SecurityBundle
+--------------
+
+ * Deprecate the `security.hide_user_not_found` config option in favor of `security.expose_security_errors`
+
 Serializer
 ----------
 
