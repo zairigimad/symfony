@@ -610,11 +610,11 @@ class FrameworkExtension extends Extension
             ->addTag('assets.package');
         $container->registerForAutoconfiguration(AssetCompilerInterface::class)
             ->addTag('asset_mapper.compiler');
-        $container->registerAttributeForAutoconfiguration(AsCommand::class, static function (ChildDefinition $definition, AsCommand $attribute, \ReflectionClass $reflector): void {
+        $container->registerAttributeForAutoconfiguration(AsCommand::class, static function (ChildDefinition $definition, AsCommand $attribute): void {
             $definition->addTag('console.command', [
                 'command' => $attribute->name,
                 'description' => $attribute->description,
-                'help' => $attribute->help,
+                'help' => $attribute->help ?? null,
             ]);
         });
         $container->registerForAutoconfiguration(Command::class)
