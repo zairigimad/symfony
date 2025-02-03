@@ -11,18 +11,37 @@ If you're upgrading from a version below 7.2, follow the [7.2 upgrade guide](UPG
 Ldap
 ----
 
- * Deprecate `LdapUser::eraseCredentials()`, use `LdapUser::setPassword(null)` instead
+ * Deprecate `LdapUser::eraseCredentials()` in favor of `__serialize()`
 
 Security
 --------
 
  * Deprecate `UserInterface::eraseCredentials()` and `TokenInterface::eraseCredentials()`,
-   use a dedicated DTO or erase credentials on your own e.g. upon `AuthenticationTokenCreatedEvent` instead
+   erase credentials e.g. using `__serialize()` instead
 
-SecurityBundle
---------------
+   *Before*
+   ```php
+   public function eraseCredentials(): void
+   {
+   }
+   ```
 
- * Deprecate the `erase_credentials` config option, erase credentials on your own e.g. upon `AuthenticationTokenCreatedEvent` instead
+   *After*
+   ```php
+   #[\Deprecated]
+   public function eraseCredentials(): void
+   {
+   }
+
+   // If your eraseCredentials() method was used to empty a "password" property:
+   public function __serialize(): array
+   {
+       $data = (array) $this;
+       unset($data["\0".self::class."\0password"]);
+
+       return $data;
+   }
+   ```
 
 Console
 -------
@@ -131,4 +150,3 @@ VarDumper
 
  * Deprecate `ResourceCaster::castCurl()`, `ResourceCaster::castGd()` and `ResourceCaster::castOpensslX509()`
  * Mark all casters as `@internal`
- * Deprecate the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
