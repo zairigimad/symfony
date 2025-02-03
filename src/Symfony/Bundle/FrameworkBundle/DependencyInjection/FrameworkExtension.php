@@ -120,6 +120,7 @@ use Symfony\Component\Messenger\Bridge as MessengerBridge;
 use Symfony\Component\Messenger\Handler\BatchHandlerInterface;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Middleware\DeduplicateMiddleware;
 use Symfony\Component\Messenger\Middleware\RouterContextMiddleware;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface as MessengerTransportFactoryInterface;
@@ -2266,6 +2267,13 @@ class FrameworkExtension extends Extension
                 ['id' => 'handle_message'],
             ],
         ];
+
+        if (class_exists(DeduplicateMiddleware::class) && class_exists(LockFactory::class)) {
+            $defaultMiddleware['before'][] = ['id' => 'deduplicate_middleware'];
+        } else {
+            $container->removeDefinition('messenger.middleware.deduplicate_middleware');
+        }
+
         foreach ($config['buses'] as $busId => $bus) {
             $middleware = $bus['middleware'];
 
