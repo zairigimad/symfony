@@ -59,8 +59,15 @@ abstract class AbstractToken implements TokenInterface, \Serializable
         $this->user = $user;
     }
 
+    /**
+     * Removes sensitive information from the token.
+     *
+     * @deprecated since Symfony 7.3, erase credentials using the "__serialize()" method instead
+     */
     public function eraseCredentials(): void
     {
+        trigger_deprecation('symfony/security-core', '7.3', \sprintf('The "%s::eraseCredentials()" method is deprecated and will be removed in 8.0, erase credentials using the "__serialize()" method instead.', TokenInterface::class));
+
         if ($this->getUser() instanceof UserInterface) {
             $this->getUser()->eraseCredentials();
         }

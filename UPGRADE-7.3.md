@@ -6,7 +6,42 @@ backward compatibility breaks. Minor backward compatibility breaks are prefixed 
 `[BC BREAK]`, make sure your code is compatible with these entries before upgrading.
 Read more about this in the [Symfony documentation](https://symfony.com/doc/7.3/setup/upgrade_minor.html).
 
-If you're upgrading from a version below 7.1, follow the [7.2 upgrade guide](UPGRADE-7.2.md) first.
+If you're upgrading from a version below 7.2, follow the [7.2 upgrade guide](UPGRADE-7.2.md) first.
+
+Ldap
+----
+
+ * Deprecate `LdapUser::eraseCredentials()` in favor of `__serialize()`
+
+Security
+--------
+
+ * Deprecate `UserInterface::eraseCredentials()` and `TokenInterface::eraseCredentials()`,
+   erase credentials e.g. using `__serialize()` instead
+
+   *Before*
+   ```php
+   public function eraseCredentials(): void
+   {
+   }
+   ```
+
+   *After*
+   ```php
+   #[\Deprecated]
+   public function eraseCredentials(): void
+   {
+   }
+
+   // If your eraseCredentials() method was used to empty a "password" property:
+   public function __serialize(): array
+   {
+       $data = (array) $this;
+       unset($data["\0".self::class."\0password"]);
+
+       return $data;
+   }
+   ```
 
 Console
 -------
