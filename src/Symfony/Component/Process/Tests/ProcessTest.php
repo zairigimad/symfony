@@ -1686,6 +1686,9 @@ class ProcessTest extends TestCase
         if (!\function_exists('pcntl_signal')) {
             $this->markTestSkipped('pnctl extension is required.');
         }
+        if (\PHP_VERSION_ID < 80300 && isset($_SERVER['GITHUB_ACTIONS'])) {
+            $this->markTestSkipped('Transient on GHA with PHP < 8.3');
+        }
 
         $process = $this->getProcess(['sleep', '10']);
 
