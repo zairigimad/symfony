@@ -156,6 +156,7 @@ use Symfony\Component\Scheduler\Attribute\AsCronTask;
 use Symfony\Component\Scheduler\Attribute\AsPeriodicTask;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\Messenger\SchedulerTransportFactory;
+use Symfony\Component\Scheduler\Messenger\Serializer\Normalizer\SchedulerTriggerNormalizer;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -2219,6 +2220,11 @@ class FrameworkExtension extends Extension
 
         if (!$this->hasConsole()) {
             $container->removeDefinition('console.command.scheduler_debug');
+        }
+
+        // BC layer Scheduler < 7.3
+        if (!class_exists(SchedulerTriggerNormalizer::class)) {
+            $container->removeDefinition('serializer.normalizer.scheduler_trigger');
         }
     }
 
