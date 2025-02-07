@@ -615,7 +615,7 @@ class FrameworkExtension extends Extension
         $container->registerForAutoconfiguration(DataCollectorInterface::class)
             ->addTag('data_collector');
         $container->registerForAutoconfiguration(FormTypeInterface::class)
-            ->addTag('form.type');
+            ->addTag('form.type', ['csrf_token_id' => '%.form.type_extension.csrf.token_id%']);
         $container->registerForAutoconfiguration(FormTypeGuesserInterface::class)
             ->addTag('form.type_guesser');
         $container->registerForAutoconfiguration(FormTypeExtensionInterface::class)
@@ -777,9 +777,7 @@ class FrameworkExtension extends Extension
             $container->setParameter('form.type_extension.csrf.enabled', true);
             $container->setParameter('form.type_extension.csrf.field_name', $config['form']['csrf_protection']['field_name']);
             $container->setParameter('form.type_extension.csrf.field_attr', $config['form']['csrf_protection']['field_attr']);
-
-            $container->getDefinition('form.type_extension.csrf')
-                ->replaceArgument(7, $config['form']['csrf_protection']['token_id']);
+            $container->setParameter('.form.type_extension.csrf.token_id', $config['form']['csrf_protection']['token_id']);
         } else {
             $container->setParameter('form.type_extension.csrf.enabled', false);
         }
