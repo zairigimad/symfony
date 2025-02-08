@@ -1056,60 +1056,73 @@ abstract class FrameworkExtensionTestCase extends TestCase
         $this->assertSame(['enable_max_depth' => true], $serializerTransportDefinition->getArgument(2));
     }
 
-    public function testMessengerWithMultipleBuses()
+    public function testMessengerWithMultipleBusesWithoutDeduplicateMiddleware()
     {
-        $container = $this->createContainerFromFile('messenger_multiple_buses');
+        $container = $this->createContainerFromFile('messenger_multiple_buses_without_deduplicate_middleware');
 
         $this->assertTrue($container->has('messenger.bus.commands'));
         $this->assertSame([], $container->getDefinition('messenger.bus.commands')->getArgument(0));
-
-        if (class_exists(DeduplicateMiddleware::class)) {
-            $this->assertEquals([
-                ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.commands']],
-                ['id' => 'reject_redelivered_message_middleware'],
-                ['id' => 'dispatch_after_current_bus'],
-                ['id' => 'failed_message_processing_middleware'],
-                ['id' => 'deduplicate_middleware'],
-                ['id' => 'send_message', 'arguments' => [true]],
-                ['id' => 'handle_message', 'arguments' => [false]],
-            ], $container->getParameter('messenger.bus.commands.middleware'));
-        } else {
-            $this->assertEquals([
-                ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.commands']],
-                ['id' => 'reject_redelivered_message_middleware'],
-                ['id' => 'dispatch_after_current_bus'],
-                ['id' => 'failed_message_processing_middleware'],
-                ['id' => 'send_message', 'arguments' => [true]],
-                ['id' => 'handle_message', 'arguments' => [false]],
-            ], $container->getParameter('messenger.bus.commands.middleware'));
-        }
-
+        $this->assertEquals([
+            ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.commands']],
+            ['id' => 'reject_redelivered_message_middleware'],
+            ['id' => 'dispatch_after_current_bus'],
+            ['id' => 'failed_message_processing_middleware'],
+            ['id' => 'send_message', 'arguments' => [true]],
+            ['id' => 'handle_message', 'arguments' => [false]],
+        ], $container->getParameter('messenger.bus.commands.middleware'));
         $this->assertTrue($container->has('messenger.bus.events'));
         $this->assertSame([], $container->getDefinition('messenger.bus.events')->getArgument(0));
+        $this->assertEquals([
+            ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.events']],
+            ['id' => 'reject_redelivered_message_middleware'],
+            ['id' => 'dispatch_after_current_bus'],
+            ['id' => 'failed_message_processing_middleware'],
+            ['id' => 'with_factory', 'arguments' => ['foo', true, ['bar' => 'baz']]],
+            ['id' => 'send_message', 'arguments' => [true]],
+            ['id' => 'handle_message', 'arguments' => [false]],
+        ], $container->getParameter('messenger.bus.events.middleware'));
+        $this->assertTrue($container->has('messenger.bus.queries'));
+        $this->assertSame([], $container->getDefinition('messenger.bus.queries')->getArgument(0));
+        $this->assertEquals([
+            ['id' => 'send_message', 'arguments' => []],
+            ['id' => 'handle_message', 'arguments' => []],
+        ], $container->getParameter('messenger.bus.queries.middleware'));
 
-        if (class_exists(DeduplicateMiddleware::class)) {
-            $this->assertEquals([
-                ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.events']],
-                ['id' => 'reject_redelivered_message_middleware'],
-                ['id' => 'dispatch_after_current_bus'],
-                ['id' => 'failed_message_processing_middleware'],
-                ['id' => 'deduplicate_middleware'],
-                ['id' => 'with_factory', 'arguments' => ['foo', true, ['bar' => 'baz']]],
-                ['id' => 'send_message', 'arguments' => [true]],
-                ['id' => 'handle_message', 'arguments' => [false]],
-            ], $container->getParameter('messenger.bus.events.middleware'));
-        } else {
-            $this->assertEquals([
-                ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.events']],
-                ['id' => 'reject_redelivered_message_middleware'],
-                ['id' => 'dispatch_after_current_bus'],
-                ['id' => 'failed_message_processing_middleware'],
-                ['id' => 'with_factory', 'arguments' => ['foo', true, ['bar' => 'baz']]],
-                ['id' => 'send_message', 'arguments' => [true]],
-                ['id' => 'handle_message', 'arguments' => [false]],
-            ], $container->getParameter('messenger.bus.events.middleware'));
+        $this->assertTrue($container->hasAlias('messenger.default_bus'));
+        $this->assertSame('messenger.bus.commands', (string) $container->getAlias('messenger.default_bus'));
+    }
+
+    public function testMessengerWithMultipleBusesWithDeduplicateMiddleware()
+    {
+        if (!class_exists(DeduplicateMiddleware::class)) {
+            $this->markTestSkipped('DeduplicateMiddleware not available.');
         }
 
+        $container = $this->createContainerFromFile('messenger_multiple_buses_with_deduplicate_middleware');
+
+        $this->assertTrue($container->has('messenger.bus.commands'));
+        $this->assertSame([], $container->getDefinition('messenger.bus.commands')->getArgument(0));
+        $this->assertEquals([
+            ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.commands']],
+            ['id' => 'reject_redelivered_message_middleware'],
+            ['id' => 'dispatch_after_current_bus'],
+            ['id' => 'failed_message_processing_middleware'],
+            ['id' => 'deduplicate_middleware'],
+            ['id' => 'send_message', 'arguments' => [true]],
+            ['id' => 'handle_message', 'arguments' => [false]],
+        ], $container->getParameter('messenger.bus.commands.middleware'));
+        $this->assertTrue($container->has('messenger.bus.events'));
+        $this->assertSame([], $container->getDefinition('messenger.bus.events')->getArgument(0));
+        $this->assertEquals([
+            ['id' => 'add_bus_name_stamp_middleware', 'arguments' => ['messenger.bus.events']],
+            ['id' => 'reject_redelivered_message_middleware'],
+            ['id' => 'dispatch_after_current_bus'],
+            ['id' => 'failed_message_processing_middleware'],
+            ['id' => 'deduplicate_middleware'],
+            ['id' => 'with_factory', 'arguments' => ['foo', true, ['bar' => 'baz']]],
+            ['id' => 'send_message', 'arguments' => [true]],
+            ['id' => 'handle_message', 'arguments' => [false]],
+        ], $container->getParameter('messenger.bus.events.middleware'));
         $this->assertTrue($container->has('messenger.bus.queries'));
         $this->assertSame([], $container->getDefinition('messenger.bus.queries')->getArgument(0));
         $this->assertEquals([
