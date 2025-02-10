@@ -317,7 +317,7 @@ final class BlueskyTransportTest extends TransportTestCase
         $this->assertSame('103254962155278888', $result->getMessageId());
     }
 
-    public function sendMessageWithEmbedDataProvider(): iterable
+    public static function sendMessageWithEmbedDataProvider(): iterable
     {
         yield 'With media' => [
             'options' => (new BlueskyOptions())->attachMedia(new File(__DIR__.'/fixtures.gif'), 'A fixture'),
