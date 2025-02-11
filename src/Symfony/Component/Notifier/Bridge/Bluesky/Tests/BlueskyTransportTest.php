@@ -279,7 +279,11 @@ final class BlueskyTransportTest extends TransportTestCase
      */
     public function testWithEmbed(BlueskyOptions $blueskyOptions, string $expectedJsonResponse)
     {
-        $transport = $this->createTransport(new MockHttpClient((function () use ($expectedJsonResponse) {
+        // realistic sample values taken from https://docs.bsky.app/docs/advanced-guides/posts#post-record-structure
+        $recordUri = 'at://did:plc:u5cwb2mwiv2bfq53cjufe6yn/app.bsky.feed.post/3k4duaz5vfs2b';
+        $recordCid = 'bafyreibjifzpqj6o6wcq3hejh7y4z4z2vmiklkvykc57tw3pcbx3kxifpm';
+
+        $transport = $this->createTransport(new MockHttpClient((function () use ($recordUri, $recordCid, $expectedJsonResponse) {
             yield function (string $method, string $url, array $options) {
                 $this->assertSame('POST', $method);
                 $this->assertSame('https://bsky.social/xrpc/com.atproto.server.createSession', $url);
@@ -302,19 +306,38 @@ final class BlueskyTransportTest extends TransportTestCase
                 ]]);
             };
 
-            yield function (string $method, string $url, array $options) use ($expectedJsonResponse) {
+            yield function (string $method, string $url, array $options) use ($recordUri, $recordCid, $expectedJsonResponse) {
                 $this->assertSame('POST', $method);
                 $this->assertSame('https://bsky.social/xrpc/com.atproto.repo.createRecord', $url);
                 $this->assertArrayHasKey('authorization', $options['normalized_headers']);
                 $this->assertSame($expectedJsonResponse, $options['body']);
 
-                return new JsonMockResponse(['cid' => '103254962155278888']);
+                return new JsonMockResponse(['uri' => $recordUri, 'cid' => $recordCid]);
             };
         })()));
 
         $result = $transport->send(new ChatMessage('Hello World!', $blueskyOptions));
 
-        $this->assertSame('103254962155278888', $result->getMessageId());
+        $this->assertSame($recordUri, $result->getMessageId());
+    }
+
+    public function testReturnedMessageId()
+    {
+        // realistic sample values taken from https://docs.bsky.app/docs/advanced-guides/posts#post-record-structure
+        $recordUri = 'at://did:plc:u5cwb2mwiv2bfq53cjufe6yn/app.bsky.feed.post/3k4duaz5vfs2b';
+        $recordCid = 'bafyreibjifzpqj6o6wcq3hejh7y4z4z2vmiklkvykc57tw3pcbx3kxifpm';
+
+        $client = new MockHttpClient(function () use ($recordUri, $recordCid) {
+            return new JsonMockResponse([
+                'uri' => $recordUri,
+                'cid' => $recordCid,
+            ]);
+        });
+
+        $transport = self::createTransport($client);
+        $message = $transport->send(new ChatMessage('Hello!'));
+
+        $this->assertSame($recordUri, $message->getMessageId());
     }
 
     public static function sendMessageWithEmbedDataProvider(): iterable
