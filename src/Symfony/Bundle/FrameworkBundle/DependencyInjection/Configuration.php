@@ -1572,6 +1572,7 @@ class Configuration implements ConfigurationInterface
                     ->{$enableIfStandalone('symfony/messenger', MessageBusInterface::class)}()
                     ->fixXmlConfig('transport')
                     ->fixXmlConfig('bus', 'buses')
+                    ->fixXmlConfig('stop_worker_on_signal')
                     ->validate()
                         ->ifTrue(fn ($v) => isset($v['buses']) && \count($v['buses']) > 1 && null === $v['default_bus'])
                         ->thenInvalid('You must specify the "default_bus" if you define more than one bus.')
@@ -1704,7 +1705,26 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('stop_worker_on_signals')
                             ->defaultValue([])
                             ->info('A list of signals that should stop the worker; defaults to SIGTERM and SIGINT.')
-                            ->integerPrototype()->end()
+                            ->beforeNormalization()
+                                ->always(function ($signals) {
+                                    if (!\is_array($signals)) {
+                                        throw new InvalidConfigurationException('The "stop_worker_on_signals" option must be an array in messenger configuration.');
+                                    }
+
+                                    return array_map(static function ($v) {
+                                        if (\is_string($v) && str_starts_with($v, 'SIG') && \array_key_exists($v, get_defined_constants(true)['pcntl'])) {
+                                            return \constant($v);
+                                        }
+
+                                        if (!\is_int($v)) {
+                                            throw new InvalidConfigurationException('The "stop_worker_on_signals" option must be an array of pcntl signals in messenger configuration.');
+                                        }
+
+                                        return $v;
+                                    }, $signals);
+                                })
+                            ->end()
+                            ->scalarPrototype()->end()
                         ->end()
                         ->scalarNode('default_bus')->defaultNull()->end()
                         ->arrayNode('buses')

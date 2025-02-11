@@ -11,6 +11,7 @@ CHANGELOG
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
  * Add `RateLimiterFactoryInterface` as an alias of the `limiter` service
  * Add `framework.validation.disable_translation` option
+ * Add support for signal plain name in the `messenger.stop_worker_on_signals` configuration
 
 7.2
 ---
