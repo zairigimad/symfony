@@ -81,6 +81,17 @@ jobs:
           REDIS_MASTER_HOST: redis
           REDIS_MASTER_SET: redis_sentinel
           REDIS_SENTINEL_QUORUM: 1
+      redis-primary:
+        image: redis:latest
+        hostname: redis-primary
+        ports:
+          - 16381:6379
+
+      redis-replica:
+        image: redis:latest
+        ports:
+          - 16382:6379
+        command: redis-server --slaveof redis-primary 6379
       memcached:
         image: memcached:1.6.5
         ports:
@@ -239,6 +250,7 @@ jobs:
           REDIS_CLUSTER_HOSTS: 'localhost:7000 localhost:7001 localhost:7002 localhost:7003 localhost:7004 localhost:7005'
           REDIS_SENTINEL_HOSTS: 'unreachable-host:26379 localhost:26379 localhost:26379'
           REDIS_SENTINEL_SERVICE: redis_sentinel
+          REDIS_REPLICATION_HOSTS: 'localhost:16381 localhost:16382'
           MESSENGER_REDIS_DSN: redis://127.0.0.1:7006/messages
           MESSENGER_AMQP_DSN: amqp://localhost/%2f/messages
           MESSENGER_SQS_DSN: "sqs://localhost:4566/messages?sslmode=disable&poll_timeout=0.01"
