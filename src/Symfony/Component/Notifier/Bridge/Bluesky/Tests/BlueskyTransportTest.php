@@ -276,7 +276,11 @@ final class BlueskyTransportTest extends TransportTestCase
 
     public function testWithMedia()
     {
-        $transport = $this->createTransport(new MockHttpClient((function () {
+        // realistic sample values taken from https://docs.bsky.app/docs/advanced-guides/posts#post-record-structure
+        $recordUri = 'at://did:plc:u5cwb2mwiv2bfq53cjufe6yn/app.bsky.feed.post/3k4duaz5vfs2b';
+        $recordCid = 'bafyreibjifzpqj6o6wcq3hejh7y4z4z2vmiklkvykc57tw3pcbx3kxifpm';
+
+        $transport = $this->createTransport(new MockHttpClient((function () use ($recordUri, $recordCid) {
             yield function (string $method, string $url, array $options) {
                 $this->assertSame('POST', $method);
                 $this->assertSame('https://bsky.social/xrpc/com.atproto.server.createSession', $url);
@@ -299,13 +303,13 @@ final class BlueskyTransportTest extends TransportTestCase
                 ]]);
             };
 
-            yield function (string $method, string $url, array $options) {
+            yield function (string $method, string $url, array $options) use ($recordUri, $recordCid) {
                 $this->assertSame('POST', $method);
                 $this->assertSame('https://bsky.social/xrpc/com.atproto.repo.createRecord', $url);
                 $this->assertArrayHasKey('authorization', $options['normalized_headers']);
                 $this->assertSame('{"repo":null,"collection":"app.bsky.feed.post","record":{"$type":"app.bsky.feed.post","text":"Hello World!","createdAt":"2024-04-28T08:40:17.000000Z","embed":{"$type":"app.bsky.embed.images","images":[{"alt":"A fixture","image":{"$type":"blob","ref":{"$link":"bafkreibabalobzn6cd366ukcsjycp4yymjymgfxcv6xczmlgpemzkz3cfa"},"mimeType":"image\/png","size":760898}}]}}}', $options['body']);
 
-                return new JsonMockResponse(['cid' => '103254962155278888']);
+                return new JsonMockResponse(['uri' => $recordUri, 'cid' => $recordCid]);
             };
         })()));
 
@@ -313,7 +317,26 @@ final class BlueskyTransportTest extends TransportTestCase
             ->attachMedia(new File(__DIR__.'/fixtures.gif'), 'A fixture');
         $result = $transport->send(new ChatMessage('Hello World!', $options));
 
-        $this->assertSame('103254962155278888', $result->getMessageId());
+        $this->assertSame($recordUri, $result->getMessageId());
+    }
+
+    public function testReturnedMessageId()
+    {
+        // realistic sample values taken from https://docs.bsky.app/docs/advanced-guides/posts#post-record-structure
+        $recordUri = 'at://did:plc:u5cwb2mwiv2bfq53cjufe6yn/app.bsky.feed.post/3k4duaz5vfs2b';
+        $recordCid = 'bafyreibjifzpqj6o6wcq3hejh7y4z4z2vmiklkvykc57tw3pcbx3kxifpm';
+
+        $client = new MockHttpClient(function () use ($recordUri, $recordCid) {
+            return new JsonMockResponse([
+                'uri' => $recordUri,
+                'cid' => $recordCid,
+            ]);
+        });
+
+        $transport = self::createTransport($client);
+        $message = $transport->send(new ChatMessage('Hello!'));
+
+        $this->assertSame($recordUri, $message->getMessageId());
     }
 
     /**

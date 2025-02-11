@@ -105,7 +105,7 @@ final class BlueskyTransport extends AbstractTransport
         if (200 === $statusCode) {
             $content = $response->toArray();
             $sentMessage = new SentMessage($message, (string) $this);
-            $sentMessage->setMessageId($content['cid']);
+            $sentMessage->setMessageId($content['uri']);
 
             return $sentMessage;
         }
