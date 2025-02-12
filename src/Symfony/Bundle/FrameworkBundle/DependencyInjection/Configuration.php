@@ -75,6 +75,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->docUrl('https://symfony.com/doc/{version:major}.{version:minor}/reference/configuration/framework.html', 'symfony/framework-bundle')
             ->beforeNormalization()
                 ->ifTrue(fn ($v) => !isset($v['assets']) && isset($v['templating']) && class_exists(Package::class))
                 ->then(function ($v) {
