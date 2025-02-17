@@ -16,17 +16,19 @@ Ldap
 Security
 --------
 
- * Deprecate `UserInterface::eraseCredentials()` and `TokenInterface::eraseCredentials()`,
+ * Deprecate `UserInterface::eraseCredentials()` and `TokenInterface::eraseCredentials()`;
    erase credentials e.g. using `__serialize()` instead
 
-   *Before*
+   Before:
+
    ```php
    public function eraseCredentials(): void
    {
    }
    ```
 
-   *After*
+   After:
+
    ```php
    #[\Deprecated]
    public function eraseCredentials(): void
@@ -43,19 +45,36 @@ Security
    }
    ```
 
+ * Add argument `$vote` to `VoterInterface::vote()` and to `Voter::voteOnAttribute()`;
+   it should be used to report the reason of a vote. E.g:
+
+   ```php
+   protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+   {
+       $vote ??= new Vote();
+
+       $vote->reasons[] = 'A brief explanation of why access is granted or denied, as appropriate.';
+   }
+   ```
+
+ * Add argument `$accessDecision` to `AccessDecisionManagerInterface::decide()` and `AuthorizationCheckerInterface::isGranted()`;
+   it should be used to report the reason of a decision, including all the related votes.
+
 Console
 -------
 
- * Omitting parameter types in callables configured via `Command::setCode` method is deprecated
+ * Omitting parameter types in callables configured via `Command::setCode()` method is deprecated
 
-   *Before*
+   Before:
+
    ```php
    $command->setCode(function ($input, $output) {
        // ...
    });
    ```
 
-   *After*
+   After:
+
    ```php
    use Symfony\Component\Console\Input\InputInterface;
    use Symfony\Component\Console\Output\OutputInterface;
@@ -119,6 +138,7 @@ Validator
        }
    }
    ```
+
  * Deprecate passing an array of options to the constructors of the constraint classes, pass each option as a dedicated argument instead
 
    Before:
