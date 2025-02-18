@@ -338,6 +338,7 @@ final class BlueskyTransportTest extends TransportTestCase
         $message = $transport->send(new ChatMessage('Hello!'));
 
         $this->assertSame($recordUri, $message->getMessageId());
+        $this->assertSame($recordCid, $message->getInfo('cid'));
     }
 
     public static function sendMessageWithEmbedDataProvider(): iterable
