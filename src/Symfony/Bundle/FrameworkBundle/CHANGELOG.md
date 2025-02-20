@@ -12,6 +12,7 @@ CHANGELOG
  * Add `RateLimiterFactoryInterface` as an alias of the `limiter` service
  * Add `framework.validation.disable_translation` option
  * Add support for signal plain name in the `messenger.stop_worker_on_signals` configuration
+ * Deprecate the `framework.validation.cache` option
 
 7.2
 ---
