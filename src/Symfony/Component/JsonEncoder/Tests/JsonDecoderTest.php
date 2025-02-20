@@ -13,15 +13,15 @@ namespace Symfony\Component\JsonEncoder\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\JsonEncoder\JsonDecoder;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Denormalizer\BooleanStringDenormalizer;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Denormalizer\DivideStringAndCastToIntDenormalizer;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Enum\DummyBackedEnum;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\ClassicDummy;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithDateTimes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNameAttributes;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNormalizerAttributes;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNullableProperties;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithPhpDoc;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithValueTransformerAttributes;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\DivideStringAndCastToIntValueTransformer;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\ValueTransformer\StringToBooleanValueTransformer;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeIdentifier;
 
@@ -110,24 +110,24 @@ class JsonDecoderTest extends TestCase
         }, '{"@id": 10}', Type::object(DummyWithNameAttributes::class));
     }
 
-    public function testDecodeObjectWithDenormalizer()
+    public function testDecodeObjectWithValueTransformer()
     {
         $decoder = JsonDecoder::create(
-            denormalizers: [
-                BooleanStringDenormalizer::class => new BooleanStringDenormalizer(),
-                DivideStringAndCastToIntDenormalizer::class => new DivideStringAndCastToIntDenormalizer(),
+            valueTransformers: [
+                StringToBooleanValueTransformer::class => new StringToBooleanValueTransformer(),
+                DivideStringAndCastToIntValueTransformer::class => new DivideStringAndCastToIntValueTransformer(),
             ],
             decodersDir: $this->decodersDir,
             lazyGhostsDir: $this->lazyGhostsDir,
         );
 
         $this->assertDecoded($decoder, function (mixed $decoded) {
-            $this->assertInstanceOf(DummyWithNormalizerAttributes::class, $decoded);
+            $this->assertInstanceOf(DummyWithValueTransformerAttributes::class, $decoded);
             $this->assertSame(10, $decoded->id);
             $this->assertTrue($decoded->active);
             $this->assertSame('LOWERCASE NAME', $decoded->name);
             $this->assertSame([0, 1], $decoded->range);
-        }, '{"id": "20", "active": "true", "name": "lowercase name", "range": "0..1"}', Type::object(DummyWithNormalizerAttributes::class), ['scale' => 1]);
+        }, '{"id": "20", "active": "true", "name": "lowercase name", "range": "0..1"}', Type::object(DummyWithValueTransformerAttributes::class), ['scale' => 1]);
     }
 
     public function testDecodeObjectWithPhpDoc()
@@ -161,8 +161,7 @@ class JsonDecoderTest extends TestCase
             $this->assertInstanceOf(DummyWithDateTimes::class, $decoded);
             $this->assertEquals(new \DateTimeImmutable('2024-11-20'), $decoded->interface);
             $this->assertEquals(new \DateTimeImmutable('2025-11-20'), $decoded->immutable);
-            $this->assertEquals(new \DateTime('2024-10-05'), $decoded->mutable);
-        }, '{"interface":"2024-11-20","immutable":"2025-11-20","mutable":"2024-10-05"}', Type::object(DummyWithDateTimes::class));
+        }, '{"interface":"2024-11-20","immutable":"2025-11-20"}', Type::object(DummyWithDateTimes::class));
     }
 
     public function testCreateDecoderFile()

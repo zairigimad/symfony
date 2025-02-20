@@ -9,23 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\JsonEncoder\Decode\Denormalizer;
+namespace Symfony\Component\JsonEncoder\ValueTransformer;
 
 use Symfony\Component\TypeInfo\Type;
 
 /**
- * Denormalizes data during the decoding process.
+ * Transforms a native value so it's ready to be JSON encoded during encoding
+ * and to other way around during decoding.
  *
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
  *
  * @experimental
  */
-interface DenormalizerInterface
+interface ValueTransformerInterface
 {
     /**
      * @param array<string, mixed> $options
      */
-    public function denormalize(mixed $normalized, array $options = []): mixed;
+    public function transform(mixed $value, array $options = []): mixed;
 
-    public static function getNormalizedType(): Type;
+    public static function getJsonValueType(): Type;
 }

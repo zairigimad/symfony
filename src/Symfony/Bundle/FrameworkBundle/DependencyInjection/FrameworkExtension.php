@@ -101,11 +101,10 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
 use Symfony\Component\JsonEncoder\Attribute\JsonEncodable;
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DenormalizerInterface as JsonEncoderDenormalizerInterface;
 use Symfony\Component\JsonEncoder\DecoderInterface as JsonEncoderDecoderInterface;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\NormalizerInterface as JsonEncoderNormalizerInterface;
 use Symfony\Component\JsonEncoder\EncoderInterface as JsonEncoderEncoderInterface;
 use Symfony\Component\JsonEncoder\JsonEncoder;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\PersistingStoreInterface;
@@ -2040,10 +2039,8 @@ class FrameworkExtension extends Extension
             throw new LogicException('JsonEncoder support cannot be enabled as the JsonEncoder component is not installed. Try running "composer require symfony/json-encoder".');
         }
 
-        $container->registerForAutoconfiguration(JsonEncoderNormalizerInterface::class)
-            ->addTag('json_encoder.normalizer');
-        $container->registerForAutoconfiguration(JsonEncoderDenormalizerInterface::class)
-            ->addTag('json_encoder.denormalizer');
+        $container->registerForAutoconfiguration(ValueTransformerInterface::class)
+            ->addTag('json_encoder.value_transformer');
 
         $loader->load('json_encoder.php');
 

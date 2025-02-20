@@ -19,7 +19,7 @@ use Symfony\Component\TypeInfo\Type;
 
 class DateTimeTypePropertyMetadataLoaderTest extends TestCase
 {
-    public function testAddDateTimeNormalizer()
+    public function testAddDateTimeToStringValueTransformer()
     {
         $loader = new DateTimeTypePropertyMetadataLoader(self::propertyMetadataLoader([
             'dateTime' => new PropertyMetadata('dateTime', Type::object(\DateTimeImmutable::class)),
@@ -27,7 +27,7 @@ class DateTimeTypePropertyMetadataLoaderTest extends TestCase
         ]));
 
         $this->assertEquals([
-            'dateTime' => new PropertyMetadata('dateTime', Type::string(), ['json_encoder.normalizer.date_time']),
+            'dateTime' => new PropertyMetadata('dateTime', Type::string(), ['json_encoder.value_transformer.date_time_to_string']),
             'other' => new PropertyMetadata('other', Type::object(self::class)),
         ], $loader->load(self::class));
     }

@@ -23,4 +23,5 @@ services:
         public: true
 
     Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\Dto\Dummy: ~
-    Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\RangeNormalizer: ~
+    Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\StringToRangeValueTransformer: ~
+    Symfony\Bundle\FrameworkBundle\Tests\Functional\app\JsonEncoder\RangeToStringValueTransformer: ~

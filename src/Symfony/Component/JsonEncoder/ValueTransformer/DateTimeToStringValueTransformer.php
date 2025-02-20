@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\JsonEncoder\Encode\Normalizer;
+namespace Symfony\Component\JsonEncoder\ValueTransformer;
 
 use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\TypeInfo\Type;
@@ -17,29 +17,29 @@ use Symfony\Component\TypeInfo\Type\BuiltinType;
 use Symfony\Component\TypeInfo\TypeIdentifier;
 
 /**
- * Casts DateTimeInterface to string.
+ * Transforms DateTimeInterface to string during encoding.
  *
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
  *
- * @internal
+ * @experimental
  */
-final class DateTimeNormalizer implements NormalizerInterface
+final class DateTimeToStringValueTransformer implements ValueTransformerInterface
 {
     public const FORMAT_KEY = 'date_time_format';
 
-    public function normalize(mixed $denormalized, array $options = []): string
+    public function transform(mixed $value, array $options = []): string
     {
-        if (!$denormalized instanceof \DateTimeInterface) {
-            throw new InvalidArgumentException('The denormalized data must implement the "\DateTimeInterface".');
+        if (!$value instanceof \DateTimeInterface) {
+            throw new InvalidArgumentException('The native value must implement the "\DateTimeInterface".');
         }
 
-        return $denormalized->format($options[self::FORMAT_KEY] ?? \DateTimeInterface::RFC3339);
+        return $value->format($options[self::FORMAT_KEY] ?? \DateTimeInterface::RFC3339);
     }
 
     /**
      * @return BuiltinType<TypeIdentifier::STRING>
      */
-    public static function getNormalizedType(): BuiltinType
+    public static function getJsonValueType(): BuiltinType
     {
         return Type::string();
     }

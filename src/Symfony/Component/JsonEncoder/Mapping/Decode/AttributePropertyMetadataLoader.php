@@ -12,12 +12,12 @@
 namespace Symfony\Component\JsonEncoder\Mapping\Decode;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\JsonEncoder\Attribute\Denormalizer;
 use Symfony\Component\JsonEncoder\Attribute\EncodedName;
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DenormalizerInterface;
+use Symfony\Component\JsonEncoder\Attribute\ValueTransformer;
 use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\JsonEncoder\Exception\RuntimeException;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\TypeInfo\TypeResolver\TypeResolverInterface;
 
 /**
@@ -31,7 +31,7 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
 {
     public function __construct(
         private PropertyMetadataLoaderInterface $decorated,
-        private ContainerInterface $denormalizers,
+        private ContainerInterface $valueTransformers,
         private TypeResolverInterface $typeResolver,
     ) {
     }
@@ -51,45 +51,42 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
             $attributesMetadata = $this->getPropertyAttributesMetadata($propertyReflection);
             $encodedName = $attributesMetadata['name'] ?? $initialEncodedName;
 
-            if (null === $denormalizer = $attributesMetadata['denormalizer'] ?? null) {
+            if (null === $valueTransformer = $attributesMetadata['toNativeValueTransformer'] ?? null) {
                 $result[$encodedName] = $initialMetadata;
 
                 continue;
             }
 
-            if (\is_string($denormalizer)) {
-                $denormalizerService = $this->getAndValidateDenormalizerService($denormalizer);
-                $normalizedType = $denormalizerService::getNormalizedType();
+            if (\is_string($valueTransformer)) {
+                $valueTransformerService = $this->getAndValidateValueTransformerService($valueTransformer);
 
                 $result[$encodedName] = $initialMetadata
-                    ->withType($normalizedType)
-                    ->withAdditionalDenormalizer($denormalizer);
+                    ->withType($valueTransformerService::getJsonValueType())
+                    ->withAdditionalToNativeValueTransformer($valueTransformer);
 
                 continue;
             }
 
             try {
-                $denormalizerReflection = new \ReflectionFunction($denormalizer);
+                $valueTransformerReflection = new \ReflectionFunction($valueTransformer);
             } catch (\ReflectionException $e) {
                 throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
             }
 
-            if (null === ($parameterReflection = $denormalizerReflection->getParameters()[0] ?? null)) {
-                throw new InvalidArgumentException(\sprintf('"%s" property\'s  denormalizer callable has no parameter.', $initialEncodedName));
+            if (null === ($parameterReflection = $valueTransformerReflection->getParameters()[0] ?? null)) {
+                throw new InvalidArgumentException(\sprintf('"%s" property\'s toNativeValue callable has no parameter.', $initialEncodedName));
             }
 
-            $normalizedType = $this->typeResolver->resolve($parameterReflection);
-
             $result[$encodedName] = $initialMetadata
-                ->withType($normalizedType)
-                ->withAdditionalDenormalizer($denormalizer);
+                ->withType($this->typeResolver->resolve($parameterReflection))
+                ->withAdditionalToNativeValueTransformer($valueTransformer);
         }
 
         return $result;
     }
 
     /**
-     * @return array{name?: string, denormalizer?: string|\Closure}
+     * @return array{name?: string, toNativeValueTransformer?: string|\Closure}
      */
     private function getPropertyAttributesMetadata(\ReflectionProperty $reflectionProperty): array
     {
@@ -100,25 +97,25 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
             $metadata['name'] = $reflectionAttribute->newInstance()->getName();
         }
 
-        $reflectionAttribute = $reflectionProperty->getAttributes(Denormalizer::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
+        $reflectionAttribute = $reflectionProperty->getAttributes(ValueTransformer::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
         if (null !== $reflectionAttribute) {
-            $metadata['denormalizer'] = $reflectionAttribute->newInstance()->getDenormalizer();
+            $metadata['toNativeValueTransformer'] = $reflectionAttribute->newInstance()->getToNativeValueTransformer();
         }
 
         return $metadata;
     }
 
-    private function getAndValidateDenormalizerService(string $denormalizerId): DenormalizerInterface
+    private function getAndValidateValueTransformerService(string $valueTransformerId): ValueTransformerInterface
     {
-        if (!$this->denormalizers->has($denormalizerId)) {
-            throw new InvalidArgumentException(\sprintf('You have requested a non-existent denormalizer service "%s". Did you implement "%s"?', $denormalizerId, DenormalizerInterface::class));
+        if (!$this->valueTransformers->has($valueTransformerId)) {
+            throw new InvalidArgumentException(\sprintf('You have requested a non-existent value transformer service "%s". Did you implement "%s"?', $valueTransformerId, ValueTransformerInterface::class));
         }
 
-        $denormalizer = $this->denormalizers->get($denormalizerId);
-        if (!$denormalizer instanceof DenormalizerInterface) {
-            throw new InvalidArgumentException(\sprintf('The "%s" denormalizer service does not implement "%s".', $denormalizerId, DenormalizerInterface::class));
+        $valueTransformer = $this->valueTransformers->get($valueTransformerId);
+        if (!$valueTransformer instanceof ValueTransformerInterface) {
+            throw new InvalidArgumentException(\sprintf('The "%s" value transformer service does not implement "%s".', $valueTransformerId, ValueTransformerInterface::class));
         }
 
-        return $denormalizer;
+        return $valueTransformer;
     }
 }

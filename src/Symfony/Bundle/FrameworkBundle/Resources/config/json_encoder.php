@@ -13,8 +13,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\JsonEncoder\CacheWarmer\EncoderDecoderCacheWarmer;
 use Symfony\Component\JsonEncoder\CacheWarmer\LazyGhostCacheWarmer;
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DateTimeDenormalizer;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\DateTimeNormalizer;
 use Symfony\Component\JsonEncoder\JsonDecoder;
 use Symfony\Component\JsonEncoder\JsonEncoder;
 use Symfony\Component\JsonEncoder\Mapping\Decode\AttributePropertyMetadataLoader as DecodeAttributePropertyMetadataLoader;
@@ -23,19 +21,21 @@ use Symfony\Component\JsonEncoder\Mapping\Encode\AttributePropertyMetadataLoader
 use Symfony\Component\JsonEncoder\Mapping\Encode\DateTimeTypePropertyMetadataLoader as EncodeDateTimeTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\GenericTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoader;
+use Symfony\Component\JsonEncoder\ValueTransformer\DateTimeToStringValueTransformer;
+use Symfony\Component\JsonEncoder\ValueTransformer\StringToDateTimeValueTransformer;
 
 return static function (ContainerConfigurator $container) {
     $container->services()
         // encoder/decoder
         ->set('json_encoder.encoder', JsonEncoder::class)
             ->args([
-                tagged_locator('json_encoder.normalizer'),
+                tagged_locator('json_encoder.value_transformer'),
                 service('json_encoder.encode.property_metadata_loader'),
                 param('.json_encoder.encoders_dir'),
             ])
         ->set('json_encoder.decoder', JsonDecoder::class)
             ->args([
-                tagged_locator('json_encoder.denormalizer'),
+                tagged_locator('json_encoder.value_transformer'),
                 service('json_encoder.decode.property_metadata_loader'),
                 param('.json_encoder.decoders_dir'),
                 param('.json_encoder.lazy_ghosts_dir'),
@@ -63,7 +63,7 @@ return static function (ContainerConfigurator $container) {
             ->decorate('json_encoder.encode.property_metadata_loader')
             ->args([
                 service('.inner'),
-                tagged_locator('json_encoder.normalizer'),
+                tagged_locator('json_encoder.value_transformer'),
                 service('type_info.resolver'),
             ])
 
@@ -86,23 +86,16 @@ return static function (ContainerConfigurator $container) {
             ->decorate('json_encoder.decode.property_metadata_loader')
             ->args([
                 service('.inner'),
-                tagged_locator('json_encoder.normalizer'),
+                tagged_locator('json_encoder.value_transformer'),
                 service('type_info.resolver'),
             ])
 
-        // normalizers/denormalizers
-        ->set('json_encoder.normalizer.date_time', DateTimeNormalizer::class)
-            ->tag('json_encoder.normalizer')
-        ->set('json_encoder.denormalizer.date_time', DateTimeDenormalizer::class)
-            ->args([
-                false,
-            ])
-            ->tag('json_encoder.denormalizer')
-        ->set('json_encoder.denormalizer.date_time_immutable', DateTimeDenormalizer::class)
-            ->args([
-                true,
-            ])
-            ->tag('json_encoder.denormalizer')
+        // value transformers
+        ->set('json_encoder.value_transformer.date_time_to_string', DateTimeToStringValueTransformer::class)
+            ->tag('json_encoder.value_transformer')
+
+        ->set('json_encoder.value_transformer.string_to_date_time', StringToDateTimeValueTransformer::class)
+            ->tag('json_encoder.value_transformer')
 
         // cache
         ->set('.json_encoder.cache_warmer.encoder_decoder', EncoderDecoderCacheWarmer::class)

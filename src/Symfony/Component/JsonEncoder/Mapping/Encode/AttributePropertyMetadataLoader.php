@@ -13,11 +13,11 @@ namespace Symfony\Component\JsonEncoder\Mapping\Encode;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\JsonEncoder\Attribute\EncodedName;
-use Symfony\Component\JsonEncoder\Attribute\Normalizer;
-use Symfony\Component\JsonEncoder\Encode\Normalizer\NormalizerInterface;
+use Symfony\Component\JsonEncoder\Attribute\ValueTransformer;
 use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\JsonEncoder\Exception\RuntimeException;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\TypeInfo\TypeResolver\TypeResolverInterface;
 
 /**
@@ -31,7 +31,7 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
 {
     public function __construct(
         private PropertyMetadataLoaderInterface $decorated,
-        private ContainerInterface $normalizers,
+        private ContainerInterface $valueTransformers,
         private TypeResolverInterface $typeResolver,
     ) {
     }
@@ -51,41 +51,38 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
             $attributesMetadata = $this->getPropertyAttributesMetadata($propertyReflection);
             $encodedName = $attributesMetadata['name'] ?? $initialEncodedName;
 
-            if (null === $normalizer = $attributesMetadata['normalizer'] ?? null) {
+            if (null === $valueTransformer = $attributesMetadata['toJsonValueTransformer'] ?? null) {
                 $result[$encodedName] = $initialMetadata;
 
                 continue;
             }
 
-            if (\is_string($normalizer)) {
-                $normalizerService = $this->getAndValidateNormalizerService($normalizer);
-                $normalizedType = $normalizerService::getNormalizedType();
+            if (\is_string($valueTransformer)) {
+                $valueTransformerService = $this->getAndValidateValueTransformerService($valueTransformer);
 
                 $result[$encodedName] = $initialMetadata
-                    ->withType($normalizedType)
-                    ->withAdditionalNormalizer($normalizer);
+                    ->withType($valueTransformerService::getJsonValueType())
+                    ->withAdditionalToJsonValueTransformer($valueTransformer);
 
                 continue;
             }
 
             try {
-                $normalizerReflection = new \ReflectionFunction($normalizer);
+                $valueTransformerReflection = new \ReflectionFunction($valueTransformer);
             } catch (\ReflectionException $e) {
                 throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
             }
 
-            $normalizedType = $this->typeResolver->resolve($normalizerReflection);
-
             $result[$encodedName] = $initialMetadata
-                ->withType($normalizedType)
-                ->withAdditionalNormalizer($normalizer);
+                ->withType($this->typeResolver->resolve($valueTransformerReflection))
+                ->withAdditionalToJsonValueTransformer($valueTransformer);
         }
 
         return $result;
     }
 
     /**
-     * @return array{name?: string, normalizer?: string|\Closure}
+     * @return array{name?: string, toJsonValueTransformer?: string|\Closure}
      */
     private function getPropertyAttributesMetadata(\ReflectionProperty $reflectionProperty): array
     {
@@ -96,25 +93,25 @@ final class AttributePropertyMetadataLoader implements PropertyMetadataLoaderInt
             $metadata['name'] = $reflectionAttribute->newInstance()->getName();
         }
 
-        $reflectionAttribute = $reflectionProperty->getAttributes(Normalizer::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
+        $reflectionAttribute = $reflectionProperty->getAttributes(ValueTransformer::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
         if (null !== $reflectionAttribute) {
-            $metadata['normalizer'] = $reflectionAttribute->newInstance()->getNormalizer();
+            $metadata['toJsonValueTransformer'] = $reflectionAttribute->newInstance()->getToJsonValueTransformer();
         }
 
         return $metadata;
     }
 
-    private function getAndValidateNormalizerService(string $normalizerId): NormalizerInterface
+    private function getAndValidateValueTransformerService(string $valueTransformerId): ValueTransformerInterface
     {
-        if (!$this->normalizers->has($normalizerId)) {
-            throw new InvalidArgumentException(\sprintf('You have requested a non-existent normalizer service "%s". Did you implement "%s"?', $normalizerId, NormalizerInterface::class));
+        if (!$this->valueTransformers->has($valueTransformerId)) {
+            throw new InvalidArgumentException(\sprintf('You have requested a non-existent value transformer service "%s". Did you implement "%s"?', $valueTransformerId, ValueTransformerInterface::class));
         }
 
-        $normalizer = $this->normalizers->get($normalizerId);
-        if (!$normalizer instanceof NormalizerInterface) {
-            throw new InvalidArgumentException(\sprintf('The "%s" normalizer service does not implement "%s".', $normalizerId, NormalizerInterface::class));
+        $valueTransformer = $this->valueTransformers->get($valueTransformerId);
+        if (!$valueTransformer instanceof ValueTransformerInterface) {
+            throw new InvalidArgumentException(\sprintf('The "%s" value transformer service does not implement "%s".', $valueTransformerId, ValueTransformerInterface::class));
         }
 
-        return $normalizer;
+        return $valueTransformer;
     }
 }

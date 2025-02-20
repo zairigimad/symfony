@@ -12,6 +12,7 @@
 namespace Symfony\Component\JsonEncoder\Tests\Mapping\Decode;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\JsonEncoder\Mapping\Decode\DateTimeTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadata;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
@@ -19,21 +20,31 @@ use Symfony\Component\TypeInfo\Type;
 
 class DateTimeTypePropertyMetadataLoaderTest extends TestCase
 {
-    public function testAddDateTimeDenormalizer()
+    public function testAddStringToDateTimeValueTransformer()
     {
         $loader = new DateTimeTypePropertyMetadataLoader(self::propertyMetadataLoader([
             'interface' => new PropertyMetadata('interface', Type::object(\DateTimeInterface::class)),
             'immutable' => new PropertyMetadata('immutable', Type::object(\DateTimeImmutable::class)),
-            'mutable' => new PropertyMetadata('mutable', Type::object(\DateTime::class)),
             'other' => new PropertyMetadata('other', Type::object(self::class)),
         ]));
 
         $this->assertEquals([
-            'interface' => new PropertyMetadata('interface', Type::string(), [], ['json_encoder.denormalizer.date_time_immutable']),
-            'immutable' => new PropertyMetadata('immutable', Type::string(), [], ['json_encoder.denormalizer.date_time_immutable']),
-            'mutable' => new PropertyMetadata('mutable', Type::string(), [], ['json_encoder.denormalizer.date_time']),
+            'interface' => new PropertyMetadata('interface', Type::string(), [], ['json_encoder.value_transformer.string_to_date_time']),
+            'immutable' => new PropertyMetadata('immutable', Type::string(), [], ['json_encoder.value_transformer.string_to_date_time']),
             'other' => new PropertyMetadata('other', Type::object(self::class)),
         ], $loader->load(self::class));
+    }
+
+    public function testThrowWhenDateTimeType()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "DateTime" class is not supported. Use "DateTimeImmutable" instead.');
+
+        $loader = new DateTimeTypePropertyMetadataLoader(self::propertyMetadataLoader([
+            'mutable' => new PropertyMetadata('mutable', Type::object(\DateTime::class)),
+        ]));
+
+        $loader->load(self::class);
     }
 
     /**

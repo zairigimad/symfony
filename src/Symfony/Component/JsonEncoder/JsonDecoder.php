@@ -14,8 +14,6 @@ namespace Symfony\Component\JsonEncoder;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\JsonEncoder\Decode\DecoderGenerator;
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DateTimeDenormalizer;
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DenormalizerInterface;
 use Symfony\Component\JsonEncoder\Decode\Instantiator;
 use Symfony\Component\JsonEncoder\Decode\LazyInstantiator;
 use Symfony\Component\JsonEncoder\Mapping\Decode\AttributePropertyMetadataLoader;
@@ -23,6 +21,8 @@ use Symfony\Component\JsonEncoder\Mapping\Decode\DateTimeTypePropertyMetadataLoa
 use Symfony\Component\JsonEncoder\Mapping\GenericTypePropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoader;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
+use Symfony\Component\JsonEncoder\ValueTransformer\StringToDateTimeValueTransformer;
+use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeContext\TypeContextFactory;
 use Symfony\Component\TypeInfo\TypeResolver\StringTypeResolver;
@@ -42,7 +42,7 @@ final class JsonDecoder implements DecoderInterface
     private LazyInstantiator $lazyInstantiator;
 
     public function __construct(
-        private ContainerInterface $denormalizers,
+        private ContainerInterface $valueTransformers,
         PropertyMetadataLoaderInterface $propertyMetadataLoader,
         string $decodersDir,
         string $lazyGhostsDir,
@@ -57,35 +57,34 @@ final class JsonDecoder implements DecoderInterface
         $isStream = \is_resource($input);
         $path = $this->decoderGenerator->generate($type, $isStream, $options);
 
-        return (require $path)($input, $this->denormalizers, $isStream ? $this->lazyInstantiator : $this->instantiator, $options);
+        return (require $path)($input, $this->valueTransformers, $isStream ? $this->lazyInstantiator : $this->instantiator, $options);
     }
 
     /**
-     * @param array<string, DenormalizerInterface> $denormalizers
+     * @param array<string, ValueTransformerInterface> $valueTransformers
      */
-    public static function create(array $denormalizers = [], ?string $decodersDir = null, ?string $lazyGhostsDir = null): self
+    public static function create(array $valueTransformers = [], ?string $decodersDir = null, ?string $lazyGhostsDir = null): self
     {
         $decodersDir ??= sys_get_temp_dir().'/json_encoder/decoder';
         $lazyGhostsDir ??= sys_get_temp_dir().'/json_encoder/lazy_ghost';
-        $denormalizers += [
-            'json_encoder.denormalizer.date_time' => new DateTimeDenormalizer(immutable: false),
-            'json_encoder.denormalizer.date_time_immutable' => new DateTimeDenormalizer(immutable: true),
+        $valueTransformers += [
+            'json_encoder.value_transformer.string_to_date_time' => new StringToDateTimeValueTransformer(),
         ];
 
-        $denormalizersContainer = new class($denormalizers) implements ContainerInterface {
+        $valueTransformersContainer = new class($valueTransformers) implements ContainerInterface {
             public function __construct(
-                private array $denormalizers,
+                private array $valueTransformers,
             ) {
             }
 
             public function has(string $id): bool
             {
-                return isset($this->denormalizers[$id]);
+                return isset($this->valueTransformers[$id]);
             }
 
-            public function get(string $id): DenormalizerInterface
+            public function get(string $id): ValueTransformerInterface
             {
-                return $this->denormalizers[$id];
+                return $this->valueTransformers[$id];
             }
         };
 
@@ -95,13 +94,13 @@ final class JsonDecoder implements DecoderInterface
             new DateTimeTypePropertyMetadataLoader(
                 new AttributePropertyMetadataLoader(
                     new PropertyMetadataLoader(TypeResolver::create()),
-                    $denormalizersContainer,
+                    $valueTransformersContainer,
                     TypeResolver::create(),
                 ),
             ),
             $typeContextFactory,
         );
 
-        return new self($denormalizersContainer, $propertyMetadataLoader, $decodersDir, $lazyGhostsDir);
+        return new self($valueTransformersContainer, $propertyMetadataLoader, $decodersDir, $lazyGhostsDir);
     }
 }

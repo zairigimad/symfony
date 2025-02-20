@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\JsonEncoder\Decode\LazyInstantiator;
 use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\ClassicDummy;
-use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithNormalizerAttributes;
+use Symfony\Component\JsonEncoder\Tests\Fixtures\Model\DummyWithValueTransformerAttributes;
 
 class LazyInstantiatorTest extends TestCase
 {
@@ -50,7 +50,7 @@ class LazyInstantiatorTest extends TestCase
      */
     public function testCreateCacheFile()
     {
-        (new LazyInstantiator($this->lazyGhostsDir))->instantiate(DummyWithNormalizerAttributes::class, function (ClassicDummy $object): void {});
+        (new LazyInstantiator($this->lazyGhostsDir))->instantiate(DummyWithValueTransformerAttributes::class, function (ClassicDummy $object): void {});
 
         $this->assertCount(1, glob($this->lazyGhostsDir.'/*'));
     }

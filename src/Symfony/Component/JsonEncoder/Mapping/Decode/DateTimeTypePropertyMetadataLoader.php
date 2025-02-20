@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\JsonEncoder\Mapping\Decode;
 
-use Symfony\Component\JsonEncoder\Decode\Denormalizer\DateTimeDenormalizer;
+use Symfony\Component\JsonEncoder\Exception\InvalidArgumentException;
 use Symfony\Component\JsonEncoder\Mapping\PropertyMetadataLoaderInterface;
+use Symfony\Component\JsonEncoder\ValueTransformer\StringToDateTimeValueTransformer;
 use Symfony\Component\TypeInfo\Type\ObjectType;
 
 /**
- * Casts DateTime properties to string properties.
+ * Transforms string to DateTimeInterface for properties with DateTimeInterface type.
  *
  * @author Mathias Arlaud <mathias.arlaud@gmail.com>
  *
@@ -37,13 +38,13 @@ final class DateTimeTypePropertyMetadataLoader implements PropertyMetadataLoader
             $type = $metadata->getType();
 
             if ($type instanceof ObjectType && is_a($type->getClassName(), \DateTimeInterface::class, true)) {
-                $dateTimeDenormalizer = match ($type->getClassName()) {
-                    \DateTimeInterface::class, \DateTimeImmutable::class => 'json_encoder.denormalizer.date_time_immutable',
-                    default => 'json_encoder.denormalizer.date_time',
-                };
+                if (\DateTime::class === $type->getClassName()) {
+                    throw new InvalidArgumentException('The "DateTime" class is not supported. Use "DateTimeImmutable" instead.');
+                }
+
                 $metadata = $metadata
-                    ->withType(DateTimeDenormalizer::getNormalizedType())
-                    ->withAdditionalDenormalizer($dateTimeDenormalizer);
+                    ->withType(StringToDateTimeValueTransformer::getJsonValueType())
+                    ->withAdditionalToNativeValueTransformer('json_encoder.value_transformer.string_to_date_time');
             }
         }
 
