@@ -26,7 +26,6 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mailer\Transport\Transports;
 use Symfony\Component\Mime\Crypto\DkimSigner;
-use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 use Symfony\Component\Mime\Crypto\SMimeSigner;
 
 return static function (ContainerConfigurator $container) {
@@ -102,12 +101,6 @@ return static function (ContainerConfigurator $container) {
                 abstract_arg('signOptions'),
             ])
 
-        ->set('mailer.smime_encrypter', SMimeEncrypter::class)
-            ->args([
-                abstract_arg('certificate'),
-                abstract_arg('cipher'),
-            ])
-
         ->set('mailer.dkim_signer.listener', DkimSignedMessageListener::class)
             ->args([
                 service(DkimSigner::class),
@@ -122,7 +115,8 @@ return static function (ContainerConfigurator $container) {
 
         ->set('mailer.smime_encrypter.listener', SmimeEncryptedMessageListener::class)
             ->args([
-                service('mailer.smime_encrypter'),
+                service('mailer.smime_encrypter.repository'),
+                param('mailer.smime_encrypter.cipher'),
             ])
             ->tag('kernel.event_subscriber')
 
