@@ -6,7 +6,7 @@ CHANGELOG
 
  * Add support for assets pre-compression
  * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`
- * Add JsonEncoder services and configuration
+ * Add JsonStreamer services and configuration
  * Add new `framework.property_info.with_constructor_extractor` option to allow enabling or disabling the constructor extractor integration
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
  * Add `RateLimiterFactoryInterface` as an alias of the `limiter` service

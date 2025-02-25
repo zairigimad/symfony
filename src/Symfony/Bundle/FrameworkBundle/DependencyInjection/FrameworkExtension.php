@@ -100,11 +100,11 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
-use Symfony\Component\JsonEncoder\Attribute\JsonEncodable;
-use Symfony\Component\JsonEncoder\DecoderInterface as JsonEncoderDecoderInterface;
-use Symfony\Component\JsonEncoder\EncoderInterface as JsonEncoderEncoderInterface;
-use Symfony\Component\JsonEncoder\JsonEncoder;
-use Symfony\Component\JsonEncoder\ValueTransformer\ValueTransformerInterface;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
+use Symfony\Component\JsonStreamer\JsonStreamWriter;
+use Symfony\Component\JsonStreamer\StreamReaderInterface;
+use Symfony\Component\JsonStreamer\StreamWriterInterface;
+use Symfony\Component\JsonStreamer\ValueTransformer\ValueTransformerInterface;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\PersistingStoreInterface;
@@ -436,12 +436,12 @@ class FrameworkExtension extends Extension
             $this->registerPropertyInfoConfiguration($config['property_info'], $container, $loader);
         }
 
-        if ($this->readConfigEnabled('json_encoder', $container, $config['json_encoder'])) {
+        if ($this->readConfigEnabled('json_streamer', $container, $config['json_streamer'])) {
             if (!$typeInfoEnabled) {
-                throw new LogicException('JsonEncoder support cannot be enabled as the TypeInfo component is not '.(interface_exists(TypeResolverInterface::class) ? 'enabled.' : 'installed. Try running "composer require symfony/type-info".'));
+                throw new LogicException('JsonStreamer support cannot be enabled as the TypeInfo component is not '.(interface_exists(TypeResolverInterface::class) ? 'enabled.' : 'installed. Try running "composer require symfony/type-info".'));
             }
 
-            $this->registerJsonEncoderConfiguration($config['json_encoder'], $container, $loader);
+            $this->registerJsonStreamerConfiguration($config['json_streamer'], $container, $loader);
         }
 
         if ($this->readConfigEnabled('lock', $container, $config['lock'])) {
@@ -755,8 +755,8 @@ class FrameworkExtension extends Extension
                 }
             );
         }
-        $container->registerAttributeForAutoconfiguration(JsonEncodable::class, static function (ChildDefinition $definition, JsonEncodable $attribute): void {
-            $definition->addTag('json_encoder.encodable', [
+        $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute): void {
+            $definition->addTag('json_streamer.streamable', [
                 'object' => $attribute->asObject,
                 'list' => $attribute->asList,
             ]);
@@ -2033,26 +2033,26 @@ class FrameworkExtension extends Extension
         $container->setParameter('.serializer.named_serializers', $config['named_serializers'] ?? []);
     }
 
-    private function registerJsonEncoderConfiguration(array $config, ContainerBuilder $container, PhpFileLoader $loader): void
+    private function registerJsonStreamerConfiguration(array $config, ContainerBuilder $container, PhpFileLoader $loader): void
     {
-        if (!class_exists(JsonEncoder::class)) {
-            throw new LogicException('JsonEncoder support cannot be enabled as the JsonEncoder component is not installed. Try running "composer require symfony/json-encoder".');
+        if (!class_exists(JsonStreamWriter::class)) {
+            throw new LogicException('JsonStreamer support cannot be enabled as the JsonStreamer component is not installed. Try running "composer require symfony/json-streamer".');
         }
 
         $container->registerForAutoconfiguration(ValueTransformerInterface::class)
-            ->addTag('json_encoder.value_transformer');
+            ->addTag('json_streamer.value_transformer');
 
-        $loader->load('json_encoder.php');
+        $loader->load('json_streamer.php');
 
-        $container->registerAliasForArgument('json_encoder.encoder', JsonEncoderEncoderInterface::class, 'json.encoder');
-        $container->registerAliasForArgument('json_encoder.decoder', JsonEncoderDecoderInterface::class, 'json.decoder');
+        $container->registerAliasForArgument('json_streamer.stream_writer', StreamWriterInterface::class, 'json.stream_writer');
+        $container->registerAliasForArgument('json_streamer.stream_reader', StreamReaderInterface::class, 'json.stream_reader');
 
-        $container->setParameter('.json_encoder.encoders_dir', '%kernel.cache_dir%/json_encoder/encoder');
-        $container->setParameter('.json_encoder.decoders_dir', '%kernel.cache_dir%/json_encoder/decoder');
-        $container->setParameter('.json_encoder.lazy_ghosts_dir', '%kernel.cache_dir%/json_encoder/lazy_ghost');
+        $container->setParameter('.json_streamer.stream_writers_dir', '%kernel.cache_dir%/json_streamer/stream_writer');
+        $container->setParameter('.json_streamer.stream_readers_dir', '%kernel.cache_dir%/json_streamer/stream_reader');
+        $container->setParameter('.json_streamer.lazy_ghosts_dir', '%kernel.cache_dir%/json_streamer/lazy_ghost');
 
         if (\PHP_VERSION_ID >= 80400) {
-            $container->removeDefinition('.json_encoder.cache_warmer.lazy_ghost');
+            $container->removeDefinition('.json_streamer.cache_warmer.lazy_ghost');
         }
     }
 
