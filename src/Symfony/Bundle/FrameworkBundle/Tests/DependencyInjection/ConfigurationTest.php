@@ -706,6 +706,22 @@ class ConfigurationTest extends TestCase
         $this->assertSame([], $config['serializer']['default_context'] ?? []);
     }
 
+    public function testFormCsrfProtectionFieldAttrDoNotNormalizeKeys()
+    {
+        $processor = new Processor();
+        $config = $processor->processConfiguration(new Configuration(false), [
+            [
+                'form' => [
+                    'csrf_protection' => [
+                        'field_attr' => ['data-example-attr' => 'value'],
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertSame(['data-example-attr' => 'value'], $config['form']['csrf_protection']['field_attr'] ?? []);
+    }
+
     protected static function getBundleDefaultConfig()
     {
         return [

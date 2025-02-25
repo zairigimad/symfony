@@ -253,6 +253,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('field_name')->defaultValue('_token')->end()
                                 ->arrayNode('field_attr')
                                     ->performNoDeepMerging()
+                                    ->normalizeKeys(false)
                                     ->scalarPrototype()->end()
                                     ->defaultValue(['data-controller' => 'csrf-protection'])
                                 ->end()
