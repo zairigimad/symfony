@@ -7,6 +7,35 @@ in 6.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v6.4.0...v6.4.1
 
+* 6.4.19 (2025-02-26)
+
+ * bug #59198 [Messenger] Filter out non-consumable receivers when registering `ConsumeMessagesCommand` (wazum)
+ * bug #59781 [Mailer] fix multiple transports default injection (fkropfhamer)
+ * bug #59836 [Mailer][Postmark] Set CID for attachments when it exists (IssamRaouf)
+ * bug #59840 Fix PHP warning in GetSetMethodNormalizer when a "set()" method is defined (Pepperoni1337)
+ * bug #59810 [DependencyInjection] Defer check for circular references instead of skipping them (biozshock)
+ * bug #59811 [Validator] Synchronize IBAN formats (alexandre-daubois)
+ * bug #59796 [Mime] use address for body at `PathHeader` (tinect)
+ * bug #59803 [Semaphore] allow redis cluster/sentinel dsn (smoench)
+ * bug #59779 [DomCrawler] Bug #43921  Check for null parent nodes in the case of orphaned branches (ttk)
+ * bug #59776 [WebProfilerBundle] fix rendering notifier message options (xabbuh)
+ * bug #59769 Enable `JSON_PRESERVE_ZERO_FRACTION` in `jsonRequest` method (raffaelecarelle)
+ * bug #59774 [TwigBridge] Fix compatibility with Twig 3.21 (alexandre-daubois)
+ * bug #59761 [VarExporter] Fix lazy objects with hooked properties (nicolas-grekas)
+ * bug #59763 [HttpClient] Don't send any default content-type when the body is empty (nicolas-grekas)
+ * bug #59747 [Translation] check empty notes (davidvancl)
+ * bug #59751 [Cache] Tests for Redis Replication with cache (DemigodCode)
+ * bug #59752 [BrowserKit] Fix submitting forms with empty file fields (nicolas-grekas)
+ * bug #59033 [WebProfilerBundle] Fix interception for non conventional redirects (Huluti)
+ * bug #59713 [DependencyInjection] Do not preload functions (biozshock)
+ * bug #59723 [DependencyInjection] Fix cloned lazy services not sharing their dependencies when dumped with PhpDumper (pvandommelen)
+ * bug #59727 [HttpClient] Fix activity tracking leading to negative timeout errors (nicolas-grekas)
+ * bug #59262 [DependencyInjection] Fix env default processor with scalar node (tBibaut)
+ * bug #59640 [Security] Return null instead of empty username to fix deprecation notice (phasdev)
+ * bug #59596 [Mime] use `isRendered` method to ensure we can avoid rendering an email twice (walva)
+ * bug #59689 [HttpClient] Fix buffering AsyncResponse with no passthru (nicolas-grekas)
+ * bug #59654 [HttpClient] Fix uploading files > 2GB (nicolas-grekas)
+
 * 6.4.18 (2025-01-29)
 
  * bug #58889 [Serializer] Handle default context in Serializer (Valmonzo)
