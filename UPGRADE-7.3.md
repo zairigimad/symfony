@@ -94,6 +94,25 @@ FrameworkBundle
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
  * Deprecate the `framework.validation.cache` config option
 
+OptionsResolver
+---------------
+
+* Deprecate defining nested options via `setDefault()`, use `setOptions()` instead
+
+  *Before*
+  ```php
+  $resolver->setDefault('option', function (OptionsResolver $resolver) {
+      // ...
+  });
+  ```
+
+  *After*
+  ```php
+  $resolver->setOptions('option', function (OptionsResolver $resolver) {
+      // ...
+  });
+  ```
+
 SecurityBundle
 --------------
 
