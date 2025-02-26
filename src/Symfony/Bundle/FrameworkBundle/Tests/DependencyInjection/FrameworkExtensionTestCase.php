@@ -2156,8 +2156,7 @@ abstract class FrameworkExtensionTestCase extends TestCase
         $this->assertTrue($container->hasAlias('mailer'));
         $this->assertTrue($container->hasDefinition('mailer.transports'));
         $this->assertSame($expectedTransports, $container->getDefinition('mailer.transports')->getArgument(0));
-        $this->assertTrue($container->hasDefinition('mailer.default_transport'));
-        $this->assertSame(current($expectedTransports), $container->getDefinition('mailer.default_transport')->getArgument(0));
+        $this->assertTrue($container->hasAlias('mailer.default_transport'));
         $this->assertTrue($container->hasDefinition('mailer.envelope_listener'));
         $l = $container->getDefinition('mailer.envelope_listener');
         $this->assertSame('sender@example.org', $l->getArgument(0));
