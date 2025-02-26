@@ -44,6 +44,11 @@ DependencyInjection
 
  * Deprecate `ContainerBuilder::getAutoconfiguredAttributes()` in favor of the `getAttributeAutoconfigurators()` method.
 
+DoctrineBridge
+--------------
+
+ * Deprecate the `DoctrineExtractor::getTypes()` method, use `DoctrineExtractor::getType()` instead
+
 FrameworkBundle
 ---------------
 
@@ -75,6 +80,13 @@ OptionsResolver
       // ...
   });
   ```
+
+PropertyInfo
+-------
+
+ * Deprecate the `Type` class, use `Symfony\Component\TypeInfo\Type` class from `symfony/type-info` instead
+ * Deprecate the `PropertyTypeExtractorInterface::getTypes()` method, use `PropertyTypeExtractorInterface::getType()` instead
+ * Deprecate the `ConstructorArgumentTypeExtractorInterface::getTypesFromConstructor()` method, use `ConstructorArgumentTypeExtractorInterface::getTypeFromConstructor()` instead
 
 Security
 --------
