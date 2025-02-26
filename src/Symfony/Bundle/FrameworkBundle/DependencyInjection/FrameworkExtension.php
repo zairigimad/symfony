@@ -2879,8 +2879,8 @@ class FrameworkExtension extends Extension
                 throw new LogicException('SMIME signed messages support cannot be enabled as this version of the Mailer component does not support it.');
             }
             $smimeSigner = $container->getDefinition('mailer.smime_signer');
-            $smimeSigner->setArgument(0, $config['smime_signer']['key']);
-            $smimeSigner->setArgument(1, $config['smime_signer']['certificate']);
+            $smimeSigner->setArgument(0, $config['smime_signer']['certificate']);
+            $smimeSigner->setArgument(1, $config['smime_signer']['key']);
             $smimeSigner->setArgument(2, $config['smime_signer']['passphrase']);
             $smimeSigner->setArgument(3, $config['smime_signer']['extra_certificates']);
             $smimeSigner->setArgument(4, $config['smime_signer']['sign_options']);

@@ -95,8 +95,8 @@ return static function (ContainerConfigurator $container) {
 
         ->set('mailer.smime_signer', SMimeSigner::class)
             ->args([
-                abstract_arg('key'),
                 abstract_arg('certificate'),
+                abstract_arg('key'),
                 abstract_arg('passphrase'),
                 abstract_arg('extraCertificates'),
                 abstract_arg('signOptions'),
@@ -110,7 +110,7 @@ return static function (ContainerConfigurator $container) {
 
         ->set('mailer.dkim_signer.listener', DkimSignedMessageListener::class)
             ->args([
-                service(DkimSigner::class),
+                service('mailer.dkim_signer'),
             ])
             ->tag('kernel.event_subscriber')
 
