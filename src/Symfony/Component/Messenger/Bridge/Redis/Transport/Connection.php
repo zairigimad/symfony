@@ -46,8 +46,7 @@ class Connection
         'lazy' => false,
         'auth' => null,
         'serializer' => 1, // see \Redis::SERIALIZER_PHP,
-        'sentinel_master' => null, // String, master to look for (optional, default is NULL meaning Sentinel support is disabled)
-        'redis_sentinel' => null, // String, alias for 'sentinel_master'
+        'sentinel' => null, // String, master to look for (optional, default is NULL meaning Sentinel support is disabled)
         'timeout' => 0.0, // Float, value in seconds (optional, default is 0 meaning unlimited)
         'read_timeout' => 0.0, //  Float, value in seconds (optional, default is 0 meaning unlimited)
         'retry_interval' => 0, //  Int, value in milliseconds (optional, default is 0)
@@ -80,11 +79,7 @@ class Connection
         $port = $options['port'];
         $auth = $options['auth'];
 
-        if (isset($options['redis_sentinel']) && isset($options['sentinel_master'])) {
-            throw new InvalidArgumentException('Cannot use both "redis_sentinel" and "sentinel_master" at the same time.');
-        }
-
-        $sentinelMaster = $options['sentinel_master'] ?? $options['redis_sentinel'] ?? null;
+        $sentinelMaster = $options['sentinel'] ?? $options['redis_sentinel'] ?? $options['sentinel_master'] ?? null;
 
         if (null !== $sentinelMaster && !class_exists(\RedisSentinel::class) && !class_exists(Sentinel::class)) {
             throw new InvalidArgumentException('Redis Sentinel support requires ext-redis>=5.2, or ext-relay.');
@@ -238,7 +233,7 @@ class Connection
         if (!str_contains($dsn, ',')) {
             $params = self::parseDsn($dsn, $options);
 
-            if (isset($params['host']) && 'rediss' === $params['scheme']) {
+            if (isset($params['host']) && ('rediss' === $params['scheme'] || 'valkeys' === $params['scheme'])) {
                 $params['host'] = 'tls://'.$params['host'];
             }
         } else {
@@ -249,7 +244,7 @@ class Connection
 
             // Merge all the URLs, the last one overrides the previous ones
             $params = array_merge(...$paramss);
-            $tls = 'rediss' === $params['scheme'];
+            $tls = 'rediss' === $params['scheme'] || 'valkeys' === $params['scheme'];
 
             // Regroup all the hosts in an array interpretable by RedisCluster
             $params['host'] = array_map(function ($params) use ($tls) {
@@ -284,7 +279,7 @@ class Connection
             parse_str($params['query'], $query);
 
             if (isset($query['host'])) {
-                $tls = 'rediss' === $params['scheme'];
+                $tls = 'rediss' === $params['scheme'] || 'valkeys' === $params['scheme'];
                 $tcpScheme = $tls ? 'tls' : 'tcp';
 
                 if (!\is_array($hosts = $query['host'])) {
@@ -325,7 +320,13 @@ class Connection
     private static function parseDsn(string $dsn, array &$options): array
     {
         $url = $dsn;
-        $scheme = str_starts_with($dsn, 'rediss:') ? 'rediss' : 'redis';
+        $scheme = match (true) {
+            str_starts_with($dsn, 'redis:') => 'redis',
+            str_starts_with($dsn, 'rediss:') => 'rediss',
+            str_starts_with($dsn, 'valkey:') => 'valkey',
+            str_starts_with($dsn, 'valkeys:') => 'valkeys',
+            default => throw new InvalidArgumentException('Invalid Redis DSN: it does not start with "redis[s]:" nor "valkey[s]:".'),
+        };
 
         if (preg_match('#^'.$scheme.':///([^:@])+$#', $dsn)) {
             $url = str_replace($scheme.':', 'file:', $dsn);

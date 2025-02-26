@@ -2501,7 +2501,7 @@ class FrameworkExtension extends Extension
             // Inline any env vars referenced in the parameter
             $container->setParameter('cache.prefix.seed', $container->resolveEnvPlaceholders($container->getParameter('cache.prefix.seed'), true));
         }
-        foreach (['psr6', 'redis', 'memcached', 'doctrine_dbal', 'pdo'] as $name) {
+        foreach (['psr6', 'redis', 'valkey', 'memcached', 'doctrine_dbal', 'pdo'] as $name) {
             if (isset($config[$name = 'default_'.$name.'_provider'])) {
                 $container->setAlias('cache.'.$name, new Alias(CachePoolPass::getServiceProvider($container, $config[$name]), false));
             }
@@ -2513,12 +2513,13 @@ class FrameworkExtension extends Extension
                 'tags' => false,
             ];
         }
+        $redisTagAwareAdapters = [['cache.adapter.redis_tag_aware'], ['cache.adapter.valkey_tag_aware']];
         foreach ($config['pools'] as $name => $pool) {
             $pool['adapters'] = $pool['adapters'] ?: ['cache.app'];
 
-            $isRedisTagAware = ['cache.adapter.redis_tag_aware'] === $pool['adapters'];
+            $isRedisTagAware = \in_array($pool['adapters'], $redisTagAwareAdapters, true);
             foreach ($pool['adapters'] as $provider => $adapter) {
-                if (($config['pools'][$adapter]['adapters'] ?? null) === ['cache.adapter.redis_tag_aware']) {
+                if (\in_array($config['pools'][$adapter]['adapters'] ?? null, $redisTagAwareAdapters, true)) {
                     $isRedisTagAware = true;
                 } elseif ($config['pools'][$adapter]['tags'] ?? false) {
                     $pool['adapters'][$provider] = $adapter = '.'.$adapter.'.inner';
