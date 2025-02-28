@@ -196,3 +196,10 @@ VarDumper
 
  * Deprecate `ResourceCaster::castCurl()`, `ResourceCaster::castGd()` and `ResourceCaster::castOpensslX509()`
  * Mark all casters as `@internal`
+
+VarExporter
+-----------
+
+ * Deprecate using `ProxyHelper::generateLazyProxy()` when native lazy proxies can be used - the method should be used to generate abstraction-based lazy decorators only
+ * Deprecate `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
+ * Deprecate `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
