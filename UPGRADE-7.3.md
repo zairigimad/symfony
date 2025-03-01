@@ -60,6 +60,8 @@ Security
  * Add argument `$accessDecision` to `AccessDecisionManagerInterface::decide()` and `AuthorizationCheckerInterface::isGranted()`;
    it should be used to report the reason of a decision, including all the related votes.
 
+ * Add discovery support to `OidcTokenHandler` and `OidcUserInfoTokenHandler`
+
 Console
 -------
 
