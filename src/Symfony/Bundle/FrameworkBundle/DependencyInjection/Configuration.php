@@ -31,7 +31,7 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\IpUtils;
-use Symfony\Component\JsonEncoder\EncoderInterface;
+use Symfony\Component\JsonStreamer\StreamWriterInterface;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 use Symfony\Component\Mailer\Mailer;
@@ -182,7 +182,7 @@ class Configuration implements ConfigurationInterface
         $this->addHtmlSanitizerSection($rootNode, $enableIfStandalone);
         $this->addWebhookSection($rootNode, $enableIfStandalone);
         $this->addRemoteEventSection($rootNode, $enableIfStandalone);
-        $this->addJsonEncoderSection($rootNode, $enableIfStandalone);
+        $this->addJsonStreamerSection($rootNode, $enableIfStandalone);
 
         return $treeBuilder;
     }
@@ -2692,13 +2692,13 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addJsonEncoderSection(ArrayNodeDefinition $rootNode, callable $enableIfStandalone): void
+    private function addJsonStreamerSection(ArrayNodeDefinition $rootNode, callable $enableIfStandalone): void
     {
         $rootNode
             ->children()
-                ->arrayNode('json_encoder')
-                    ->info('JSON encoder configuration')
-                    ->{$enableIfStandalone('symfony/json-encoder', EncoderInterface::class)}()
+                ->arrayNode('json_streamer')
+                    ->info('JSON streamer configuration')
+                    ->{$enableIfStandalone('symfony/json-streamer', StreamWriterInterface::class)}()
                 ->end()
             ->end()
         ;
