@@ -4,6 +4,7 @@ CHANGELOG
 7.3
 ---
 
+ * Implement the `CloseableTransportInterface` to allow closing the Redis connection
  * Implement the `KeepaliveReceiverInterface` to enable asynchronously notifying Redis that the job is still being processed, in order to avoid timeouts
 
 6.3
