@@ -422,7 +422,7 @@ class ProcessTest extends TestCase
 
         $p->run();
         $p->clearErrorOutput();
-        $this->assertEmpty($p->getErrorOutput());
+        $this->assertSame('', $p->getErrorOutput());
     }
 
     /**
@@ -475,7 +475,7 @@ class ProcessTest extends TestCase
 
         $p->run();
         $p->clearOutput();
-        $this->assertEmpty($p->getOutput());
+        $this->assertSame('', $p->getOutput());
     }
 
     public function testZeroAsOutput()

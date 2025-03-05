@@ -796,7 +796,7 @@ abstract class FrameworkExtensionTestCase extends TestCase
             \ARRAY_FILTER_USE_KEY
         );
 
-        $this->assertEmpty($messengerDefinitions);
+        $this->assertSame([], $messengerDefinitions);
         $this->assertFalse($container->hasDefinition('console.command.messenger_consume_messages'));
         $this->assertFalse($container->hasDefinition('console.command.messenger_debug'));
         $this->assertFalse($container->hasDefinition('console.command.messenger_stop_workers'));
@@ -1941,7 +1941,7 @@ abstract class FrameworkExtensionTestCase extends TestCase
 
         $container = $this->createContainer(['kernel.debug' => false]);
         (new FrameworkExtension())->load([['annotations' => false, 'http_method_override' => false, 'handle_all_throwables' => true, 'php_errors' => ['log' => true]]], $container);
-        $this->assertEmpty($container->getDefinition('config_cache_factory')->getArguments());
+        $this->assertSame([], $container->getDefinition('config_cache_factory')->getArguments());
     }
 
     public function testLoggerAwareRegistration()
