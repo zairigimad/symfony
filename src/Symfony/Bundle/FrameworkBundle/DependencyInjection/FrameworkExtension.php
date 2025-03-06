@@ -151,6 +151,7 @@ use Symfony\Component\PropertyInfo\PropertyListExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\RateLimiter\Storage\CacheStorage;
 use Symfony\Component\RemoteEvent\Attribute\AsRemoteEventConsumer;
 use Symfony\Component\RemoteEvent\RemoteEvent;
@@ -3201,6 +3202,10 @@ class FrameworkExtension extends Extension
             $limiter->replaceArgument(0, $limiterConfig);
 
             $container->registerAliasForArgument($limiterId, RateLimiterFactory::class, $name.'.limiter');
+
+            if (interface_exists(RateLimiterFactoryInterface::class)) {
+                $container->registerAliasForArgument($limiterId, RateLimiterFactoryInterface::class, $name.'.limiter');
+            }
         }
     }
 
