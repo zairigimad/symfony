@@ -18,7 +18,6 @@ use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
-
 use function Symfony\Component\Clock\now;
 
 class ClockTest extends TestCase

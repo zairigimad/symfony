@@ -30,7 +30,6 @@ use Symfony\Component\HttpClient\Internal\AmpClientStateV5;
 use Symfony\Component\HttpClient\Internal\Canary;
 use Symfony\Component\HttpClient\Internal\ClientState;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
 use function Amp\delay;
 use function Amp\Future\awaitFirst;
 
