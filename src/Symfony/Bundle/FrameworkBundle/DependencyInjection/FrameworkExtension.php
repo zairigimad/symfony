@@ -186,6 +186,7 @@ use Symfony\Component\Translation\Command\XliffLintCommand as BaseXliffLintComma
 use Symfony\Component\Translation\Extractor\PhpAstExtractor;
 use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Component\Translation\PseudoLocalizationTranslator;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeResolver\PhpDocAwareReflectionTypeResolver;
@@ -1613,6 +1614,10 @@ class FrameworkExtension extends Extension
             );
 
             $translator->replaceArgument(4, $options);
+        }
+
+        foreach ($config['globals'] as $name => $global) {
+            $translator->addMethodCall('addGlobalParameter', [$name, $global['value'] ?? new Definition(TranslatableMessage::class, [$global['message'], $global['parameters'] ?? [], $global['domain'] ?? null])]);
         }
 
         if ($config['pseudo_localization']['enabled']) {

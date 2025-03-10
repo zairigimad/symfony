@@ -83,6 +83,7 @@ use Symfony\Component\Serializer\Normalizer\TranslatableNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\DependencyInjection\TranslatorPass;
 use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\DependencyInjection\AddConstraintValidatorsPass;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -1239,6 +1240,36 @@ abstract class FrameworkExtensionTestCase extends TestCase
         $container = $this->createContainerFromFile('translator_cache_dir_disabled');
         $options = $container->getDefinition('translator.default')->getArgument(4);
         $this->assertNull($options['cache_dir']);
+    }
+
+    public function testTranslatorGlobals()
+    {
+        $container = $this->createContainerFromFile('translator_globals');
+
+        $calls = $container->getDefinition('translator.default')->getMethodCalls();
+
+        $this->assertCount(5, $calls);
+        $this->assertSame(
+            ['addGlobalParameter', ['%%app_name%%', 'My application']],
+            $calls[2],
+        );
+        $this->assertSame(
+            ['addGlobalParameter', ['{app_version}', '1.2.3']],
+            $calls[3],
+        );
+        $this->assertEquals(
+            ['addGlobalParameter', ['{url}', new Definition(TranslatableMessage::class, ['url', ['scheme' => 'https://'], 'global'])]],
+            $calls[4],
+        );
+    }
+
+    public function testTranslatorWithoutGlobals()
+    {
+        $container = $this->createContainerFromFile('translator_without_globals');
+
+        $calls = $container->getDefinition('translator.default')->getMethodCalls();
+
+        $this->assertCount(2, $calls);
     }
 
     public function testValidation()
