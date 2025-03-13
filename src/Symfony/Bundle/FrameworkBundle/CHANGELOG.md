@@ -13,6 +13,7 @@ CHANGELOG
  * Add `framework.validation.disable_translation` option
  * Add support for signal plain name in the `messenger.stop_worker_on_signals` configuration
  * Deprecate the `framework.validation.cache` option
+ * Add `--method` option to the `debug:router` command
 
 7.2
 ---
