@@ -559,6 +559,20 @@ class ProcessTest extends TestCase
         $this->assertNull($process->getExitCodeText());
     }
 
+    public function testStderrNotMixedWithStdout()
+    {
+        if (!Process::isPtySupported()) {
+            $this->markTestSkipped('PTY is not supported on this operating system.');
+        }
+
+        $process = $this->getProcess('echo "foo" && echo "bar" >&2');
+        $process->setPty(true);
+        $process->run();
+
+        $this->assertSame("foo\r\n", $process->getOutput());
+        $this->assertSame("bar\n", $process->getErrorOutput());
+    }
+
     public function testPTYCommand()
     {
         if (!Process::isPtySupported()) {
