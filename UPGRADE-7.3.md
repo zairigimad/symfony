@@ -8,10 +8,68 @@ Read more about this in the [Symfony documentation](https://symfony.com/doc/7.3/
 
 If you're upgrading from a version below 7.2, follow the [7.2 upgrade guide](UPGRADE-7.2.md) first.
 
+AssetMapper
+-----------
+
+ * `ImportMapRequireCommand` now takes `projectDir` as a required third constructor argument
+
+Console
+-------
+
+ * Omitting parameter types in callables configured via `Command::setCode()` method is deprecated
+
+   Before:
+
+   ```php
+   $command->setCode(function ($input, $output) {
+       // ...
+   });
+   ```
+
+   After:
+
+   ```php
+   use Symfony\Component\Console\Input\InputInterface;
+   use Symfony\Component\Console\Output\OutputInterface;
+
+   $command->setCode(function (InputInterface $input, OutputInterface $output) {
+       // ...
+   });
+   ```
+
+ * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
+
+FrameworkBundle
+---------------
+
+ * Not setting the `framework.property_info.with_constructor_extractor` option explicitly is deprecated
+   because its default value will change in version 8.0
+ * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
+ * Deprecate the `framework.validation.cache` config option
+
 Ldap
 ----
 
  * Deprecate `LdapUser::eraseCredentials()` in favor of `__serialize()`
+
+OptionsResolver
+---------------
+
+ * Deprecate defining nested options via `setDefault()`, use `setOptions()` instead
+
+  *Before*
+  ```php
+  $resolver->setDefault('option', function (OptionsResolver $resolver) {
+      // ...
+  });
+  ```
+
+  *After*
+  ```php
+  $resolver->setOptions('option', function (OptionsResolver $resolver) {
+      // ...
+  });
+  ```
 
 Security
 --------
@@ -61,59 +119,6 @@ Security
    it should be used to report the reason of a decision, including all the related votes.
 
  * Add discovery support to `OidcTokenHandler` and `OidcUserInfoTokenHandler`
-
-Console
--------
-
- * Omitting parameter types in callables configured via `Command::setCode()` method is deprecated
-
-   Before:
-
-   ```php
-   $command->setCode(function ($input, $output) {
-       // ...
-   });
-   ```
-
-   After:
-
-   ```php
-   use Symfony\Component\Console\Input\InputInterface;
-   use Symfony\Component\Console\Output\OutputInterface;
-
-   $command->setCode(function (InputInterface $input, OutputInterface $output) {
-       // ...
-   });
-   ```
-
- * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
-
-FrameworkBundle
----------------
-
- * Not setting the `framework.property_info.with_constructor_extractor` option explicitly is deprecated
-   because its default value will change in version 8.0
- * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
- * Deprecate the `framework.validation.cache` config option
-
-OptionsResolver
----------------
-
-* Deprecate defining nested options via `setDefault()`, use `setOptions()` instead
-
-  *Before*
-  ```php
-  $resolver->setDefault('option', function (OptionsResolver $resolver) {
-      // ...
-  });
-  ```
-
-  *After*
-  ```php
-  $resolver->setOptions('option', function (OptionsResolver $resolver) {
-      // ...
-  });
-  ```
 
 SecurityBundle
 --------------
@@ -191,8 +196,3 @@ VarDumper
 
  * Deprecate `ResourceCaster::castCurl()`, `ResourceCaster::castGd()` and `ResourceCaster::castOpensslX509()`
  * Mark all casters as `@internal`
-
-AssetMapper
------------
-
- * `ImportMapRequireCommand` now takes `projectDir` as a required third constructor argument
