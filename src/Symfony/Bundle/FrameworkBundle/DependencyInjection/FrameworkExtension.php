@@ -12,12 +12,16 @@
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection;
 
 use Composer\InstalledVersions;
+use Doctrine\ORM\Mapping\Embeddable;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\MappedSuperclass;
 use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Types\ContextFactory;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface as PsrClockInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
@@ -57,6 +61,7 @@ use Symfony\Component\Console\Messenger\RunCommandMessageHandler;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -117,6 +122,7 @@ use Symfony\Component\Mailer\EventListener\SmimeEncryptedMessageListener;
 use Symfony\Component\Mailer\EventListener\SmimeSignedMessageListener;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mercure\HubRegistry;
+use Symfony\Component\Messenger\Attribute\AsMessage;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Bridge as MessengerBridge;
 use Symfony\Component\Messenger\Handler\BatchHandlerInterface;
@@ -757,12 +763,29 @@ class FrameworkExtension extends Extension
                 }
             );
         }
-        $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute): void {
-            $definition->addTag('json_streamer.streamable', [
+
+        $container->registerForAutoconfiguration(CompilerPassInterface::class)
+            ->addExcludeTag('container.excluded.compiler_pass');
+        $container->registerForAutoconfiguration(TestCase::class)
+            ->addExcludeTag('container.excluded.test_case');
+        $container->registerAttributeForAutoconfiguration(AsMessage::class, static function (ChildDefinition $definition) {
+            $definition->addExcludeTag('container.excluded.messenger.message');
+        });
+        $container->registerAttributeForAutoconfiguration(Entity::class, static function (ChildDefinition $definition) {
+            $definition->addExcludeTag('container.excluded.doctrine.entity');
+        });
+        $container->registerAttributeForAutoconfiguration(Embeddable::class, static function (ChildDefinition $definition) {
+            $definition->addExcludeTag('container.excluded.doctrine.embeddable');
+        });
+        $container->registerAttributeForAutoconfiguration(MappedSuperclass::class, static function (ChildDefinition $definition) {
+            $definition->addExcludeTag('container.excluded.doctrine.mapped_superclass');
+        });
+
+        $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute) {
+            $definition->addExcludeTag('json_streamer.streamable', [
                 'object' => $attribute->asObject,
                 'list' => $attribute->asList,
             ]);
-            $definition->addTag('container.excluded');
         });
 
         if (!$container->getParameter('kernel.debug')) {
