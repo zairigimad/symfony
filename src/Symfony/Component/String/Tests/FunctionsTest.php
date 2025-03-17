@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\AbstractString;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\String\UnicodeString;
+
 use function Symfony\Component\String\b;
 use function Symfony\Component\String\s;
 use function Symfony\Component\String\u;
