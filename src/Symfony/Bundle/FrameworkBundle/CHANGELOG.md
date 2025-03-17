@@ -14,6 +14,7 @@ CHANGELOG
  * Add support for signal plain name in the `messenger.stop_worker_on_signals` configuration
  * Deprecate the `framework.validation.cache` option
  * Add `--method` option to the `debug:router` command
+ * Auto-exclude DI extensions, test cases, entities and messenger messages
 
 7.2
 ---
