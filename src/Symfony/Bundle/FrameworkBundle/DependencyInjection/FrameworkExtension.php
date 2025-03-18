@@ -765,27 +765,29 @@ class FrameworkExtension extends Extension
         }
 
         $container->registerForAutoconfiguration(CompilerPassInterface::class)
-            ->addResourceTag('container.excluded.compiler_pass');
+            ->addTag('container.excluded.compiler_pass')->addTag('container.excluded')->setAbstract(true);
         $container->registerForAutoconfiguration(TestCase::class)
-            ->addResourceTag('container.excluded.test_case');
+            ->addTag('container.excluded.test_case')->addTag('container.excluded')->setAbstract(true);
         $container->registerAttributeForAutoconfiguration(AsMessage::class, static function (ChildDefinition $definition) {
-            $definition->addResourceTag('container.excluded.messenger.message');
+            $definition->addTag('container.excluded.messenger.message')->addTag('container.excluded')->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(Entity::class, static function (ChildDefinition $definition) {
-            $definition->addResourceTag('container.excluded.doctrine.entity');
+            $definition->addTag('container.excluded.doctrine.entity')->addTag('container.excluded')->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(Embeddable::class, static function (ChildDefinition $definition) {
-            $definition->addResourceTag('container.excluded.doctrine.embeddable');
+            $definition->addTag('container.excluded.doctrine.embeddable')->addTag('container.excluded')->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(MappedSuperclass::class, static function (ChildDefinition $definition) {
-            $definition->addResourceTag('container.excluded.doctrine.mapped_superclass');
+            $definition->addTag('container.excluded.doctrine.mapped_superclass')->addTag('container.excluded')->setAbstract(true);
         });
 
         $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute) {
-            $definition->addResourceTag('json_streamer.streamable', [
+            $definition->addTag('json_streamer.streamable', [
                 'object' => $attribute->asObject,
                 'list' => $attribute->asList,
             ]);
+            $definition->addTag('container.excluded');
+            $definition->setAbstract(true);
         });
 
         if (!$container->getParameter('kernel.debug')) {
