@@ -765,24 +765,24 @@ class FrameworkExtension extends Extension
         }
 
         $container->registerForAutoconfiguration(CompilerPassInterface::class)
-            ->addExcludeTag('container.excluded.compiler_pass');
+            ->addResourceTag('container.excluded.compiler_pass');
         $container->registerForAutoconfiguration(TestCase::class)
-            ->addExcludeTag('container.excluded.test_case');
+            ->addResourceTag('container.excluded.test_case');
         $container->registerAttributeForAutoconfiguration(AsMessage::class, static function (ChildDefinition $definition) {
-            $definition->addExcludeTag('container.excluded.messenger.message');
+            $definition->addResourceTag('container.excluded.messenger.message');
         });
         $container->registerAttributeForAutoconfiguration(Entity::class, static function (ChildDefinition $definition) {
-            $definition->addExcludeTag('container.excluded.doctrine.entity');
+            $definition->addResourceTag('container.excluded.doctrine.entity');
         });
         $container->registerAttributeForAutoconfiguration(Embeddable::class, static function (ChildDefinition $definition) {
-            $definition->addExcludeTag('container.excluded.doctrine.embeddable');
+            $definition->addResourceTag('container.excluded.doctrine.embeddable');
         });
         $container->registerAttributeForAutoconfiguration(MappedSuperclass::class, static function (ChildDefinition $definition) {
-            $definition->addExcludeTag('container.excluded.doctrine.mapped_superclass');
+            $definition->addResourceTag('container.excluded.doctrine.mapped_superclass');
         });
 
         $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute) {
-            $definition->addExcludeTag('json_streamer.streamable', [
+            $definition->addResourceTag('json_streamer.streamable', [
                 'object' => $attribute->asObject,
                 'list' => $attribute->asList,
             ]);
