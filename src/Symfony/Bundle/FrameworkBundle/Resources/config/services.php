@@ -42,6 +42,7 @@ use Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
+use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetterInterface;
 use Symfony\Component\HttpKernel\EventListener\LocaleAwareListener;
 use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
@@ -177,6 +178,7 @@ return static function (ContainerConfigurator $container) {
 
         ->set('services_resetter', ServicesResetter::class)
             ->public()
+        ->alias(ServicesResetterInterface::class, 'services_resetter')
 
         ->set('reverse_container', ReverseContainer::class)
             ->args([
