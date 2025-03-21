@@ -39,6 +39,11 @@ Console
 
  * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
 
+DependencyInjection
+-------------------
+
+ * Deprecate `ContainerBuilder::getAutoconfiguredAttributes()` in favor of the `getAttributeAutoconfigurators()` method.
+
 FrameworkBundle
 ---------------
 
