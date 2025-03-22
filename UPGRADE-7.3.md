@@ -82,7 +82,7 @@ OptionsResolver
   ```
 
 PropertyInfo
--------
+------------
 
  * Deprecate the `Type` class, use `Symfony\Component\TypeInfo\Type` class from `symfony/type-info` instead
  * Deprecate the `PropertyTypeExtractorInterface::getTypes()` method, use `PropertyTypeExtractorInterface::getType()` instead
