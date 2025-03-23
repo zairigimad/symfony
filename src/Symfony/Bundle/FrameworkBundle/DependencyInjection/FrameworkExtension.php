@@ -214,6 +214,7 @@ use Symfony\Component\Yaml\Command\LintCommand as BaseYamlLintCommand;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\CallbackInterface;
+use Symfony\Contracts\Cache\NamespacedPoolInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -2601,6 +2602,10 @@ class FrameworkExtension extends Extension
                 $container->registerAliasForArgument($tagAwareId, TagAwareCacheInterface::class, $pool['name'] ?? $name);
                 $container->registerAliasForArgument($name, CacheInterface::class, $pool['name'] ?? $name);
                 $container->registerAliasForArgument($name, CacheItemPoolInterface::class, $pool['name'] ?? $name);
+
+                if (interface_exists(NamespacedPoolInterface::class)) {
+                    $container->registerAliasForArgument($name, NamespacedPoolInterface::class, $pool['name'] ?? $name);
+                }
             }
 
             $definition->setPublic($pool['public']);
