@@ -16,6 +16,7 @@ CHANGELOG
  * Add `--method` option to the `debug:router` command
  * Auto-exclude DI extensions, test cases, entities and messenger messages
  * Add DI alias from `ServicesResetterInterface` to `services_resetter`
+ * Add `methods` argument in `#[IsCsrfTokenValid]` attribute
 
 7.2
 ---
