@@ -17,6 +17,7 @@ CHANGELOG
  * Auto-exclude DI extensions, test cases, entities and messenger messages
  * Add DI alias from `ServicesResetterInterface` to `services_resetter`
  * Add `methods` argument in `#[IsCsrfTokenValid]` attribute
+ * Allow configuring the logging channel per type of exceptions
 
 7.2
 ---

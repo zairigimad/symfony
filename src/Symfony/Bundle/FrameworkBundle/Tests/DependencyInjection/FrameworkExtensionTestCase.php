@@ -615,21 +615,25 @@ abstract class FrameworkExtensionTestCase extends TestCase
         ], array_keys($configuration));
 
         $this->assertEqualsCanonicalizing([
+            'log_channel' => null,
             'log_level' => 'info',
             'status_code' => 422,
         ], $configuration[\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class]);
 
         $this->assertEqualsCanonicalizing([
+            'log_channel' => null,
             'log_level' => 'info',
             'status_code' => null,
         ], $configuration[\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class]);
 
         $this->assertEqualsCanonicalizing([
+            'log_channel' => null,
             'log_level' => 'info',
             'status_code' => null,
         ], $configuration[\Symfony\Component\HttpKernel\Exception\ConflictHttpException::class]);
 
         $this->assertEqualsCanonicalizing([
+            'log_channel' => null,
             'log_level' => null,
             'status_code' => 500,
         ], $configuration[\Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException::class]);
