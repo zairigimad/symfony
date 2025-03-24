@@ -129,7 +129,7 @@ return static function (ContainerConfigurator $container) {
                 service('property_info')->ignoreOnInvalid(),
                 service('serializer.mapping.class_discriminator_resolver')->ignoreOnInvalid(),
                 null,
-                null,
+                abstract_arg('default context, set in the SerializerPass'),
                 service('property_info')->ignoreOnInvalid(),
             ])
             ->tag('serializer.normalizer', ['built_in' => true, 'priority' => -1000])
