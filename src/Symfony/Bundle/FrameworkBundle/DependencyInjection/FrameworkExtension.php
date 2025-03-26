@@ -2946,11 +2946,9 @@ class FrameworkExtension extends Extension
             if (!class_exists(SmimeEncryptedMessageListener::class)) {
                 throw new LogicException('S/MIME encrypted messages support cannot be enabled as this version of the Mailer component does not support it.');
             }
-            $smimeDecrypter = $container->getDefinition('mailer.smime_encrypter');
-            $smimeDecrypter->setArgument(0, $config['smime_encrypter']['certificate']);
-            $smimeDecrypter->setArgument(1, $config['smime_encrypter']['cipher']);
+            $container->setAlias('mailer.smime_encrypter.repository', $config['smime_encrypter']['repository']);
+            $container->setParameter('mailer.smime_encrypter.cipher', $config['smime_encrypter']['cipher']);
         } else {
-            $container->removeDefinition('mailer.smime_encrypter');
             $container->removeDefinition('mailer.smime_encrypter.listener');
         }
 

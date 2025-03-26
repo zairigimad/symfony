@@ -959,7 +959,7 @@ class ConfigurationTest extends TestCase
                 ],
                 'smime_encrypter' => [
                     'enabled' => false,
-                    'certificate' => '',
+                    'repository' => '',
                     'cipher' => null,
                 ],
             ],

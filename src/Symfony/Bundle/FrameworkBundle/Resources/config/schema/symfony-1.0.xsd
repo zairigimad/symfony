@@ -855,7 +855,7 @@
     </xsd:complexType>
 
     <xsd:complexType name="mailer_smime_encrypter">
-        <xsd:attribute name="certificate" type="xsd:string"/>
+        <xsd:attribute name="repository" type="xsd:string" />
         <xsd:attribute name="cipher" type="xsd:integer" />
     </xsd:complexType>
 
