@@ -33,6 +33,7 @@ use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\Compiler\ResolveBindingsPass;
 use Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass;
 use Symfony\Component\DependencyInjection\Compiler\ResolveInstanceofConditionalsPass;
 use Symfony\Component\DependencyInjection\Compiler\ResolveTaggedIteratorArgumentPass;
@@ -67,6 +68,7 @@ use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Security\Core\AuthenticationEvents;
+use Symfony\Component\Serializer\DependencyInjection\SerializerPass;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Serializer\Mapping\Loader\YamlFileLoader;
@@ -1447,9 +1449,6 @@ abstract class FrameworkExtensionTestCase extends TestCase
         $this->assertEquals(AttributeLoader::class, $argument[0]->getClass());
         $this->assertEquals(new Reference('serializer.name_converter.camel_case_to_snake_case'), $container->getDefinition('serializer.name_converter.metadata_aware')->getArgument(1));
         $this->assertEquals(new Reference('property_info', ContainerBuilder::IGNORE_ON_INVALID_REFERENCE), $container->getDefinition('serializer.normalizer.object')->getArgument(3));
-        $this->assertArrayHasKey('circular_reference_handler', $container->getDefinition('serializer.normalizer.object')->getArgument(6));
-        $this->assertArrayHasKey('max_depth_handler', $container->getDefinition('serializer.normalizer.object')->getArgument(6));
-        $this->assertEquals($container->getDefinition('serializer.normalizer.object')->getArgument(6)['max_depth_handler'], new Reference('my.max.depth.handler'));
     }
 
     public function testSerializerWithoutTranslator()
@@ -1547,13 +1546,22 @@ abstract class FrameworkExtensionTestCase extends TestCase
 
     public function testObjectNormalizerRegistered()
     {
-        $container = $this->createContainerFromFile('full');
+        $container = $this->createContainerFromFile('full', compile: false);
+        $container->addCompilerPass(new SerializerPass());
+        $container->addCompilerPass(new ResolveBindingsPass());
+        $container->compile();
 
         $definition = $container->getDefinition('serializer.normalizer.object');
         $tag = $definition->getTag('serializer.normalizer');
 
         $this->assertEquals(ObjectNormalizer::class, $definition->getClass());
         $this->assertEquals(-1000, $tag[0]['priority']);
+
+        $this->assertEquals([
+            'enable_max_depth' => true,
+            'circular_reference_handler' => new Reference('my.circular.reference.handler'),
+            'max_depth_handler' => new Reference('my.max.depth.handler'),
+        ], $definition->getArgument(6));
     }
 
     public function testConstraintViolationListNormalizerRegistered()
