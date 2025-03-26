@@ -58,9 +58,9 @@ class Email extends Message
     /**
      * @return $this
      */
-    public function subject(string|\Stringable $subject): static
+    public function subject(string $subject): static
     {
-        return $this->setHeaderBody('Text', 'Subject', (string) $subject);
+        return $this->setHeaderBody('Text', 'Subject', $subject);
     }
 
     public function getSubject(): ?string
