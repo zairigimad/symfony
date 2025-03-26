@@ -144,6 +144,9 @@ use Symfony\Component\Notifier\Notifier;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Notifier\Transport\TransportFactoryInterface as NotifierTransportFactoryInterface;
+use Symfony\Component\ObjectMapper\ConditionCallableInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\ObjectMapper\TransformCallableInterface;
 use Symfony\Component\Process\Messenger\RunProcessMessageHandler;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyInfo\Extractor\ConstructorArgumentTypeExtractorInterface;
@@ -862,6 +865,14 @@ class FrameworkExtension extends Extension
 
         if (!ContainerBuilder::willBeAvailable('symfony/translation', Translator::class, ['symfony/framework-bundle', 'symfony/form'])) {
             $container->removeDefinition('form.type_extension.upload.validator');
+        }
+
+        if (ContainerBuilder::willBeAvailable('symfony/object-mapper', ObjectMapperInterface::class, ['symfony/framework-bundle'])) {
+            $loader->load('object_mapper.php');
+            $container->registerForAutoconfiguration(TransformCallableInterface::class)
+                ->addTag('object_mapper.transform_callable');
+            $container->registerForAutoconfiguration(ConditionCallableInterface::class)
+                ->addTag('object_mapper.condition_callable');
         }
     }
 
