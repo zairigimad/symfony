@@ -4,6 +4,7 @@ CHANGELOG
 7.3
 ---
 
+ * Add support for the ObjectMapper component
  * Add support for assets pre-compression
  * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`
  * Add JsonStreamer services and configuration
