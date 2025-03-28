@@ -40,6 +40,7 @@ Console
    ```
 
  * Deprecate methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
+ * `#[AsCommand]` attribute is now marked as `@final`; you should use separate attributes to add more logic to commands
 
 DependencyInjection
 -------------------
