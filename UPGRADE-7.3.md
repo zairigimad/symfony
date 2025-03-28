@@ -16,7 +16,7 @@ AssetMapper
 Console
 -------
 
- * Omitting parameter types in callables configured via `Command::setCode()` method is deprecated
+ * Omitting parameter types or returning a non-integer value from a `\Closure` set via `Command::setCode()` method is deprecated
 
    Before:
 
@@ -32,8 +32,10 @@ Console
    use Symfony\Component\Console\Input\InputInterface;
    use Symfony\Component\Console\Output\OutputInterface;
 
-   $command->setCode(function (InputInterface $input, OutputInterface $output) {
+   $command->setCode(function (InputInterface $input, OutputInterface $output): int {
        // ...
+
+       return 0;
    });
    ```
 
