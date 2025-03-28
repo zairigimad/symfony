@@ -7,6 +7,23 @@ in 6.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v6.4.0...v6.4.1
 
+* 6.4.20 (2025-03-28)
+
+ * bug #60054 [Form] Use duplicate_preferred_choices to set value of ChoiceType (aleho)
+ * bug #59858 Update `JsDelivrEsmResolver::IMPORT_REGEX` to support dynamic imports (natepage)
+ * bug #60019 [HttpKernel] Fix `TraceableEventDispatcher` when the `Stopwatch` service has been reset (lyrixx)
+ * bug #59975 [HttpKernel] Only remove `E_WARNING` from error level during kernel init (fritzmg)
+ * bug #59988 [FrameworkBundle] Remove redundant `name` attribute from `default_context` (HypeMC)
+ * bug #59949 [Process] Use a pipe for stderr in pty mode to avoid mixed output between stdout and stderr (joelwurtz)
+ * bug #59940 [Cache] Fix missing cache data in profiler (dcmbrs)
+ * bug #59965 [VarExporter] Fix support for hooks and asymmetric visibility (nicolas-grekas)
+ * bug #59874 [Console] fix progress bar messing output in section when there is an EOL (joelwurtz)
+ * bug #59888 [PhpUnitBridge] don't trigger "internal" deprecations for PHPUnit Stub objects (xabbuh)
+ * bug #59830 [Yaml] drop comments while lexing unquoted strings (xabbuh)
+ * bug #59884 [VarExporter] Fix support for asymmetric visibility (nicolas-grekas)
+ * bug #59881 [VarExporter] Fix support for abstract properties (nicolas-grekas)
+ * bug #59841 [Cache] fix cache data collector on late collect (dcmbrs)
+
 * 6.4.19 (2025-02-26)
 
  * bug #59198 [Messenger] Filter out non-consumable receivers when registering `ConsumeMessagesCommand` (wazum)
