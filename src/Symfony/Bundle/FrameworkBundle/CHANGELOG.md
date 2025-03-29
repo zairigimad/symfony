@@ -19,6 +19,8 @@ CHANGELOG
  * Add DI alias from `ServicesResetterInterface` to `services_resetter`
  * Add `methods` argument in `#[IsCsrfTokenValid]` attribute
  * Allow configuring the logging channel per type of exceptions
+ * Enable service argument resolution on classes that use the `#[Route]` attribute,
+   the `#[AsController]` attribute is no longer required
 
 7.2
 ---

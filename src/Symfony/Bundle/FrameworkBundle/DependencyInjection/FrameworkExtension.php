@@ -164,6 +164,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\RateLimiter\Storage\CacheStorage;
 use Symfony\Component\RemoteEvent\Attribute\AsRemoteEventConsumer;
 use Symfony\Component\RemoteEvent\RemoteEvent;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Scheduler\Attribute\AsCronTask;
 use Symfony\Component\Scheduler\Attribute\AsPeriodicTask;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
@@ -429,7 +430,7 @@ class FrameworkExtension extends Extension
             }
             $loggers[$exception['log_channel']] = new Reference('monolog.logger.'.$exception['log_channel'], ContainerInterface::NULL_ON_INVALID_REFERENCE);
         }
-        
+
         $exceptionListener
             ->replaceArgument(3, $config['exceptions'])
             ->setArgument(4, $loggers)
@@ -737,6 +738,9 @@ class FrameworkExtension extends Extension
             $definition->addTag('kernel.event_listener', $tagAttributes);
         });
         $container->registerAttributeForAutoconfiguration(AsController::class, static function (ChildDefinition $definition, AsController $attribute): void {
+            $definition->addTag('controller.service_arguments');
+        });
+        $container->registerAttributeForAutoconfiguration(Route::class, static function (ChildDefinition $definition, Route $attribute, \ReflectionClass|\ReflectionMethod $reflection): void {
             $definition->addTag('controller.service_arguments');
         });
         $container->registerAttributeForAutoconfiguration(AsRemoteEventConsumer::class, static function (ChildDefinition $definition, AsRemoteEventConsumer $attribute): void {
