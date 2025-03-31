@@ -204,6 +204,7 @@ use Symfony\Component\TypeInfo\TypeResolver\StringTypeResolver;
 use Symfony\Component\TypeInfo\TypeResolver\TypeResolverInterface;
 use Symfony\Component\Uid\Factory\UuidFactory;
 use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\ExpressionLanguageProvider;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\GroupProviderInterface;
@@ -786,29 +787,34 @@ class FrameworkExtension extends Extension
         }
 
         $container->registerForAutoconfiguration(CompilerPassInterface::class)
-            ->addTag('container.excluded.compiler_pass')->addTag('container.excluded')->setAbstract(true);
+            ->addTag('container.excluded', ['source' => 'because it\'s a compiler pass'])->setAbstract(true);
+        $container->registerForAutoconfiguration(Constraint::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s a validation constraint'])->setAbstract(true);
         $container->registerForAutoconfiguration(TestCase::class)
-            ->addTag('container.excluded.test_case')->addTag('container.excluded')->setAbstract(true);
+            ->addTag('container.excluded', ['source' => 'because it\'s a test case'])->setAbstract(true);
+        $container->registerForAutoconfiguration(\UnitEnum::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s an enum'])->setAbstract(true);
         $container->registerAttributeForAutoconfiguration(AsMessage::class, static function (ChildDefinition $definition) {
-            $definition->addTag('container.excluded.messenger.message')->addTag('container.excluded')->setAbstract(true);
+            $definition->addTag('container.excluded', ['source' => 'because it\'s a messenger message'])->setAbstract(true);
+        });
+        $container->registerAttributeForAutoconfiguration(\Attribute::class, static function (ChildDefinition $definition) {
+            $definition->addTag('container.excluded', ['source' => 'because it\'s an attribute'])->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(Entity::class, static function (ChildDefinition $definition) {
-            $definition->addTag('container.excluded.doctrine.entity')->addTag('container.excluded')->setAbstract(true);
+            $definition->addTag('container.excluded', ['source' => 'because it\'s a doctrine entity'])->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(Embeddable::class, static function (ChildDefinition $definition) {
-            $definition->addTag('container.excluded.doctrine.embeddable')->addTag('container.excluded')->setAbstract(true);
+            $definition->addTag('container.excluded', ['source' => 'because it\'s a doctrine embeddable'])->setAbstract(true);
         });
         $container->registerAttributeForAutoconfiguration(MappedSuperclass::class, static function (ChildDefinition $definition) {
-            $definition->addTag('container.excluded.doctrine.mapped_superclass')->addTag('container.excluded')->setAbstract(true);
+            $definition->addTag('container.excluded', ['source' => 'because it\'s a doctrine mapped superclass'])->setAbstract(true);
         });
 
         $container->registerAttributeForAutoconfiguration(JsonStreamable::class, static function (ChildDefinition $definition, JsonStreamable $attribute) {
             $definition->addTag('json_streamer.streamable', [
                 'object' => $attribute->asObject,
                 'list' => $attribute->asList,
-            ]);
-            $definition->addTag('container.excluded');
-            $definition->setAbstract(true);
+            ])->addTag('container.excluded', ['source' => 'because it\'s a streamable JSON'])->setAbstract(true);
         });
 
         if (!$container->getParameter('kernel.debug')) {
