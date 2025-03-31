@@ -58,6 +58,21 @@ FrameworkBundle
    because its default value will change in version 8.0
  * Deprecate the `--show-arguments` option of the `container:debug` command, as arguments are now always shown
  * Deprecate the `framework.validation.cache` config option
+ * Deprecate setting the `framework.profiler.collect_serializer_data` config option to `false`
+
+   When set to `true`, normalizers must be injected using the `NormalizerInterface`, and not using any concrete implementation.
+
+   Before:
+
+   ```php
+   public function __construct(ObjectNormalizer $normalizer) {}
+   ```
+
+   After:
+
+   ```php
+   public function __construct(#[Autowire('@serializer.normalizer.object')] NormalizerInterface $normalizer) {}
+   ```
 
 Ldap
 ----

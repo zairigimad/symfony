@@ -278,20 +278,11 @@ abstract class FrameworkExtensionTestCase extends TestCase
 
     public function testProfilerCollectSerializerDataEnabled()
     {
-        $container = $this->createContainerFromFile('profiler_collect_serializer_data');
+        $container = $this->createContainerFromFile('profiler');
 
         $this->assertTrue($container->hasDefinition('profiler'));
         $this->assertTrue($container->hasDefinition('serializer.data_collector'));
         $this->assertTrue($container->hasDefinition('debug.serializer'));
-    }
-
-    public function testProfilerCollectSerializerDataDefaultDisabled()
-    {
-        $container = $this->createContainerFromFile('profiler');
-
-        $this->assertTrue($container->hasDefinition('profiler'));
-        $this->assertFalse($container->hasDefinition('serializer.data_collector'));
-        $this->assertFalse($container->hasDefinition('debug.serializer'));
     }
 
     public function testWorkflows()
