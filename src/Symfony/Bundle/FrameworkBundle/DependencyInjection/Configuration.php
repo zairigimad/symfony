@@ -2504,7 +2504,7 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('lock_factory')
                                         ->info('The service ID of the lock factory used by this limiter (or null to disable locking).')
-                                        ->defaultValue('lock.factory')
+                                        ->defaultValue('auto')
                                     ->end()
                                     ->scalarNode('cache_pool')
                                         ->info('The cache pool to use for storing the current limiter state.')

@@ -188,7 +188,7 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
         $this->assertNull($argumentsB['index_1'], 'workflow_b marking_store argument is null');
     }
 
-    public function testRateLimiterWithLockFactory()
+    public function testRateLimiterLockFactoryWithLockDisabled()
     {
         try {
             $this->createContainerFromClosure(function (ContainerBuilder $container) {
@@ -199,7 +199,7 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
                     'php_errors' => ['log' => true],
                     'lock' => false,
                     'rate_limiter' => [
-                        'with_lock' => ['policy' => 'fixed_window', 'limit' => 10, 'interval' => '1 hour'],
+                        'with_lock' => ['policy' => 'fixed_window', 'limit' => 10, 'interval' => '1 hour', 'lock_factory' => 'lock.factory'],
                     ],
                 ]);
             });
@@ -208,7 +208,10 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
         } catch (LogicException $e) {
             $this->assertEquals('Rate limiter "with_lock" requires the Lock component to be configured.', $e->getMessage());
         }
+    }
 
+    public function testRateLimiterAutoLockFactoryWithLockEnabled()
+    {
         $container = $this->createContainerFromClosure(function (ContainerBuilder $container) {
             $container->loadFromExtension('framework', [
                 'annotations' => false,
@@ -226,13 +229,35 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
         $this->assertEquals('lock.factory', (string) $withLock->getArgument(2));
     }
 
-    public function testRateLimiterLockFactory()
+    public function testRateLimiterAutoLockFactoryWithLockDisabled()
     {
         $container = $this->createContainerFromClosure(function (ContainerBuilder $container) {
             $container->loadFromExtension('framework', [
                 'annotations' => false,
                 'http_method_override' => false,
                 'handle_all_throwables' => true,
+                'lock' => false,
+                'php_errors' => ['log' => true],
+                'rate_limiter' => [
+                    'without_lock' => ['policy' => 'fixed_window', 'limit' => 10, 'interval' => '1 hour'],
+                ],
+            ]);
+        });
+
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessageMatches('/^The argument "2" doesn\'t exist.*\.$/');
+
+        $container->getDefinition('limiter.without_lock')->getArgument(2);
+    }
+
+    public function testRateLimiterDisableLockFactory()
+    {
+        $container = $this->createContainerFromClosure(function (ContainerBuilder $container) {
+            $container->loadFromExtension('framework', [
+                'annotations' => false,
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'lock' => true,
                 'php_errors' => ['log' => true],
                 'rate_limiter' => [
                     'without_lock' => ['policy' => 'fixed_window', 'limit' => 10, 'interval' => '1 hour', 'lock_factory' => null],

@@ -3239,6 +3239,10 @@ class FrameworkExtension extends Extension
             $limiter = $container->setDefinition($limiterId = 'limiter.'.$name, new ChildDefinition('limiter'))
                 ->addTag('rate_limiter', ['name' => $name]);
 
+            if ('auto' === $limiterConfig['lock_factory']) {
+                $limiterConfig['lock_factory'] = $this->isInitializedConfigEnabled('lock') ? 'lock.factory' : null;
+            }
+
             if (null !== $limiterConfig['lock_factory']) {
                 if (!interface_exists(LockInterface::class)) {
                     throw new LogicException(\sprintf('Rate limiter "%s" requires the Lock component to be installed. Try running "composer require symfony/lock".', $name));
