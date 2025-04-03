@@ -22,6 +22,7 @@ CHANGELOG
  * Enable service argument resolution on classes that use the `#[Route]` attribute,
    the `#[AsController]` attribute is no longer required
  * Deprecate setting the `framework.profiler.collect_serializer_data` config option to `false`
+ * Set `framework.rate_limiter.limiters.*.lock_factory` to `auto` by default
 
 7.2
 ---
