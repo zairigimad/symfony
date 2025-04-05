@@ -17,6 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\RateLimiter\CompoundRateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Workflow\Exception\InvalidDefinitionException;
 
 class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
@@ -289,5 +291,78 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
 
         $this->assertSame('first', $container->getDefinition('limiter.first')->getTag('rate_limiter')[0]['name']);
         $this->assertSame('second', $container->getDefinition('limiter.second')->getTag('rate_limiter')[0]['name']);
+    }
+
+    public function testRateLimiterCompoundPolicy()
+    {
+        if (!class_exists(CompoundRateLimiterFactory::class)) {
+            $this->markTestSkipped('CompoundRateLimiterFactory is not available.');
+        }
+
+        $container = $this->createContainerFromClosure(function (ContainerBuilder $container) {
+            $container->loadFromExtension('framework', [
+                'annotations' => false,
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'php_errors' => ['log' => true],
+                'lock' => true,
+                'rate_limiter' => [
+                    'first' => ['policy' => 'fixed_window', 'limit' => 10, 'interval' => '1 hour'],
+                    'second' => ['policy' => 'sliding_window', 'limit' => 10, 'interval' => '1 hour'],
+                    'compound' => ['policy' => 'compound', 'limiters' => ['first', 'second']],
+                ],
+            ]);
+        });
+
+        $definition = $container->getDefinition('limiter.compound');
+        $this->assertSame(CompoundRateLimiterFactory::class, $definition->getClass());
+        $this->assertEquals(
+            [
+                'limiter.first',
+                'limiter.second',
+            ],
+            $definition->getArgument(0)->getValues()
+        );
+        $this->assertSame('limiter.compound', (string) $container->getAlias(RateLimiterFactoryInterface::class.' $compoundLimiter'));
+    }
+
+    public function testRateLimiterCompoundPolicyNoLimiters()
+    {
+        if (!class_exists(CompoundRateLimiterFactory::class)) {
+            $this->markTestSkipped('CompoundRateLimiterFactory is not available.');
+        }
+
+        $this->expectException(\LogicException::class);
+        $this->createContainerFromClosure(function ($container) {
+            $container->loadFromExtension('framework', [
+                'annotations' => false,
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'php_errors' => ['log' => true],
+                'rate_limiter' => [
+                    'compound' => ['policy' => 'compound'],
+                ],
+            ]);
+        });
+    }
+
+    public function testRateLimiterCompoundPolicyInvalidLimiters()
+    {
+        if (!class_exists(CompoundRateLimiterFactory::class)) {
+            $this->markTestSkipped('CompoundRateLimiterFactory is not available.');
+        }
+
+        $this->expectException(\LogicException::class);
+        $this->createContainerFromClosure(function ($container) {
+            $container->loadFromExtension('framework', [
+                'annotations' => false,
+                'http_method_override' => false,
+                'handle_all_throwables' => true,
+                'php_errors' => ['log' => true],
+                'rate_limiter' => [
+                    'compound' => ['policy' => 'compound', 'limiters' => ['invalid1', 'invalid2']],
+                ],
+            ]);
+        });
     }
 }

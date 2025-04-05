@@ -24,6 +24,7 @@ CHANGELOG
  * Deprecate setting the `framework.profiler.collect_serializer_data` config option to `false`
  * Set `framework.rate_limiter.limiters.*.lock_factory` to `auto` by default
  * Deprecate `RateLimiterFactory` autowiring aliases, use `RateLimiterFactoryInterface` instead
+ * Allow configuring compound rate limiters
 
 7.2
 ---

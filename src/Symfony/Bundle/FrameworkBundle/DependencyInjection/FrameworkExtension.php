@@ -59,6 +59,7 @@ use Symfony\Component\Console\DataCollector\CommandDataCollector;
 use Symfony\Component\Console\Debug\CliRequest;
 use Symfony\Component\Console\Messenger\RunCommandMessageHandler;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -158,6 +159,7 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyInitializableExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyListExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
+use Symfony\Component\RateLimiter\CompoundRateLimiterFactory;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
@@ -3232,7 +3234,18 @@ class FrameworkExtension extends Extension
     {
         $loader->load('rate_limiter.php');
 
+        $limiters = [];
+        $compoundLimiters = [];
+
         foreach ($config['limiters'] as $name => $limiterConfig) {
+            if ('compound' === $limiterConfig['policy']) {
+                $compoundLimiters[$name] = $limiterConfig;
+
+                continue;
+            }
+
+            $limiters[] = $name;
+
             // default configuration (when used by other DI extensions)
             $limiterConfig += ['lock_factory' => 'lock.factory', 'cache_pool' => 'cache.rate_limiter'];
 
@@ -3272,6 +3285,30 @@ class FrameworkExtension extends Extension
                 $container->registerAliasForArgument($limiterId, RateLimiterFactoryInterface::class, $name.'.limiter');
                 $factoryAlias->setDeprecated('symfony/dependency-injection', '7.3', 'The "%alias_id%" autowiring alias is deprecated and will be removed in 8.0, use "RateLimiterFactoryInterface" instead.');
             }
+        }
+
+        if ($compoundLimiters && !class_exists(CompoundRateLimiterFactory::class)) {
+            throw new LogicException('Configuring compound rate limiters is only available in symfony/rate-limiter 7.3+.');
+        }
+
+        foreach ($compoundLimiters as $name => $limiterConfig) {
+            if (!$limiterConfig['limiters']) {
+                throw new LogicException(\sprintf('Compound rate limiter "%s" requires at least one sub-limiter.', $name));
+            }
+
+            if (\array_diff($limiterConfig['limiters'], $limiters)) {
+                throw new LogicException(\sprintf('Compound rate limiter "%s" requires at least one sub-limiter to be configured.', $name));
+            }
+
+            $container->register($limiterId = 'limiter.'.$name, CompoundRateLimiterFactory::class)
+                ->addTag('rate_limiter', ['name' => $name])
+                ->addArgument(new IteratorArgument(\array_map(
+                    static fn (string $name) => new Reference('limiter.'.$name),
+                    $limiterConfig['limiters']
+                )))
+            ;
+
+            $container->registerAliasForArgument($limiterId, RateLimiterFactoryInterface::class, $name.'.limiter');
         }
     }
 
