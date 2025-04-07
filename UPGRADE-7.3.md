@@ -75,6 +75,11 @@ FrameworkBundle
    public function __construct(#[Autowire('@serializer.normalizer.object')] NormalizerInterface $normalizer) {}
    ```
 
+HttpFoundation
+--------------
+
+ * `Request::getPreferredLanguage()` now favors a more preferred language above exactly matching a locale
+
 Ldap
 ----
 
@@ -170,6 +175,12 @@ Serializer
 
  * Deprecate the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
 
+TypeInfo
+--------
+
+ * Deprecate constructing a `CollectionType` instance as a list that is not an array
+ * Deprecate the third `$asList` argument of `TypeFactoryTrait::iterable()`, use `TypeFactoryTrait::list()` instead
+
 Validator
 ---------
 
@@ -224,12 +235,6 @@ Validator
        message: 'a custom constraint violation message',
    )
    ```
-
-TypeInfo
---------
-
- * Deprecate constructing a `CollectionType` instance as a list that is not an array
- * Deprecate the third `$asList` argument of `TypeFactoryTrait::iterable()`, use `TypeFactoryTrait::list()` instead
 
 VarDumper
 ---------
