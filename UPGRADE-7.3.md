@@ -249,3 +249,78 @@ VarExporter
  * Deprecate using `ProxyHelper::generateLazyProxy()` when native lazy proxies can be used - the method should be used to generate abstraction-based lazy decorators only
  * Deprecate `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
  * Deprecate `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
+
+Workflow
+--------
+
+ * Deprecate `Event::getWorkflow()` method
+
+   Before:
+
+   ```php
+   use Symfony\Component\Workflow\Attribute\AsCompletedListener;
+   use Symfony\Component\Workflow\Event\CompletedEvent;
+
+   class MyListener
+   {
+       #[AsCompletedListener('my_workflow', 'to_state2')]
+       public function terminateOrder(CompletedEvent $event): void
+       {
+           $subject = $event->getSubject();
+           if ($event->getWorkflow()->can($subject, 'to_state3')) {
+               $event->getWorkflow()->apply($subject, 'to_state3');
+           }
+       }
+   }
+   ```
+
+   After:
+
+   ```php
+   use Symfony\Component\DependencyInjection\Attribute\Target;
+   use Symfony\Component\Workflow\Attribute\AsCompletedListener;
+   use Symfony\Component\Workflow\Event\CompletedEvent;
+   use Symfony\Component\Workflow\WorkflowInterface;
+
+   class MyListener
+   {
+       public function __construct(
+           #[Target('your_workflow_name')]
+           private readonly WorkflowInterface $workflow,
+       ) {
+       }
+
+       #[AsCompletedListener('your_workflow_name', 'to_state2')]
+       public function terminateOrder(CompletedEvent $event): void
+       {
+           $subject = $event->getSubject();
+           if ($this->workflow->can($subject, 'to_state3')) {
+               $this->workflow->apply($subject, 'to_state3');
+           }
+       }
+   }
+   ```
+
+   Or:
+
+   ```php
+   use Symfony\Component\DependencyInjection\ServiceLocator;
+   use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+   use Symfony\Component\Workflow\Attribute\AsTransitionListener;
+   use Symfony\Component\Workflow\Event\TransitionEvent;
+
+   class GenericListener
+   {
+       public function __construct(
+           #[AutowireLocator('workflow', 'name')]
+           private ServiceLocator $workflows
+       ) {
+       }
+
+       #[AsTransitionListener()]
+       public function doSomething(TransitionEvent $event): void
+       {
+           $workflow = $this->workflows->get($event->getWorkflowName());
+       }
+   }
+   ```
