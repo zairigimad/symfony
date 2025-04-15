@@ -158,6 +158,9 @@ return static function (ContainerConfigurator $container) {
         ->set('uri_signer', UriSigner::class)
             ->args([
                 new Parameter('kernel.secret'),
+                '_hash',
+                '_expiration',
+                service('clock')->nullOnInvalid(),
             ])
             ->lazy()
         ->alias(UriSigner::class, 'uri_signer')
