@@ -106,6 +106,7 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
+use Symfony\Component\HttpKernel\Profiler\ProfilerStateChecker;
 use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 use Symfony\Component\JsonStreamer\JsonStreamWriter;
 use Symfony\Component\JsonStreamer\StreamReaderInterface;
@@ -962,6 +963,11 @@ class FrameworkExtension extends Extension
         $loader->load('profiling.php');
         $loader->load('collectors.php');
         $loader->load('cache_debug.php');
+
+        if (!class_exists(ProfilerStateChecker::class)) {
+            $container->removeDefinition('profiler.state_checker');
+            $container->removeDefinition('profiler.is_disabled_state_checker');
+        }
 
         if ($this->isInitializedConfigEnabled('form')) {
             $loader->load('form_debug.php');
