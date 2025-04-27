@@ -4,6 +4,7 @@ CHANGELOG
 7.3
 ---
 
+ * Add `errors.php` and `webhook.php` routing configuration files (use them instead of their XML equivalent)
  * Add support for the ObjectMapper component
  * Add support for assets pre-compression
  * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`
