@@ -5,6 +5,33 @@ CHANGELOG
 ---
 
  * Add `errors.php` and `webhook.php` routing configuration files (use them instead of their XML equivalent)
+
+   Before:
+
+   ```yaml
+   when@dev:
+       _errors:
+           resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+           prefix: /_error
+
+   webhook:
+       resource: '@FrameworkBundle/Resources/config/routing/webhook.xml'
+       prefix: /webhook
+   ```
+
+   After:
+
+   ```yaml
+   when@dev:
+       _errors:
+           resource: '@FrameworkBundle/Resources/config/routing/errors.php'
+           prefix: /_error
+
+   webhook:
+       resource: '@FrameworkBundle/Resources/config/routing/webhook.php'
+       prefix: /webhook
+   ```
+
  * Add support for the ObjectMapper component
  * Add support for assets pre-compression
  * Rename `TranslationUpdateCommand` to `TranslationExtractCommand`

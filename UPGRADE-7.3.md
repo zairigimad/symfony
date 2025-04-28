@@ -79,29 +79,31 @@ FrameworkBundle
  * The XML routing configuration files (`errors.xml` and `webhook.xml`) are
    deprecated, use their PHP equivalent ones:
 
-  *Before*
-  ```yaml
-    when@dev:
-        _errors:
-            resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
-            prefix: /_error
+   Before:
 
-    webhook:
-        resource: '@FrameworkBundle/Resources/config/routing/webhook.xml'
-        prefix: /webhook
-    ```
+   ```yaml
+   when@dev:
+       _errors:
+           resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+           prefix: /_error
 
-  *After*
-  ```yaml
-    when@dev:
-        _errors:
-            resource: '@FrameworkBundle/Resources/config/routing/errors.php'
-            prefix: /_error
+   webhook:
+       resource: '@FrameworkBundle/Resources/config/routing/webhook.xml'
+       prefix: /webhook
+   ```
 
-    webhook:
-        resource: '@FrameworkBundle/Resources/config/routing/webhook.php'
-        prefix: /webhook
-    ```
+   After:
+
+   ```yaml
+   when@dev:
+       _errors:
+           resource: '@FrameworkBundle/Resources/config/routing/errors.php'
+           prefix: /_error
+
+   webhook:
+       resource: '@FrameworkBundle/Resources/config/routing/webhook.php'
+       prefix: /webhook
+   ```
 
 HttpFoundation
 --------------
@@ -138,36 +140,6 @@ PropertyInfo
  * Deprecate the `Type` class, use `Symfony\Component\TypeInfo\Type` class from `symfony/type-info` instead
  * Deprecate the `PropertyTypeExtractorInterface::getTypes()` method, use `PropertyTypeExtractorInterface::getType()` instead
  * Deprecate the `ConstructorArgumentTypeExtractorInterface::getTypesFromConstructor()` method, use `ConstructorArgumentTypeExtractorInterface::getTypeFromConstructor()` instead
-
-Routing
--------
-
- * The XML routing configuration files (`profiler.xml` and `wdt.xml`) are
-   deprecated, use their PHP equivalent ones:
-
-  *Before*
-  ```yaml
-    when@dev:
-        web_profiler_wdt:
-            resource: '@WebProfilerBundle/Resources/config/routing/wdt.xml'
-            prefix: /_wdt
-
-        web_profiler_profiler:
-            resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
-            prefix: /_profiler
-    ```
-
-  *After*
-  ```yaml
-    when@dev:
-        web_profiler_wdt:
-            resource: '@WebProfilerBundle/Resources/config/routing/wdt.php'
-            prefix: /_wdt
-
-        web_profiler_profiler:
-            resource: '@WebProfilerBundle/Resources/config/routing/profiler.php
-            prefix: /_profiler
-    ```
 
 Security
 --------
@@ -306,6 +278,38 @@ VarExporter
  * Deprecate using `ProxyHelper::generateLazyProxy()` when native lazy proxies can be used - the method should be used to generate abstraction-based lazy decorators only
  * Deprecate `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
  * Deprecate `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
+
+WebProfilerBundle
+-----------------
+
+ * The XML routing configuration files (`profiler.xml` and `wdt.xml`) are
+   deprecated, use their PHP equivalent ones:
+
+   Before:
+
+   ```yaml
+   when@dev:
+       web_profiler_wdt:
+           resource: '@WebProfilerBundle/Resources/config/routing/wdt.xml'
+           prefix: /_wdt
+
+       web_profiler_profiler:
+           resource: '@WebProfilerBundle/Resources/config/routing/profiler.xml'
+           prefix: /_profiler
+   ```
+
+   After:
+
+   ```yaml
+   when@dev:
+       web_profiler_wdt:
+           resource: '@WebProfilerBundle/Resources/config/routing/wdt.php'
+           prefix: /_wdt
+
+       web_profiler_profiler:
+           resource: '@WebProfilerBundle/Resources/config/routing/profiler.php
+           prefix: /_profiler
+   ```
 
 Workflow
 --------
