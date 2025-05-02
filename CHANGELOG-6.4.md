@@ -7,6 +7,27 @@ in 6.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v6.4.0...v6.4.1
 
+* 6.4.21 (2025-05-02)
+
+ * bug #60288 [VarExporter] dump default value for property hooks if present (xabbuh)
+ * bug #60268 [Contracts] Fix `ServiceSubscriberTrait` for nullable service (StevenRenaux)
+ * bug #60256 [Mailer][Postmark] drop the `Date` header using the API transport (xabbuh)
+ * bug #60258 [VarExporter] Fix: Use correct closure call for property-specific logic in $notByRef (Hakayashii, denjas)
+ * bug #60269 [Notifier] [Discord] Fix value limits (norkunas)
+ * bug #60248 [Messenger] Revert " Add call to `gc_collect_cycles()` after each message is handled" (jwage)
+ * bug #60236 [String] Support nexus -> nexuses pluralization (KorvinSzanto)
+ * bug #60194 [Workflow] Fix dispatch of entered event when the subject is already in this marking (lyrixx)
+ * bug #60172 [Cache] Fix invalidating on save failures with Array|ApcuAdapter (nicolas-grekas)
+ * bug #60122 [Cache] ArrayAdapter serialization exception clean $expiries (bastien-wink)
+ * bug #60167 [Cache] Fix proxying third party PSR-6 cache items (Dmitry Danilson)
+ * bug #60165 [HttpKernel] Do not ignore enum in controller arguments when it has an `#[Autowire]` attribute (ruudk)
+ * bug #60168 [Console] Correctly convert `SIGSYS` to its name (cs278)
+ * bug #60166 [Security] fix(security): fix OIDC user identifier (vincentchalamon)
+ * bug #60124 [Validator] : fix url validation when punycode is on tld but not on domain (joelwurtz)
+ * bug #60057 [Mailer] Fix `Trying to access array offset on value of type null` error by adding null checking (khushaalan)
+ * bug #60094 [DoctrineBridge] Fix support for entities that leverage native lazy objects (nicolas-grekas)
+ * bug #60094 [DoctrineBridge] Fix support for entities that leverage native lazy objects (nicolas-grekas)
+
 * 6.4.20 (2025-03-28)
 
  * bug #60054 [Form] Use duplicate_preferred_choices to set value of ChoiceType (aleho)
