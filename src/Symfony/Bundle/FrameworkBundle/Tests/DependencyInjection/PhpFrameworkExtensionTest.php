@@ -314,6 +314,19 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
             ]);
         });
 
+        $this->assertSame([
+            'policy' => 'fixed_window',
+            'limit' => 10,
+            'interval' => '1 hour',
+            'id' => 'first',
+        ], $container->getDefinition('limiter.first')->getArgument(0));
+        $this->assertSame([
+            'policy' => 'sliding_window',
+            'limit' => 10,
+            'interval' => '1 hour',
+            'id' => 'second',
+        ], $container->getDefinition('limiter.second')->getArgument(0));
+
         $definition = $container->getDefinition('limiter.compound');
         $this->assertSame(CompoundRateLimiterFactory::class, $definition->getClass());
         $this->assertEquals(
