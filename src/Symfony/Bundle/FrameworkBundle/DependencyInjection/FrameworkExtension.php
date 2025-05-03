@@ -3255,6 +3255,8 @@ class FrameworkExtension extends Extension
                 continue;
             }
 
+            unset($limiterConfig['limiters']);
+
             $limiters[] = $name;
 
             // default configuration (when used by other DI extensions)
