@@ -2350,7 +2350,7 @@ class Configuration implements ConfigurationInterface
                             ->info('S/MIME encrypter configuration')
                             ->children()
                                 ->scalarNode('repository')
-                                    ->info('Path to the S/MIME certificate repository. Shall implement the `Symfony\Component\Mailer\EventListener\SmimeCertificateRepositoryInterface`.')
+                                    ->info('S/MIME certificate repository service. This service shall implement the `Symfony\Component\Mailer\EventListener\SmimeCertificateRepositoryInterface`.')
                                     ->defaultValue('')
                                     ->cannotBeEmpty()
                                 ->end()
