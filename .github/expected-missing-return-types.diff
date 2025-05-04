@@ -180,20 +180,20 @@ diff --git a/src/Symfony/Component/DependencyInjection/Extension/PrependExtensio
 diff --git a/src/Symfony/Component/Emoji/EmojiTransliterator.php b/src/Symfony/Component/Emoji/EmojiTransliterator.php
 --- a/src/Symfony/Component/Emoji/EmojiTransliterator.php
 +++ b/src/Symfony/Component/Emoji/EmojiTransliterator.php
-@@ -74,5 +74,5 @@ if (!class_exists(\Transliterator::class)) {
-          */
-         #[\ReturnTypeWillChange]
--        public function getErrorCode(): int|false
-+        public function getErrorCode(): int
-         {
-             return isset($this->transliterator) ? $this->transliterator->getErrorCode() : 0;
-@@ -83,5 +83,5 @@ if (!class_exists(\Transliterator::class)) {
-          */
-         #[\ReturnTypeWillChange]
--        public function getErrorMessage(): string|false
-+        public function getErrorMessage(): string
-         {
-             return isset($this->transliterator) ? $this->transliterator->getErrorMessage() : '';
+@@ -88,5 +88,5 @@ final class EmojiTransliterator extends \Transliterator
+      */
+     #[\ReturnTypeWillChange]
+-    public function getErrorCode(): int|false
++    public function getErrorCode(): int
+     {
+         return isset($this->transliterator) ? $this->transliterator->getErrorCode() : 0;
+@@ -97,5 +97,5 @@ final class EmojiTransliterator extends \Transliterator
+      */
+     #[\ReturnTypeWillChange]
+-    public function getErrorMessage(): string|false
++    public function getErrorMessage(): string
+     {
+         return isset($this->transliterator) ? $this->transliterator->getErrorMessage() : '';
 diff --git a/src/Symfony/Component/EventDispatcher/EventSubscriberInterface.php b/src/Symfony/Component/EventDispatcher/EventSubscriberInterface.php
 --- a/src/Symfony/Component/EventDispatcher/EventSubscriberInterface.php
 +++ b/src/Symfony/Component/EventDispatcher/EventSubscriberInterface.php
