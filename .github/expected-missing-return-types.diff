@@ -8923,6 +8923,23 @@ diff --git a/src/Symfony/Component/Intl/Data/Bundle/Writer/BundleWriterInterface
 -    public function write(string $path, string $locale, mixed $data);
 +    public function write(string $path, string $locale, mixed $data): void;
  }
+diff --git a/src/Symfony/Component/Intl/Transliterator/EmojiTransliterator.php b/src/Symfony/Component/Intl/Transliterator/EmojiTransliterator.php
+--- a/src/Symfony/Component/Intl/Transliterator/EmojiTransliterator.php
++++ b/src/Symfony/Component/Intl/Transliterator/EmojiTransliterator.php
+@@ -74,5 +74,5 @@ if (!class_exists(\Transliterator::class)) {
+          */
+         #[\ReturnTypeWillChange]
+-        public function getErrorCode(): int|false
++        public function getErrorCode(): int
+         {
+             return isset($this->transliterator) ? $this->transliterator->getErrorCode() : 0;
+@@ -83,5 +83,5 @@ if (!class_exists(\Transliterator::class)) {
+          */
+         #[\ReturnTypeWillChange]
+-        public function getErrorMessage(): string|false
++        public function getErrorMessage(): string
+         {
+             return isset($this->transliterator) ? $this->transliterator->getErrorMessage() : '';
 diff --git a/src/Symfony/Component/Intl/Util/IntlTestHelper.php b/src/Symfony/Component/Intl/Util/IntlTestHelper.php
 --- a/src/Symfony/Component/Intl/Util/IntlTestHelper.php
 +++ b/src/Symfony/Component/Intl/Util/IntlTestHelper.php
