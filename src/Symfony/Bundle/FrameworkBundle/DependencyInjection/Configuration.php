@@ -48,6 +48,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\Uid\Factory\UuidFactory;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Webhook\Controller\WebhookController;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
@@ -1075,7 +1076,7 @@ class Configuration implements ConfigurationInterface
                             ->validate()->castToArray()->end()
                         ->end()
                         ->scalarNode('translation_domain')->defaultValue('validators')->end()
-                        ->enumNode('email_validation_mode')->values(['html5', 'loose', 'strict'])->defaultValue('html5')->end()
+                        ->enumNode('email_validation_mode')->values(Email::VALIDATION_MODES + ['loose'])->defaultValue('html5')->end()
                         ->arrayNode('mapping')
                             ->addDefaultsIfNotSet()
                             ->fixXmlConfig('path')
