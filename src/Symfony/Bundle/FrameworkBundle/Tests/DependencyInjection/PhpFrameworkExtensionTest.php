@@ -400,7 +400,7 @@ class PhpFrameworkExtensionTest extends FrameworkExtensionTestCase
         });
     }
 
-    public function emailValidationModeProvider()
+    public static function emailValidationModeProvider()
     {
         foreach (Email::VALIDATION_MODES as $mode) {
             yield [$mode];
