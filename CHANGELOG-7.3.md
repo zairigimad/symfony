@@ -7,6 +7,29 @@ in 7.3 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.3.0...v7.3.1
 
+* 7.3.0-BETA2 (2025-05-10)
+
+ * bug #58643 [SecurityBundle] Use Composer `InstalledVersions` to check if flex is installed (andyexeter)
+ * feature #54276 [Workflow] Add support for executing custom workflow definition validators during the container compilation (lyrixx)
+ * feature #52981 [FrameworkBundle] Make `ValidatorCacheWarmer` and `SerializeCacheWarmer` use `kernel.build_dir` instead of `kernel.cache_dir` (Okhoshi)
+ * feature #54384 [TwigBundle] Use `kernel.build_dir` to store the templates known at build time (Okhoshi)
+ * bug #60275 [DoctrineBridge] Fix UniqueEntityValidator Stringable identifiers (GiuseppeArcuti, wkania)
+ * feature #59602 [Console] `#[Option]` rules & restrictions (kbond)
+ * feature #60389 [Console] Add support for `SignalableCommandInterface` with invokable commands (HypeMC)
+ * bug #60293 [Messenger] fix asking users to select an option if `--force` option is used in `messenger:failed:retry` command (W0rma)
+ * bug #60392 [DependencyInjection][FrameworkBundle] Fix precedence of `App\Kernel` alias and ignore `container.excluded` tag on synthetic services (nicolas-grekas)
+ * bug #60379 [Security] Avoid failing when PersistentRememberMeHandler handles a malformed cookie (Seldaek)
+ * bug #60308 [Messenger] Fix integration with newer versions of Pheanstalk (HypeMC)
+ * bug #60373 [FrameworkBundle] Ensure `Email` class exists before using it (Kocal)
+ * bug #60365 [FrameworkBundle] ensure that all supported e-mail validation modes can be configured (xabbuh)
+ * bug #60350 [Security][LoginLink] Throw `InvalidLoginLinkException` on invalid parameters (davidszkiba)
+ * bug #60366 [Console] Set description as first parameter to `Argument` and `Option` attributes (alamirault)
+ * bug #60361 [Console] Ensure overriding `Command::execute()` keeps priority over `__invoke()` (GromNaN)
+ * feature #60028 [ObjectMapper] Condition to target a specific class  (soyuka)
+ * feature #60344 [Console] Use kebab-case for auto-guessed input arguments/options names (chalasr)
+ * bug #60340 [String] fix EmojiTransliterator return type compatibility with PHP 8.5 (xabbuh)
+ * bug #60322 [FrameworkBundle] drop the limiters option for non-compound rater limiters (xabbuh)
+
 * 7.3.0-BETA1 (2025-05-02)
 
  * feature #60232 Add PHP config support for routing (fabpot)
