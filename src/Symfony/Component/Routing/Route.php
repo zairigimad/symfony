@@ -420,7 +420,7 @@ class Route implements \Serializable
 
         $pattern = preg_replace_callback('#\{(!?)([\w\x80-\xFF]++)(:([\w\x80-\xFF]++)(\.[\w\x80-\xFF]++)?)?(<.*?>)?(\?[^\}]*+)?\}#', function ($m) use (&$mapping) {
             if (isset($m[7][0])) {
-                $this->setDefault($m[2], '?' !== $m[6] ? substr($m[7], 1) : null);
+                $this->setDefault($m[2], '?' !== $m[7] ? substr($m[7], 1) : null);
             }
             if (isset($m[6][0])) {
                 $this->setRequirement($m[2], substr($m[6], 1, -1));
