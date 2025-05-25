@@ -7,6 +7,36 @@ in 7.3 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.3.0...v7.3.1
 
+* 7.3.0-RC1 (2025-05-25)
+
+ * bug #60529 [AssetMapper] Fix SequenceParser possible infinite loop (smnandre)
+ * bug #60532 [Routing] Fix inline default `null` (HypeMC)
+ * bug #60535 [DoctrineBridge] Fix resetting the manager when using native lazy objects (HypeMC)
+ * bug #60500 [PhpUnitBridge] Fix cleaning up mocked features with attributes (HypeMC)
+ * bug #60330 [FrameworkBundle] skip messenger deduplication middleware registration when no "default" lock is configured (lyrixx)
+ * bug #60494 [Messenger] fix: Add argument as integer (overexpOG)
+ * bug #60524 [Notifier] Fix Clicksend transport (BafS)
+ * bug #60479 [FrameworkBundle] object mapper service definition without form (soyuka)
+ * bug #60478 [Validator] add missing `$extensions` and `$extensionsMessage` to the `Image` constraint (xabbuh)
+ * bug #60491 [ObjectMapper] added earlier skip to allow if=false when using source mapping (maciekpaprocki)
+ * bug #60484 [PhpUnitBridge] Clean up mocked features only when ``@group`` is present (HypeMC)
+ * bug #60490 [PhpUnitBridge] set path to the PHPUnit autoload file (xabbuh)
+ * bug #60489 [FrameworkBundle] Fix activation strategy of traceable decorators (nicolas-grekas)
+ * feature #60475 [Validator] Revert Slug constraint (wouterj)
+ * feature #60105 [JsonPath] Add `JsonPathAssertionsTrait` and related constraints (alexandre-daubois)
+ * bug #60423 [DependencyInjection] Make `DefinitionErrorExceptionPass` consider `IGNORE_ON_UNINITIALIZED_REFERENCE` and `RUNTIME_EXCEPTION_ON_INVALID_REFERENCE` the same (MatTheCat)
+ * bug #60439 [FrameworkBundle] Fix declaring field-attr tags in xml config files (nicolas-grekas)
+ * bug #60428 [DependencyInjection] Fix missing binding for ServiceCollectionInterface when declaring a service subscriber (nicolas-grekas)
+ * bug #60426 [Validator] let the `SlugValidator` accept `AsciiSlugger` results (xabbuh)
+ * bug #60421 [VarExporter] Fixed lazy-loading ghost objects generation with property hooks (cheack)
+ * bug #60419 [SecurityBundle] normalize string values to a single ExposeSecurityLevel instance (xabbuh)
+ * bug #60266 [Security] Exclude remember_me from default login authenticators (santysisi)
+ * bug #60407 [Console] Invokable command `#[Option]` adjustments (kbond)
+ * bug #60400 [Config] Fix generated comment for multiline "info" (GromNaN)
+ * bug #60260 [Serializer] Prevent `Cannot traverse an already closed generator` error by materializing Traversable input (santysisi)
+ * bug #60292 [HttpFoundation] Encode path in `X-Accel-Redirect` header (Athorcis)
+ * bug #60401 Passing more than one Security attribute is not supported (santysisi)
+
 * 7.3.0-BETA2 (2025-05-10)
 
  * bug #58643 [SecurityBundle] Use Composer `InstalledVersions` to check if flex is installed (andyexeter)
