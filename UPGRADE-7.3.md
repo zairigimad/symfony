@@ -179,9 +179,7 @@ Security
    ```php
    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
    {
-       $vote ??= new Vote();
-
-       $vote->reasons[] = 'A brief explanation of why access is granted or denied, as appropriate.';
+       $vote?->addReason('A brief explanation of why access is granted or denied, as appropriate.');
    }
    ```
 
