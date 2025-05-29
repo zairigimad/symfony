@@ -7,6 +7,32 @@ in 7.2 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v7.2.0...v7.2.1
 
+* 7.2.7 (2025-05-29)
+
+ * bug #60549 [Translation] Add intl-icu fallback for MessageCatalogue metadata (pontus-mp)
+ * bug #60571 [ErrorHandler] Do not transform file to link if it does not exist (lyrixx)
+ * bug #60494 [Messenger] fix: Add argument as integer (overexpOG)
+ * bug #60524 [Notifier] Fix Clicksend transport (BafS)
+ * bug #60478 [Validator] add missing `$extensions` and `$extensionsMessage` to the `Image` constraint (xabbuh)
+ * bug #60484 [PhpUnitBridge] Clean up mocked features only when ``@group`` is present (HypeMC)
+ * bug #60490 [PhpUnitBridge] set path to the PHPUnit autoload file (xabbuh)
+ * bug #60423 [DependencyInjection] Make `DefinitionErrorExceptionPass` consider `IGNORE_ON_UNINITIALIZED_REFERENCE` and `RUNTIME_EXCEPTION_ON_INVALID_REFERENCE` the same (MatTheCat)
+ * bug #60439 [FrameworkBundle] Fix declaring field-attr tags in xml config files (nicolas-grekas)
+ * bug #60428 [DependencyInjection] Fix missing binding for ServiceCollectionInterface when declaring a service subscriber (nicolas-grekas)
+ * bug #60421 [VarExporter] Fixed lazy-loading ghost objects generation with property hooks (cheack)
+ * bug #60266 [Security] Exclude remember_me from default login authenticators (santysisi)
+ * bug #60400 [Config] Fix generated comment for multiline "info" (GromNaN)
+ * bug #60260 [Serializer] Prevent `Cannot traverse an already closed generator` error by materializing Traversable input (santysisi)
+ * bug #60292 [HttpFoundation] Encode path in `X-Accel-Redirect` header (Athorcis)
+ * bug #58643 [SecurityBundle] Use Composer `InstalledVersions` to check if flex is installed (andyexeter)
+ * bug #60275 [DoctrineBridge] Fix UniqueEntityValidator Stringable identifiers (GiuseppeArcuti, wkania)
+ * bug #60293 [Messenger] fix asking users to select an option if `--force` option is used in `messenger:failed:retry` command (W0rma)
+ * bug #60379 [Security] Avoid failing when PersistentRememberMeHandler handles a malformed cookie (Seldaek)
+ * bug #60373 [FrameworkBundle] Ensure `Email` class exists before using it (Kocal)
+ * bug #60365 [FrameworkBundle] ensure that all supported e-mail validation modes can be configured (xabbuh)
+ * bug #60350 [Security][LoginLink] Throw `InvalidLoginLinkException` on invalid parameters (davidszkiba)
+ * bug #60340 [String] fix EmojiTransliterator return type compatibility with PHP 8.5 (xabbuh)
+
 * 7.2.6 (2025-05-02)
 
  * bug #60288 [VarExporter] dump default value for property hooks if present (xabbuh)
