@@ -8,6 +8,37 @@ Read more about this in the [Symfony documentation](https://symfony.com/doc/7.3/
 
 If you're upgrading from a version below 7.2, follow the [7.2 upgrade guide](UPGRADE-7.2.md) first.
 
+Table of Contents
+-----------------
+
+Bundles
+
+ * [FrameworkBundle](#FrameworkBundle)
+ * [SecurityBundle](#SecurityBundle)
+ * [WebProfilerBundle](#WebProfilerBundle)
+
+Bridges
+
+ * [DoctrineBridge](#DoctrineBridge)
+
+Components
+
+ * [AssetMapper](#AssetMapper)
+ * [Console](#Console)
+ * [DependencyInjection](#DependencyInjection)
+ * [HttpFoundation](#HttpFoundation)
+ * [Ldap](#Ldap)
+ * [OptionsResolver](#OptionsResolver)
+ * [PropertyInfo](#PropertyInfo)
+ * [Security](#Security)
+ * [Notifier](#Notifier)
+ * [Serializer](#Serializer)
+ * [TypeInfo](#TypeInfo)
+ * [Validator](#Validator)
+ * [VarDumper](#VarDumper)
+ * [VarExporter](#VarExporter)
+ * [Workflow](#Workflow)
+
 AssetMapper
 -----------
 
@@ -193,8 +224,8 @@ SecurityBundle
 
  * Deprecate the `security.hide_user_not_found` config option in favor of `security.expose_security_errors`
 
- Notifier
- --------
+Notifier
+--------
 
  * Deprecate the `Sms77` transport, use `SevenIo` instead
 
