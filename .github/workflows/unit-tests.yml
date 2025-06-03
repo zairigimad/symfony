@@ -142,7 +142,7 @@ jobs:
 
           echo SYMFONY_VERSION=$SYMFONY_VERSION >> $GITHUB_ENV
           echo COMPOSER_ROOT_VERSION=$SYMFONY_VERSION.x-dev >> $GITHUB_ENV
-          echo SYMFONY_REQUIRE=">=$([ '${{ matrix.mode }}' = low-deps ] && echo 5.4 || echo $SYMFONY_VERSION)" >> $GITHUB_ENV
+          echo SYMFONY_REQUIRE=">=$([ '${{ matrix.mode }}' = low-deps ] && echo 6.4 || echo $SYMFONY_VERSION)" >> $GITHUB_ENV
           [[ "${{ matrix.mode }}" = *-deps ]] && mv composer.json.phpunit composer.json || true
 
       - name: Install dependencies
@@ -214,8 +214,8 @@ jobs:
           # get a list of the patched components (relies on .github/build-packages.php being called in the previous step)
           PATCHED_COMPONENTS=$(git diff --name-only src/ | grep composer.json || true)
 
-          # for 6.4 LTS, checkout and test previous major with the patched components (only for patched components)
-          if [[ $PATCHED_COMPONENTS && $SYMFONY_VERSION = 6.4 ]]; then
+          # for 7.4 LTS, checkout and test previous major with the patched components (only for patched components)
+          if [[ $PATCHED_COMPONENTS && $SYMFONY_VERSION = 7.4 ]]; then
               export FLIP='^'
               SYMFONY_VERSION=$(echo $SYMFONY_VERSION | awk '{print $1 - 1}')
               echo -e "\\n\\e[33;1mChecking out Symfony $SYMFONY_VERSION and running tests with patched components as deps\\e[0m"
