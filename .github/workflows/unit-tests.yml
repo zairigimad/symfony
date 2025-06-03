@@ -26,12 +26,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: '8.2'
-          - php: '8.2'
+          - php: '8.4'
             mode: high-deps
-          - php: '8.2'
+          - php: '8.4'
             mode: low-deps
-          - php: '8.3'
           - php: '8.4'
             # brotli and zstd extensions are optional, when not present the commands will be used instead,
             # we must test both scenarios
@@ -142,6 +140,7 @@ jobs:
 
           echo SYMFONY_VERSION=$SYMFONY_VERSION >> $GITHUB_ENV
           echo COMPOSER_ROOT_VERSION=$SYMFONY_VERSION.x-dev >> $GITHUB_ENV
+          echo COMPOSER_ROOT_VERSION=7.4.x-dev >> $GITHUB_ENV # to be removed once all deps allow ^8.0
           echo SYMFONY_REQUIRE=">=$([ '${{ matrix.mode }}' = low-deps ] && echo 6.4 || echo $SYMFONY_VERSION)" >> $GITHUB_ENV
           [[ "${{ matrix.mode }}" = *-deps ]] && mv composer.json.phpunit composer.json || true
 
@@ -156,19 +155,19 @@ jobs:
           echo "::endgroup::"
 
       - name: Patch return types
-        if: "matrix.php == '8.2' && ! matrix.mode"
+        if: "matrix.php == '8.4' && ! matrix.mode"
         run: |
           patch -sp1 < .github/expected-missing-return-types.diff
           git add .
           composer install -q --optimize-autoloader || composer install --optimize-autoloader
-          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.2' php .github/patch-types.php
+          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.4' php .github/patch-types.php
           git checkout src/Symfony/Contracts/Service/ResetInterface.php
-          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.2' php .github/patch-types.php # ensure the script is idempotent
+          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.4' php .github/patch-types.php # ensure the script is idempotent
           git checkout src/Symfony/Contracts/Service/ResetInterface.php
           git diff --exit-code
 
       - name: Check return types
-        if: "matrix.php == '8.2' && ! matrix.mode"
+        if: "matrix.php == '8.4' && ! matrix.mode"
         run: |
           php .github/patch-types.php lint
 
@@ -220,6 +219,7 @@ jobs:
               SYMFONY_VERSION=$(echo $SYMFONY_VERSION | awk '{print $1 - 1}')
               echo -e "\\n\\e[33;1mChecking out Symfony $SYMFONY_VERSION and running tests with patched components as deps\\e[0m"
               export COMPOSER_ROOT_VERSION=$SYMFONY_VERSION.x-dev
+              export COMPOSER_ROOT_VERSION=7.4.x-dev # to be removed once deps allow ^8.0
               export SYMFONY_REQUIRE=">=$SYMFONY_VERSION"
               git fetch --depth=2 origin $SYMFONY_VERSION
               git checkout -m FETCH_HEAD
@@ -240,12 +240,12 @@ jobs:
             script -e -c './phpunit --group tty' /dev/null
 
       - name: Run tests with SIGCHLD enabled PHP
-        if: "matrix.php == '8.2' && ! matrix.mode"
+        if: "matrix.php == '8.4' && ! matrix.mode"
         run: |
           mkdir build
           cd build
-          wget -q https://github.com/symfony/binary-utils/releases/download/v0.1/php-8.2.0-pcntl-sigchild.tar.bz2
-          tar -xjf php-8.2.0-pcntl-sigchild.tar.bz2
+          wget -q https://github.com/symfony/binary-utils/releases/download/v0.1/php-8.4.0-pcntl-sigchild.tar.bz2
+          tar -xjf php-8.4.0-pcntl-sigchild.tar.bz2
           cd ..
 
           mkdir -p /opt/php/lib
