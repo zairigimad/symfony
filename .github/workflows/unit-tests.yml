@@ -148,22 +148,12 @@ jobs:
           ./phpunit install
           echo "::endgroup::"
 
-      - name: Patch return types
-        if: "matrix.php == '8.4' && ! matrix.mode"
-        run: |
-          patch -sp1 < .github/expected-missing-return-types.diff
-          git add .
-          sed -i 's/ *"\*\*\/Tests\/",//' composer.json
-          composer install -q --optimize-autoloader || composer install --optimize-autoloader
-          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.4' php .github/patch-types.php
-          git checkout composer.json src/Symfony/Contracts/Service/ResetInterface.php
-          SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.4' php .github/patch-types.php # ensure the script is idempotent
-          git checkout src/Symfony/Contracts/Service/ResetInterface.php
-          git diff --exit-code
-
       - name: Check return types
         if: "matrix.php == '8.4' && ! matrix.mode"
         run: |
+          sed -i 's/ *"\*\*\/Tests\/",//' composer.json
+          composer install -q --optimize-autoloader || composer install --optimize-autoloader
+          git checkout composer.json
           php .github/patch-types.php lint
 
       - name: Run tests
@@ -209,7 +199,7 @@ jobs:
           PATCHED_COMPONENTS=$(git diff --name-only src/ | grep composer.json || true)
 
           # for 7.4 LTS, checkout and test previous major with the patched components (only for patched components)
-          if [[ $PATCHED_COMPONENTS && $SYMFONY_VERSION = 7.4 ]]; then
+          if [[ $PATCHED_COMPONENTS && $SYMFONY_VERSION = 7.4 && $FLIP = '' ]]; then
               export FLIP='^'
               SYMFONY_VERSION=$(echo $SYMFONY_VERSION | awk '{print $1 - 1}')
               echo -e "\\n\\e[33;1mChecking out Symfony $SYMFONY_VERSION and running tests with patched components as deps\\e[0m"
