@@ -24,18 +24,16 @@
     "require": {
         "php": ">=8.4",
         "psr/log": "^1|^2|^3",
-        "symfony/deprecation-contracts": "^2.5|^3",
         "symfony/http-client-contracts": "~3.4.4|^3.5.2",
         "symfony/service-contracts": "^2.5|^3"
     },
     "require-dev": {
-        "amphp/http-client": "^4.2.1|^5.0",
-        "amphp/http-tunnel": "^1.0|^2.0",
+        "amphp/http-client": "^5.0",
+        "amphp/http-tunnel": "^2.0",
         "guzzlehttp/promises": "^1.4|^2.0",
         "nyholm/psr7": "^1.0",
         "php-http/httplug": "^1.0|^2.0",
         "psr/http-client": "^1.0",
-        "symfony/amphp-http-client-meta": "^1.0|^2.0",
         "symfony/dependency-injection": "^7.4|^8.0",
         "symfony/http-kernel": "^7.4|^8.0",
         "symfony/messenger": "^7.4|^8.0",
@@ -44,8 +42,7 @@
         "symfony/stopwatch": "^7.4|^8.0"
     },
     "conflict": {
-        "amphp/amp": "<2.5",
-        "amphp/socket": "<1.1",
+        "amphp/amp": "<3",
         "php-http/discovery": "<1.15"
     },
     "autoload": {
