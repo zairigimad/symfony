@@ -7,6 +7,16 @@ git checkout src/Symfony/Contracts/Service/ResetInterface.php
 (echo "$head" && echo && git diff -U2 src/ | grep '^index ' -v) > .github/expected-missing-return-types.diff
 git checkout composer.json src/
 
+diff --git a/src/Symfony/Bridge/Twig/Test/Traits/RuntimeLoaderProvider.php b/src/Symfony/Bridge/Twig/Test/Traits/RuntimeLoaderProvider.php
+--- a/src/Symfony/Bridge/Twig/Test/Traits/RuntimeLoaderProvider.php
++++ b/src/Symfony/Bridge/Twig/Test/Traits/RuntimeLoaderProvider.php
+@@ -21,5 +21,5 @@ trait RuntimeLoaderProvider
+      * @return void
+      */
+-    protected function registerTwigRuntimeLoader(Environment $environment, FormRenderer $renderer)
++    protected function registerTwigRuntimeLoader(Environment $environment, FormRenderer $renderer): void
+     {
+         $loader = $this->createMock(RuntimeLoaderInterface::class);
 diff --git a/src/Symfony/Component/BrowserKit/AbstractBrowser.php b/src/Symfony/Component/BrowserKit/AbstractBrowser.php
 --- a/src/Symfony/Component/BrowserKit/AbstractBrowser.php
 +++ b/src/Symfony/Component/BrowserKit/AbstractBrowser.php
@@ -48,7 +58,7 @@ diff --git a/src/Symfony/Component/BrowserKit/AbstractBrowser.php b/src/Symfony/
 diff --git a/src/Symfony/Component/Config/Definition/Builder/NodeDefinition.php b/src/Symfony/Component/Config/Definition/Builder/NodeDefinition.php
 --- a/src/Symfony/Component/Config/Definition/Builder/NodeDefinition.php
 +++ b/src/Symfony/Component/Config/Definition/Builder/NodeDefinition.php
-@@ -94,5 +94,5 @@ abstract class NodeDefinition implements NodeParentInterface
+@@ -115,5 +115,5 @@ abstract class NodeDefinition implements NodeParentInterface
       * @return NodeParentInterface|NodeBuilder|self|ArrayNodeDefinition|VariableNodeDefinition
       */
 -    public function end(): NodeParentInterface
@@ -58,21 +68,21 @@ diff --git a/src/Symfony/Component/Config/Definition/Builder/NodeDefinition.php 
 diff --git a/src/Symfony/Component/Console/Command/Command.php b/src/Symfony/Component/Console/Command/Command.php
 --- a/src/Symfony/Component/Console/Command/Command.php
 +++ b/src/Symfony/Component/Console/Command/Command.php
-@@ -163,5 +163,5 @@ class Command
+@@ -201,5 +201,5 @@ class Command implements SignalableCommandInterface
       * @return void
       */
 -    protected function configure()
 +    protected function configure(): void
      {
      }
-@@ -195,5 +195,5 @@ class Command
+@@ -233,5 +233,5 @@ class Command implements SignalableCommandInterface
       * @return void
       */
 -    protected function interact(InputInterface $input, OutputInterface $output)
 +    protected function interact(InputInterface $input, OutputInterface $output): void
      {
      }
-@@ -211,5 +211,5 @@ class Command
+@@ -249,5 +249,5 @@ class Command implements SignalableCommandInterface
       * @return void
       */
 -    protected function initialize(InputInterface $input, OutputInterface $output)
@@ -474,14 +484,14 @@ diff --git a/src/Symfony/Component/HttpKernel/KernelInterface.php b/src/Symfony/
 diff --git a/src/Symfony/Component/Routing/Loader/AttributeClassLoader.php b/src/Symfony/Component/Routing/Loader/AttributeClassLoader.php
 --- a/src/Symfony/Component/Routing/Loader/AttributeClassLoader.php
 +++ b/src/Symfony/Component/Routing/Loader/AttributeClassLoader.php
-@@ -253,5 +253,5 @@ abstract class AttributeClassLoader implements LoaderInterface
+@@ -277,5 +277,5 @@ abstract class AttributeClassLoader implements LoaderInterface
       * @return string
       */
 -    protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
 +    protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method): string
      {
          $name = str_replace('\\', '_', $class->name).'_'.$method->name;
-@@ -355,5 +355,5 @@ abstract class AttributeClassLoader implements LoaderInterface
+@@ -379,5 +379,5 @@ abstract class AttributeClassLoader implements LoaderInterface
       * @return void
       */
 -    abstract protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, object $attr);
@@ -578,7 +588,7 @@ diff --git a/src/Symfony/Component/Translation/Extractor/ExtractorInterface.php 
 diff --git a/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php b/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
 --- a/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
 +++ b/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
-@@ -15,5 +15,5 @@ final class DummyWithPhpDoc
+@@ -50,5 +50,5 @@ final class DummyWithPhpDoc
       * @return Dummy
       */
 -    public function getNextDummy(mixed $dummy): mixed
@@ -610,6 +620,23 @@ diff --git a/src/Symfony/Component/VarDumper/Dumper/DataDumperInterface.php b/sr
 -    public function dump(Data $data);
 +    public function dump(Data $data): ?string;
  }
+diff --git a/src/Symfony/Component/VarDumper/Test/VarDumperTestTrait.php b/src/Symfony/Component/VarDumper/Test/VarDumperTestTrait.php
+--- a/src/Symfony/Component/VarDumper/Test/VarDumperTestTrait.php
++++ b/src/Symfony/Component/VarDumper/Test/VarDumperTestTrait.php
+@@ -49,5 +49,5 @@ trait VarDumperTestTrait
+      * @return void
+      */
+-    public function assertDumpEquals(mixed $expected, mixed $data, int $filter = 0, string $message = '')
++    public function assertDumpEquals(mixed $expected, mixed $data, int $filter = 0, string $message = ''): void
+     {
+         $this->assertSame($this->prepareExpectation($expected, $filter), $this->getDump($data, null, $filter), $message);
+@@ -57,5 +57,5 @@ trait VarDumperTestTrait
+      * @return void
+      */
+-    public function assertDumpMatchesFormat(mixed $expected, mixed $data, int $filter = 0, string $message = '')
++    public function assertDumpMatchesFormat(mixed $expected, mixed $data, int $filter = 0, string $message = ''): void
+     {
+         $this->assertStringMatchesFormat($this->prepareExpectation($expected, $filter), $this->getDump($data, null, $filter), $message);
 diff --git a/src/Symfony/Contracts/Translation/LocaleAwareInterface.php b/src/Symfony/Contracts/Translation/LocaleAwareInterface.php
 --- a/src/Symfony/Contracts/Translation/LocaleAwareInterface.php
 +++ b/src/Symfony/Contracts/Translation/LocaleAwareInterface.php
