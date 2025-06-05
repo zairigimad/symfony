@@ -273,10 +273,8 @@ abstract class AttributeClassLoader implements LoaderInterface
 
     /**
      * Gets the default route name for a class method.
-     *
-     * @return string
      */
-    protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
+    protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method): string
     {
         $name = str_replace('\\', '_', $class->name).'_'.$method->name;
         $name = \function_exists('mb_strtolower') && preg_match('//u', $name) ? mb_strtolower($name, 'UTF-8') : strtolower($name);
@@ -375,10 +373,8 @@ abstract class AttributeClassLoader implements LoaderInterface
 
     /**
      * @param RouteAttribute $attr or an object that exposes a similar interface
-     *
-     * @return void
      */
-    abstract protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, object $attr);
+    abstract protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, object $attr): void;
 
     /**
      * @return iterable<int, RouteAttribute>
