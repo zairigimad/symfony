@@ -101,7 +101,7 @@ jobs:
 
           # Create local composer packages for each patched components and reference them in composer.json files when cross-testing components
           if [[ ! "${{ matrix.mode }}" = *-deps ]]; then
-              php .github/build-packages.php HEAD^ $SYMFONY_VERSION src/Symfony/Bridge/PhpUnit
+            php .github/build-packages.php HEAD^ $SYMFONY_VERSION src/Symfony/Bridge/PhpUnit
           else
             echo SYMFONY_DEPRECATIONS_HELPER=weak >> $GITHUB_ENV
             cp composer.json composer.json.orig
@@ -154,9 +154,10 @@ jobs:
         run: |
           patch -sp1 < .github/expected-missing-return-types.diff
           git add .
+          sed -i 's/ *"\*\*\/Tests\/",//' composer.json
           composer install -q --optimize-autoloader || composer install --optimize-autoloader
           SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.2' php .github/patch-types.php
-          git checkout src/Symfony/Contracts/Service/ResetInterface.php
+          git checkout composer.json src/Symfony/Contracts/Service/ResetInterface.php
           SYMFONY_PATCH_TYPE_DECLARATIONS='force=2&php=8.2' php .github/patch-types.php # ensure the script is idempotent
           git checkout src/Symfony/Contracts/Service/ResetInterface.php
           git diff --exit-code
