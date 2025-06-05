@@ -10,6 +10,7 @@ HttpClient
 ----------
 
  * Remove support for amphp/http-client < 5
+ * Remove setLogger() methods on decorators; configure the logger on the wrapped client directly instead
 
 TwigBridge
 ----------
