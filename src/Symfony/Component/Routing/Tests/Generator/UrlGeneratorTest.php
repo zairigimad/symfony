@@ -1054,6 +1054,80 @@ class UrlGeneratorTest extends TestCase
         $this->assertSame('/app.php/foo/baz', $this->getGenerator($routes)->generate('test', ['bär' => 'baz']));
     }
 
+    public function testQueryParameters()
+    {
+        $routes = $this->getRoutes('user', new Route('/user/{username}'));
+        $url = $this->getGenerator($routes)->generate('user', [
+            'username' => 'john',
+            'a' => 'foo',
+            'b' => 'bar',
+            'c' => 'baz',
+            '_query' => [
+                'a' => '123',
+                'd' => '789',
+            ],
+        ]);
+        $this->assertSame('/app.php/user/john?a=123&b=bar&c=baz&d=789', $url);
+    }
+
+    public function testRouteHostParameterAndQueryParameterWithSameName()
+    {
+        $routes = $this->getRoutes('admin_stats', new Route('/admin/stats', requirements: ['domain' => '.+'], host: '{siteCode}.{domain}'));
+        $url = $this->getGenerator($routes)->generate('admin_stats', [
+            'siteCode' => 'fr',
+            'domain' => 'example.com',
+            '_query' => [
+                'siteCode' => 'us',
+            ],
+        ], UrlGeneratorInterface::NETWORK_PATH);
+        $this->assertSame('//fr.example.com/app.php/admin/stats?siteCode=us', $url);
+    }
+
+    public function testRoutePathParameterAndQueryParameterWithSameName()
+    {
+        $routes = $this->getRoutes('user', new Route('/user/{id}'));
+        $url = $this->getGenerator($routes)->generate('user', [
+            'id' => '123',
+            '_query' => [
+                'id' => '456',
+            ],
+        ]);
+        $this->assertSame('/app.php/user/123?id=456', $url);
+    }
+
+    public function testQueryParameterCannotSubstituteRouteParameter()
+    {
+        $routes = $this->getRoutes('user', new Route('/user/{id}'));
+
+        $this->expectException(MissingMandatoryParametersException::class);
+        $this->expectExceptionMessage('Some mandatory parameters are missing ("id") to generate a URL for route "user".');
+
+        $this->getGenerator($routes)->generate('user', [
+            '_query' => [
+                'id' => '456',
+            ],
+        ]);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testQueryParametersWithScalarValue()
+    {
+        $routes = $this->getRoutes('user', new Route('/user/{id}'));
+
+        $this->expectDeprecation(
+            'Since symfony/routing 7.4: Parameter "_query" is reserved for passing an array of query parameters. ' .
+            'Passing a scalar value is deprecated and will throw an exception in Symfony 8.0.',
+        );
+
+        $url = $this->getGenerator($routes)->generate('user', [
+            'id' => '123',
+            '_query' => 'foo',
+        ]);
+        $this->assertSame('/app.php/user/123?_query=foo', $url);
+    }
+
     protected function getGenerator(RouteCollection $routes, array $parameters = [], $logger = null, ?string $defaultLocale = null)
     {
         $context = new RequestContext('/app.php');
