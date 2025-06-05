@@ -12,6 +12,25 @@ HttpClient
  * Remove support for amphp/http-client < 5
  * Remove setLogger() methods on decorators; configure the logger on the wrapped client directly instead
 
+OptionsResolver
+---------------
+
+ * Remove support for nested options definition via `setDefault()`, use `setOptions()` instead
+
+   *Before*
+   ```php
+   $resolver->setDefault('option', function (OptionsResolver $resolver) {
+       // ...
+   });
+   ```
+
+   *After*
+   ```php
+   $resolver->setOptions('option', function (OptionsResolver $resolver) {
+       // ...
+   });
+   ```
+
 TwigBridge
 ----------
 
