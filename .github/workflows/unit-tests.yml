@@ -92,7 +92,7 @@ jobs:
 
           # Create local composer packages for each patched components and reference them in composer.json files when cross-testing components
           if [[ ! "${{ matrix.mode }}" = *-deps ]]; then
-              php .github/build-packages.php HEAD^ $SYMFONY_VERSION src/Symfony/Bridge/PhpUnit
+            php .github/build-packages.php HEAD^ $SYMFONY_VERSION src/Symfony/Bridge/PhpUnit
           else
             echo SYMFONY_DEPRECATIONS_HELPER=weak >> $GITHUB_ENV
             cp composer.json composer.json.orig
