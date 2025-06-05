@@ -21,7 +21,7 @@ jobs:
     name: Unit Tests
 
     env:
-      extensions: amqp,apcu,igbinary,intl,mbstring,memcached,redis,relay
+      extensions: amqp,apcu,brotli,igbinary,intl,mbstring,memcached,redis,relay,zstd
 
     strategy:
       matrix:
@@ -31,9 +31,6 @@ jobs:
           - php: '8.4'
             mode: low-deps
           - php: '8.4'
-            # brotli and zstd extensions are optional, when not present the commands will be used instead,
-            # we must test both scenarios
-            extensions: amqp,apcu,brotli,igbinary,intl,mbstring,memcached,redis,relay,zstd
           - php: '8.5'
             #mode: experimental
       fail-fast: false
@@ -223,6 +220,12 @@ jobs:
         if: "! matrix.mode"
         run: |
             script -e -c './phpunit --group tty' /dev/null
+
+      - name: Run AssetMapper without ext-brotli nor ext-zstd
+        if: "! matrix.mode"
+        run: |
+          sudo rm /etc/php/*/cli/conf.d/*-{brotli,zstd}.ini
+          ./phpunit src/Symfony/Component/AssetMapper
 
       - name: Run tests with SIGCHLD enabled PHP
         if: "matrix.php == '8.4' && ! matrix.mode"
