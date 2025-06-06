@@ -66,6 +66,21 @@ Console
 
  * Add method `isSilent()` to `OutputInterface`
 
+DoctrineBridge
+--------------
+
+ * Remove the `DoctrineExtractor::getTypes()` method, use `DoctrineExtractor::getType()` instead
+
+   *Before*
+   ```php
+   $types = $extractor->getTypes(Foo::class, 'property');
+   ```
+
+   *After*
+   ```php
+   $type = $extractor->getType(Foo::class, 'property');
+   ```
+
 HttpClient
 ----------
 
@@ -89,6 +104,107 @@ OptionsResolver
    $resolver->setOptions('option', function (OptionsResolver $resolver) {
        // ...
    });
+   ```
+
+PropertyInfo
+------------
+
+ * Remove the `PropertyTypeExtractorInterface::getTypes()` method, use `PropertyTypeExtractorInterface::getType()` instead
+
+   *Before*
+   ```php
+   $types = $extractor->getTypes(Foo::class, 'property');
+   ```
+
+   *After*
+   ```php
+   $type = $extractor->getType(Foo::class, 'property');
+   ```
+
+ * Remove the `ConstructorArgumentTypeExtractorInterface::getTypesFromConstructor()` method, use `ConstructorArgumentTypeExtractorInterface::getTypeFromConstructor()` instead
+
+   *Before*
+   ```php
+   $types = $extractor->getTypesFromConstructor(Foo::class, 'property');
+   ```
+
+   *After*
+   ```php
+   $type = $extractor->getTypeFromConstructor(Foo::class, 'property');
+   ```
+
+ * Remove the `Type` class, use `Symfony\Component\TypeInfo\Type` class from `symfony/type-info` instead
+
+   *Before*
+   ```php
+   use Symfony\Component\PropertyInfo\Type;
+
+   // create types
+   $int = [new Type(Type::BUILTIN_TYPE_INT)];
+   $nullableString = [new Type(Type::BUILTIN_TYPE_STRING, true)];
+   $object = [new Type(Type::BUILTIN_TYPE_OBJECT, false, Foo::class)];
+   $boolList = [new Type(Type::BUILTIN_TYPE_ARRAY, false, null, true, new Type(BUILTIN_TYPE_INT), new Type(BUILTIN_TYPE_BOOL))];
+   $union = [new Type(Type::BUILTIN_TYPE_STRING), new Type(BUILTIN_TYPE_INT)];
+   $intersection = [new Type(Type::BUILTIN_TYPE_OBJECT, false, \Traversable::class), new Type(Type::BUILTIN_TYPE_OBJECT, false, \Stringable::class)];
+
+   // test if a type is nullable
+   $intIsNullable = $int[0]->isNullable();
+
+   // echo builtin types of union
+   foreach ($union as $type) {
+       echo $type->getBuiltinType();
+   }
+
+   // test if a type represents an instance of \ArrayAccess
+   if ($object[0]->getClassName() instanceof \ArrayAccess::class) {
+       // ...
+   }
+
+   // handle collections
+   if ($boolList[0]->isCollection()) {
+       $k = $boolList->getCollectionKeyTypes();
+       $v = $boolList->getCollectionValueTypes();
+
+       // ...
+   }
+   ```
+
+   *After*
+   ```php
+   use Symfony\Component\TypeInfo\BuiltinType;
+   use Symfony\Component\TypeInfo\CollectionType;
+   use Symfony\Component\TypeInfo\Type;
+
+   // create types
+   $int = Type::int();
+   $nullableString = Type::nullable(Type::string());
+   $object = Type::object(Foo::class);
+   $boolList = Type::list(Type::bool());
+   $union = Type::union(Type::string(), Type::int());
+   $intersection = Type::intersection(Type::object(\Traversable::class), Type::object(\Stringable::class));
+
+   // test if a type is nullable
+   $intIsNullable = $int->isNullable();
+
+   // echo builtin types of union
+   foreach ($union->traverse() as $type) {
+       if ($type instanceof BuiltinType) {
+           echo $type->getTypeIdentifier()->value;
+       }
+   }
+
+   // test if a type represents an instance of \ArrayAccess
+   if ($object->isIdentifiedBy(\ArrayAccess::class)) {
+       // ...
+   }
+
+   // handle collections
+   if ($boolList instanceof CollectionType) {
+       $k = $boolList->getCollectionKeyType();
+       $v = $boolList->getCollectionValueType();
+
+       // ...
+   }
    ```
 
 TwigBridge
