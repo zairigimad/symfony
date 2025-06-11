@@ -8,6 +8,16 @@ Read more about this in the [Symfony documentation](https://symfony.com/doc/7.4/
 
 If you're upgrading from a version below 7.3, follow the [7.3 upgrade guide](UPGRADE-7.3.md) first.
 
+Console
+-------
+
+ * Deprecate `Symfony\Component\Console\Application::add()` in favor of `Symfony\Component\Console\Application::addCommand()`
+
+FrameworkBundle
+---------------
+
+ * Deprecate `Symfony\Bundle\FrameworkBundle\Console\Application::add()` in favor of `Symfony\Bundle\FrameworkBundle\Console\Application::addCommand()`
+
 HttpClient
 ----------
 
