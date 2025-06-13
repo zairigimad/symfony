@@ -66,6 +66,24 @@ Console
 
  * Add method `isSilent()` to `OutputInterface`
 
+ * Remove deprecated `Symfony\Component\Console\Application::add()` method in favor of `Symfony\Component\Console\Application::addCommand()`
+
+   *Before*
+   ```php
+   use Symfony\Component\Console\Application;
+
+   $application = new Application();
+   $application->add(new CreateUserCommand());
+   ```
+
+   *After*
+   ```php
+   use Symfony\Component\Console\Application;
+
+   $application = new Application();
+   $application->addCommand(new CreateUserCommand());
+   ```
+
 DoctrineBridge
 --------------
 
@@ -79,6 +97,27 @@ DoctrineBridge
    *After*
    ```php
    $type = $extractor->getType(Foo::class, 'property');
+   ```
+
+FrameworkBundle
+---------------
+
+ * Remove deprecated `Symfony\Bundle\FrameworkBundle\Console\Application::add()` method in favor of `Symfony\Bundle\FrameworkBundle\Console\Application::addCommand()`
+
+   *Before*
+   ```php
+   use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+   $application = new Application($kernel);
+   $application->add(new CreateUserCommand());
+   ```
+
+   *After*
+   ```php
+   use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+   $application = new Application($kernel);
+   $application->addCommand(new CreateUserCommand());
    ```
 
 HttpClient
