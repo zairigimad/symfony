@@ -126,6 +126,11 @@ HttpClient
  * Remove support for amphp/http-client < 5
  * Remove setLogger() methods on decorators; configure the logger on the wrapped client directly instead
 
+Ldap
+----
+
+ * Remove `LdapUser::eraseCredentials()` in favor of `__serialize()`
+
 OptionsResolver
 ---------------
 
@@ -245,6 +250,26 @@ PropertyInfo
        // ...
    }
    ```
+
+Security
+--------
+
+ * Remove `UserInterface::eraseCredentials()` and `TokenInterface::eraseCredentials()`;
+   erase credentials e.g. using `__serialize()` instead:
+
+  ```diff
+  -public function eraseCredentials(): void
+  -{
+  -}
+  +// If your eraseCredentials() method was used to empty a "password" property:
+  +public function __serialize(): array
+  +{
+  +    $data = (array) $this;
+  +    unset($data["\0".self::class."\0password"]);
+  +
+  +    return $data;
+  +}
+  ```
 
 TwigBridge
 ----------
