@@ -109,6 +109,8 @@ DependencyInjection
     }
     ```
 
+ * Remove the `ContainerBuilder::getAutoconfiguredAttributes()` method, use `getAttributeAutoconfigurators()` instead to retrieve all the callbacks for a specific attribute class
+
 DoctrineBridge
 --------------
 
