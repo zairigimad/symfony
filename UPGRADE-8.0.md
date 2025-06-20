@@ -84,6 +84,31 @@ Console
    $application->addCommand(new CreateUserCommand());
    ```
 
+DependencyInjection
+-------------------
+
+ * Replace `#[TaggedIterator]` and `#[TaggedLocator]` attributes with `#[AutowireLocator]` and `#[AutowireIterator]`
+
+    *Before*
+    ```php
+    use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+
+    class MyService
+    {
+         public function __construct(#[TaggedIterator('app.my_tag')] private iterable $services) {}
+    }
+    ```
+
+    *After*
+    ```php
+    use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+
+    class MyService
+    {
+         public function __construct(#[AutowireIterator('app.my_tag')] private iterable $services) {}
+    }
+    ```
+
 DoctrineBridge
 --------------
 
