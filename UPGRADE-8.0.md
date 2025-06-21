@@ -165,6 +165,11 @@ Ldap
 
  * Remove `LdapUser::eraseCredentials()` in favor of `__serialize()`
 
+Notifier
+--------
+
+ * Remove the Sms77 Notifier bridge
+
 OptionsResolver
 ---------------
 
