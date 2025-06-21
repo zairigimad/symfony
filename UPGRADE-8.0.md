@@ -165,6 +165,11 @@ Ldap
 
  * Remove `LdapUser::eraseCredentials()` in favor of `__serialize()`
 
+Mailer
+------
+
+ * Remove `TransportFactoryTestCase`, extend `AbstractTransportFactoryTestCase` instead
+
 Notifier
 --------
 
