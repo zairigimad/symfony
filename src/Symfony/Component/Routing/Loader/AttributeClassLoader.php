@@ -55,10 +55,6 @@ use Symfony\Component\Routing\RouteCollection;
  */
 abstract class AttributeClassLoader implements LoaderInterface
 {
-    /**
-     * @deprecated since Symfony 7.2, use "setRouteAttributeClass()" instead.
-     */
-    protected string $routeAnnotationClass = RouteAttribute::class;
     private string $routeAttributeClass = RouteAttribute::class;
     protected int $defaultRouteIndex = 0;
 
@@ -68,23 +64,10 @@ abstract class AttributeClassLoader implements LoaderInterface
     }
 
     /**
-     * @deprecated since Symfony 7.2, use "setRouteAttributeClass(string $class)" instead
-     *
-     * Sets the annotation class to read route properties from.
-     */
-    public function setRouteAnnotationClass(string $class): void
-    {
-        trigger_deprecation('symfony/routing', '7.2', 'The "%s()" method is deprecated, use "%s::setRouteAttributeClass()" instead.', __METHOD__, self::class);
-
-        $this->setRouteAttributeClass($class);
-    }
-
-    /**
      * Sets the attribute class to read route properties from.
      */
     public function setRouteAttributeClass(string $class): void
     {
-        $this->routeAnnotationClass = $class;
         $this->routeAttributeClass = $class;
     }
 
@@ -293,8 +276,7 @@ abstract class AttributeClassLoader implements LoaderInterface
     {
         $globals = $this->resetGlobals();
 
-        // to be replaced in Symfony 8.0 by $this->routeAttributeClass
-        if ($attribute = $class->getAttributes($this->routeAnnotationClass, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null) {
+        if ($attribute = $class->getAttributes($this->routeAttributeClass, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null) {
             $attr = $attribute->newInstance();
 
             if (null !== $attr->getName()) {
@@ -381,8 +363,7 @@ abstract class AttributeClassLoader implements LoaderInterface
      */
     private function getAttributes(\ReflectionClass|\ReflectionMethod $reflection): iterable
     {
-        // to be replaced in Symfony 8.0 by $this->routeAttributeClass
-        foreach ($reflection->getAttributes($this->routeAnnotationClass, \ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
+        foreach ($reflection->getAttributes($this->routeAttributeClass, \ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             yield $attribute->newInstance();
         }
     }
