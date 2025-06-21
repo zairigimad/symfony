@@ -305,6 +305,11 @@ Security
   +}
   ```
 
+Serializer
+----------
+
+ * Remove `AbstractNormalizerContextBuilder::withDefaultContructorArguments()`, use `withDefaultConstructorArguments()` instead
+
 TwigBridge
 ----------
 
