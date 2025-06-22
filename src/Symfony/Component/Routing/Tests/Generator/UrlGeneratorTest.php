@@ -1109,23 +1109,16 @@ class UrlGeneratorTest extends TestCase
         ]);
     }
 
-    /**
-     * @group legacy
-     */
     public function testQueryParametersWithScalarValue()
     {
         $routes = $this->getRoutes('user', new Route('/user/{id}'));
 
-        $this->expectUserDeprecationMessage(
-            'Since symfony/routing 7.4: Parameter "_query" is reserved for passing an array of query parameters. ' .
-            'Passing a scalar value is deprecated and will throw an exception in Symfony 8.0.',
-        );
+        $this->expectException(InvalidParameterException::class);
 
-        $url = $this->getGenerator($routes)->generate('user', [
+        $this->getGenerator($routes)->generate('user', [
             'id' => '123',
             '_query' => 'foo',
         ]);
-        $this->assertSame('/app.php/user/123?_query=foo', $url);
     }
 
     protected function getGenerator(RouteCollection $routes, array $parameters = [], $logger = null, ?string $defaultLocale = null)

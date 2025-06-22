@@ -295,6 +295,11 @@ PropertyInfo
    }
    ```
 
+Routing
+-------
+
+ * Providing a non-array `_query` parameter to `UrlGenerator` causes an `InvalidParameterException`
+
 Security
 --------
 

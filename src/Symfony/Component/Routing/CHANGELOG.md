@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+8.0
+---
+
+ * Providing a non-array `_query` parameter to `UrlGenerator` causes an `InvalidParameterException`
+
 7.4
 ---
 
