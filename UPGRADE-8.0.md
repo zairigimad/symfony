@@ -6,6 +6,11 @@ release process, both versions have the same features, but Symfony 8.0 doesn't i
 To upgrade, make sure to resolve all deprecation notices.
 Read more about this in the [Symfony documentation](https://symfony.com/doc/8.0/setup/upgrade_major.html).
 
+AssetMapper
+-----------
+
+ * Remove `ImportMapConfigReader::splitPackageNameAndFilePath()`, use `ImportMapEntry::splitPackageNameAndFilePath()` instead
+
 Console
 -------
 
