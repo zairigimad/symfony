@@ -22,3 +22,8 @@ HttpClient
 ----------
 
  * Deprecate using amphp/http-client < 5
+
+HttpFoundation
+--------------
+
+ * Deprecate using `Request::sendHeaders()` after headers have already been sent; use a `StreamedResponse` instead
