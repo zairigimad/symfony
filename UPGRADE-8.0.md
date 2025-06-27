@@ -134,6 +134,30 @@ DoctrineBridge
    $type = $extractor->getType(Foo::class, 'property');
    ```
 
+Form
+----
+
+ * The `default_protocol` option in `UrlType` now defaults to `null` instead of `'http'`
+
+   *Before*
+   ```php
+   // URLs without protocol were automatically prefixed with 'http://'
+   $builder->add('website', UrlType::class);
+   // Input: 'example.com' → Value: 'http://example.com'
+   ```
+
+   *After*
+   ```php
+   // URLs without protocol are now kept as-is
+   $builder->add('website', UrlType::class);
+   // Input: 'example.com' → Value: 'example.com'
+
+   // To restore the previous behavior, explicitly set the option:
+   $builder->add('website', UrlType::class, [
+       'default_protocol' => 'http',
+   ]);
+   ```
+
 FrameworkBundle
 ---------------
 
