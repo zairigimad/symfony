@@ -330,6 +330,20 @@ Security
  * Remove `AbstractListener::__invoke`
  * Remove `LazyFirewallContext::__invoke()`
 
+SecurityBundle
+--------------
+
+ * Remove the deprecated `hide_user_not_found` configuration option, use `expose_security_errors` instead
+
+   ```diff
+    # config/packages/security.yaml
+    security:
+   -    hide_user_not_found: false
+   +    expose_security_errors: true
+   ```
+
+   Note: `expose_security_errors: true` is equivalent to `hide_user_not_found: false`. The logic is inverted.
+
 Serializer
 ----------
 
