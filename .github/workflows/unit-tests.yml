@@ -205,7 +205,7 @@ jobs:
               export SYMFONY_REQUIRE=">=$SYMFONY_VERSION"
               git fetch --depth=2 origin $SYMFONY_VERSION
               git checkout -m FETCH_HEAD
-              PATCHED_COMPONENTS=$(echo "$PATCHED_COMPONENTS" | xargs dirname | xargs -n1 -I{} bash -c "[ -e '{}/phpunit.xml.dist' ] && echo '{}'" | sort || true)
+              PATCHED_COMPONENTS=$(echo "$PATCHED_COMPONENTS" | xargs dirname | xargs -I{} bash -c "[ -e '{}/phpunit.xml.dist' ] && echo '{}'" | sort || true)
               if [[ $PATCHED_COMPONENTS ]]; then
                 echo "::group::install phpunit"
                 ./phpunit install
