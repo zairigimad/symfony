@@ -13,6 +13,11 @@ Console
 
  * Deprecate `Symfony\Component\Console\Application::add()` in favor of `Symfony\Component\Console\Application::addCommand()`
 
+DependencyInjection
+-------------------
+
+ * Add argument `$target` to `ContainerBuilder::registerAliasForArgument()`
+
 FrameworkBundle
 ---------------
 
