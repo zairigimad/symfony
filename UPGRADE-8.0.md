@@ -371,10 +371,20 @@ SecurityBundle
     # config/packages/security.yaml
     security:
    -    hide_user_not_found: false
-   +    expose_security_errors: true
+   +    expose_security_errors: 'all'
    ```
 
-   Note: `expose_security_errors: true` is equivalent to `hide_user_not_found: false`. The logic is inverted.
+   ```diff
+    # config/packages/security.yaml
+    security:
+   -    hide_user_not_found: true
+   +    expose_security_errors: 'none'
+   ```
+
+   Note: The `expose_security_errors` option accepts three values:
+   - `'none'`: Equivalent to `hide_user_not_found: true` (hides all security-related errors)
+   - `'all'`: Equivalent to `hide_user_not_found: false` (exposes all security-related errors)
+   - `'account_status'`: A new option that only exposes account status errors (e.g., account locked, disabled)
 
 Serializer
 ----------
