@@ -382,6 +382,11 @@ TwigBridge
 
  * Remove `text` format from the `debug:twig` command, use the `txt` format instead
 
+Validator
+---------
+
+ * Remove `Bic::INVALID_BANK_CODE_ERROR` constant. This error code was not used in the Bic constraint validator anymore.
+
 VarExporter
 -----------
 
