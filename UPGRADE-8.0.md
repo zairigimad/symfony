@@ -377,6 +377,21 @@ Serializer
  * Remove `AdvancedNameConverterInterface`, use `NameConverterInterface` instead
  * Remove the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
 
+Translation
+-----------
+
+ * Remove the `$escape` parameter from `CsvFileLoader::setCsvControl()`
+
+   ```diff
+   use Symfony\Component\Translation\Loader\CsvFileLoader;
+
+   $loader = new CsvFileLoader();
+   
+   // Set CSV control characters including escape character
+   -$loader->setCsvControl(';', '"', '\\');
+   +$loader->setCsvControl(';', '"');
+   ```
+
 TwigBridge
 ----------
 
