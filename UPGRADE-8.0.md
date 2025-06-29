@@ -403,7 +403,7 @@ Serializer
 
     // Using escape character with context builder
     use Symfony\Component\Serializer\Context\Encoder\CsvEncoderContextBuilder;
-   
+
     $context = (new CsvEncoderContextBuilder())
    -    ->withEscapeChar('\\')
         ->toArray();
@@ -432,11 +432,11 @@ Translation
  * Remove the `$escape` parameter from `CsvFileLoader::setCsvControl()`
 
    ```diff
-   use Symfony\Component\Translation\Loader\CsvFileLoader;
+    use Symfony\Component\Translation\Loader\CsvFileLoader;
 
-   $loader = new CsvFileLoader();
-   
-   // Set CSV control characters including escape character
+    $loader = new CsvFileLoader();
+
+    // Set CSV control characters including escape character
    -$loader->setCsvControl(';', '"', '\\');
    +$loader->setCsvControl(';', '"');
    ```
