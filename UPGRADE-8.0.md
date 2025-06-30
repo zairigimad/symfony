@@ -222,6 +222,8 @@ Notifier
 --------
 
  * Remove the Sms77 Notifier bridge
+ * Remove `TransportFactoryTestCase`, extend `AbstractTransportFactoryTestCase` instead.
+   To keep using the `testIncompleteDsnException()` and `testMissingRequiredOptionException()` tests, you now need to use `IncompleteDsnTestTrait` or `MissingRequiredOptionTestTrait` respectively.
 
 OptionsResolver
 ---------------
