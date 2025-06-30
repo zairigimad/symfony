@@ -182,6 +182,8 @@ FrameworkBundle
    $application->addCommand(new CreateUserCommand());
    ```
 
+ * Make `Router` class `final`
+
 HttpFoundation
 --------------
 
