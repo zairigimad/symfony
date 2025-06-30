@@ -183,6 +183,7 @@ FrameworkBundle
    ```
 
  * Make `Router` class `final`
+ * Make `SerializerCacheWarmer` class `final`
 
 HttpFoundation
 --------------
