@@ -186,6 +186,7 @@ FrameworkBundle
  * Make `SerializerCacheWarmer` class `final`
  * Make `Translator` class `final`
  * Make `ConfigBuilderCacheWarmer` class `final`
+ * Make `TranslationsCacheWarmer` class `final`
 
 HttpFoundation
 --------------
