@@ -160,6 +160,7 @@ Form
    ```
 
  * Made `ResizeFormListener::postSetData()` method `final`
+ * Remove the `VersionAwareTest` trait, use feature detection instead
 
 FrameworkBundle
 ---------------
