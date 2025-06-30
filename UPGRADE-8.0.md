@@ -17,6 +17,7 @@ AssetMapper
 Console
 -------
 
+ * The `AsCommand` attribute class is now `final`
  * Remove methods `Command::getDefaultName()` and `Command::getDefaultDescription()` in favor of the `#[AsCommand]` attribute
 
    *Before*
