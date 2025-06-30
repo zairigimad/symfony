@@ -184,6 +184,7 @@ FrameworkBundle
 
  * Make `Router` class `final`
  * Make `SerializerCacheWarmer` class `final`
+ * Make `Translator` class `final`
 
 HttpFoundation
 --------------
