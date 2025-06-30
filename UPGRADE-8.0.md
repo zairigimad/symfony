@@ -470,6 +470,7 @@ Translation
    ```
 
  * Make `DataCollectorTranslator` class `final`
+ * Remove `ProviderFactoryTestCase`, extend `AbstractProviderFactoryTestCase` instead
 
 TwigBridge
 ----------
