@@ -398,6 +398,21 @@ SecurityBundle
    - `'account_status'`: A new option that only exposes account status errors (e.g., account locked, disabled)
 
  * Make `ExpressionCacheWarmer` class `final`
+ * Remove the deprecated `algorithm` and `key` options from the OIDC token handler configuration, use `algorithms` and `keyset` instead
+
+   ```diff
+    # config/packages/security.yaml
+    security:
+        firewalls:
+            main:
+                access_token:
+                    token_handler:
+                        oidc:
+   -                        algorithm: 'RS256'
+   -                        key: 'https://example.com/.well-known/jwks.json'
+   +                        algorithms: ['RS256']
+   +                        keyset: 'https://example.com/.well-known/jwks.json'
+   ```
 
 Serializer
 ----------
