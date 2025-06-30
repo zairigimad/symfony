@@ -11594,6 +11594,13 @@ diff --git a/src/Symfony/Component/Serializer/Normalizer/AbstractObjectNormalize
 +    abstract protected function setAttributeValue(object $object, string $attribute, mixed $value, ?string $format = null, array $context = []): void;
  
      /**
+@@ -767,5 +767,5 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
+     }
+
+-    protected function getAllowedAttributes(string|object $classOrObject, array $context, bool $attributesAsString = false)
++    protected function getAllowedAttributes(string|object $classOrObject, array $context, bool $attributesAsString = false): array|bool
+     {
+         if (false === $allowedAttributes = parent::getAllowedAttributes($classOrObject, $context, $attributesAsString)) {
 diff --git a/src/Symfony/Component/Serializer/Normalizer/DenormalizableInterface.php b/src/Symfony/Component/Serializer/Normalizer/DenormalizableInterface.php
 --- a/src/Symfony/Component/Serializer/Normalizer/DenormalizableInterface.php
 +++ b/src/Symfony/Component/Serializer/Normalizer/DenormalizableInterface.php
