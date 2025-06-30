@@ -158,6 +158,8 @@ Form
    ]);
    ```
 
+ * Made `ResizeFormListener::postSetData()` method `final`
+
 FrameworkBundle
 ---------------
 
