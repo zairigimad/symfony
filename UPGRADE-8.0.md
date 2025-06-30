@@ -441,6 +441,8 @@ Translation
    +$loader->setCsvControl(';', '"');
    ```
 
+ * Make `DataCollectorTranslator` class `final`
+
 TwigBridge
 ----------
 
