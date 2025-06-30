@@ -476,6 +476,11 @@ TwigBridge
 
  * Remove `text` format from the `debug:twig` command, use the `txt` format instead
 
+TwigBundle
+----------
+
+ * Make `TemplateCacheWarmer` class `final`
+
 Validator
 ---------
 
