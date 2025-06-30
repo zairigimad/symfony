@@ -386,6 +386,8 @@ SecurityBundle
    - `'all'`: Equivalent to `hide_user_not_found: false` (exposes all security-related errors)
    - `'account_status'`: A new option that only exposes account status errors (e.g., account locked, disabled)
 
+ * Make `ExpressionCacheWarmer` class `final`
+
 Serializer
 ----------
 
