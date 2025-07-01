@@ -135,6 +135,8 @@ DoctrineBridge
    $type = $extractor->getType(Foo::class, 'property');
    ```
 
+ * Make `ProxyCacheWarmer` class `final`
+
 Form
 ----
 
