@@ -14,6 +14,11 @@ AssetMapper
 
  * Remove `ImportMapConfigReader::splitPackageNameAndFilePath()`, use `ImportMapEntry::splitPackageNameAndFilePath()` instead
 
+Cache
+-----
+
+ * Remove `CouchbaseBucketAdapter`, use `CouchbaseCollectionAdapter` instead
+
 Console
 -------
 
