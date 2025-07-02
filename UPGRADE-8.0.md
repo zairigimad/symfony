@@ -168,6 +168,7 @@ Form
 
  * Made `ResizeFormListener::postSetData()` method `final`
  * Remove the `VersionAwareTest` trait, use feature detection instead
+ * Remove deprecated `ResizeFormListener::preSetData()` method, use `postSetData()` instead
 
 FrameworkBundle
 ---------------
