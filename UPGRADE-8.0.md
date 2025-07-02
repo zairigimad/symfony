@@ -216,6 +216,11 @@ HttpKernel
  * Remove `Kernel::getAnnotatedClassesToCompile()` and `Kernel::setAnnotatedClassCache()`
  * Make `ServicesResetter` class `final`
 
+Intl
+----
+
+ * Remove `Symfony\Component\Intl\Transliterator\EmojiTransliterator`, use `Symfony\Component\Emoji\EmojiTransliterator` instead
+
 Ldap
 ----
 
