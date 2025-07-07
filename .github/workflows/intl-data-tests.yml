@@ -85,7 +85,11 @@ jobs:
         run: uconv -V && php -i | grep 'ICU version'
 
       - name: Run intl-data tests
-        run: ./phpunit --group intl-data -v
+        run: |
+          ./phpunit --group intl-data --exclude-group intl-data-isolate -v
+          ./phpunit --group intl-data --filter testWhenEnvVarNotSet -v
+          ./phpunit --group intl-data --filter testWhenEnvVarSetFalse -v
+          ./phpunit --group intl-data --filter testWhenEnvVarSetTrue -v
 
       - name: Test intl-data with compressed data
         run: |
