@@ -491,6 +491,7 @@ Translation
 TwigBridge
 ----------
 
+ * Remove support for passing a tag to the constructor of `FormThemeNode`
  * Remove `text` format from the `debug:twig` command, use the `txt` format instead
 
 TwigBundle
