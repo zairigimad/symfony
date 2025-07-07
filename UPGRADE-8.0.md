@@ -225,6 +225,7 @@ Intl
 Ldap
 ----
 
+ * Remove the `sizeLimit` option of `AbstractQuery`
  * Remove `LdapUser::eraseCredentials()` in favor of `__serialize()`
 
 Mailer
