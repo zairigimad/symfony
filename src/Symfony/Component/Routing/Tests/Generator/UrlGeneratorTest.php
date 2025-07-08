@@ -1117,7 +1117,7 @@ class UrlGeneratorTest extends TestCase
         $routes = $this->getRoutes('user', new Route('/user/{id}'));
 
         $this->expectUserDeprecationMessage(
-            'Since symfony/routing 7.4: Parameter "_query" is reserved for passing an array of query parameters. ' .
+            'Since symfony/routing 7.4: Parameter "_query" is reserved for passing an array of query parameters. '.
             'Passing a scalar value is deprecated and will throw an exception in Symfony 8.0.',
         );
 

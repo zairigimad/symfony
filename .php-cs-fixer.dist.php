@@ -44,7 +44,7 @@ return (new PhpCsFixer\Config())
                 '(?P<EXTRA>.*)??',
                 preg_quote($fileHeaderParts[1], '/'),
                 '/s',
-            ])
+            ]),
         ],
     ])
     ->setRiskyAllowed(true)
