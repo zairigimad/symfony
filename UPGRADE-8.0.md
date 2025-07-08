@@ -388,6 +388,7 @@ Security
  * Remove callable firewall listeners support, extend `AbstractListener` or implement `FirewallListenerInterface` instead
  * Remove `AbstractListener::__invoke`
  * Remove `LazyFirewallContext::__invoke()`
+ * Remove `RememberMeToken::getSecret()`
 
 SecurityBundle
 --------------
