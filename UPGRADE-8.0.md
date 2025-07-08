@@ -173,6 +173,7 @@ Form
 FrameworkBundle
 ---------------
 
+ * Remove `errors.xml` and `webhook.xml` routing configuration files (use their PHP equivalent instead)
  * Remove deprecated `Symfony\Bundle\FrameworkBundle\Console\Application::add()` method in favor of `Symfony\Bundle\FrameworkBundle\Console\Application::addCommand()`
 
    *Before*
@@ -511,6 +512,11 @@ VarExporter
  * Restrict `ProxyHelper::generateLazyProxy()` to generating abstraction-based lazy decorators; use native lazy proxies otherwise
  * Remove `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
  * Remove `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
+
+WebProfilerBundle
+-----------------
+
+ * Remove `profiler.xml` and `wdt.xml` routing configuration files (use their PHP equivalent instead)
 
 Workflow
 --------
