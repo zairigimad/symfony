@@ -37,7 +37,7 @@ final class BrevoRequestParser extends AbstractRequestParser
             new IsJsonRequestMatcher(),
             // https://developers.brevo.com/docs/how-to-use-webhooks#securing-your-webhooks
             // localhost is added for testing
-            new IpsRequestMatcher(['185.107.232.1/24', '1.179.112.1/20', '127.0.0.1']),
+            new IpsRequestMatcher(['185.107.232.1/24', '1.179.112.1/20', '172.246.240.1/20', '127.0.0.1']),
         ]);
     }
 
