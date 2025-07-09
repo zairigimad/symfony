@@ -36,8 +36,6 @@ return (new PhpCsFixer\Config())
             'allow_unused_params' => true, // for future-ready params, to be replaced with https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7377
         ],
         'header_comment' => ['header' => $fileHeaderComment],
-        // TODO: Remove once the "compiler_optimized" set includes "sprintf"
-        'native_function_invocation' => ['include' => ['@compiler_optimized', 'sprintf'], 'scope' => 'namespaced', 'strict' => true],
         'nullable_type_declaration' => true,
         'nullable_type_declaration_for_default_null_value' => true,
         'modernize_strpos' => true,
