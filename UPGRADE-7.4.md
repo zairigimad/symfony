@@ -8,6 +8,11 @@ Read more about this in the [Symfony documentation](https://symfony.com/doc/7.4/
 
 If you're upgrading from a version below 7.3, follow the [7.3 upgrade guide](UPGRADE-7.3.md) first.
 
+Cache
+-----
+
+ * Bump ext-redis to 6.2 and ext-relay to 0.11 minimum
+
 Console
 -------
 
