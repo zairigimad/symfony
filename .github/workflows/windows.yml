@@ -43,13 +43,15 @@ jobs:
         run: |
           $env:Path = 'c:\php;' + $env:Path
           mkdir c:\php && cd c:\php
-          iwr -outf php-8.2.0-Win32-vs16-x86.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php-8.2.0-Win32-vs16-x86.zip
-          7z x php-8.2.0-Win32-vs16-x86.zip -y >nul
+          iwr -outf php.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php-8.2.0-Win32-vs16-x86.zip
+          7z x php.zip -y >nul
           cd ext
-          iwr -outf php_apcu-5.1.22-8.2-ts-vs16-x86.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php_apcu-5.1.22-8.2-ts-vs16-x86.zip
-          7z x php_apcu-5.1.22-8.2-ts-vs16-x86.zip -y >nul
-          iwr -outf php_redis-6.0.0-dev-8.2-ts-vs16-x86.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php_redis-6.0.0-dev-8.2-ts-vs16-x86.zip
-          7z x php_redis-6.0.0-dev-8.2-ts-vs16-x86.zip -y >nul
+          iwr -outf php_apcu.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php_apcu-5.1.22-8.2-ts-vs16-x86.zip
+          7z x php_apcu.zip -y >nul
+          iwr -outf php_igbinary.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php_igbinary-3.2.16-8.2-ts-vs16-x86.zip
+          7z x php_igbinary.zip -y >nul
+          iwr -outf php_redis.zip https://github.com/symfony/binary-utils/releases/download/v0.1/php_redis-6.0.0-dev-8.2-ts-vs16-x86.zip
+          7z x php_redis.zip -y >nul
           cd ..
           Copy php.ini-development php.ini-min
           "memory_limit=-1" >> php.ini-min
