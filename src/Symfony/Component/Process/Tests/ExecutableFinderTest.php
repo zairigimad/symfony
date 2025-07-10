@@ -149,7 +149,7 @@ class ExecutableFinderTest extends TestCase
      */
     public function testEmptyDirInPath()
     {
-        putenv(sprintf('PATH=%s%s', \dirname(\PHP_BINARY), \PATH_SEPARATOR));
+        putenv(\sprintf('PATH=%s%s', \dirname(\PHP_BINARY), \PATH_SEPARATOR));
 
         try {
             touch('executable');
@@ -158,7 +158,7 @@ class ExecutableFinderTest extends TestCase
             $finder = new ExecutableFinder();
             $result = $finder->find('executable');
 
-            $this->assertSame(sprintf('.%sexecutable', \DIRECTORY_SEPARATOR), $result);
+            $this->assertSame(\sprintf('.%sexecutable', \DIRECTORY_SEPARATOR), $result);
         } finally {
             unlink('executable');
         }
