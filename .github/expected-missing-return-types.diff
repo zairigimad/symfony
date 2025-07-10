@@ -578,7 +578,7 @@ diff --git a/src/Symfony/Component/Translation/Extractor/ExtractorInterface.php 
 diff --git a/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php b/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
 --- a/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
 +++ b/src/Symfony/Component/TypeInfo/Tests/Fixtures/DummyWithPhpDoc.php
-@@ -15,5 +15,5 @@ final class DummyWithPhpDoc
+@@ -32,5 +32,5 @@ final class DummyWithPhpDoc
       * @return Dummy
       */
 -    public function getNextDummy(mixed $dummy): mixed
@@ -613,14 +613,14 @@ diff --git a/src/Symfony/Component/VarDumper/Dumper/DataDumperInterface.php b/sr
 diff --git a/src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php b/src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php
 --- a/src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php
 +++ b/src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php
-@@ -172,5 +172,5 @@ class ProxyHelperTest extends TestCase
+@@ -173,5 +173,5 @@ class ProxyHelperTest extends TestCase
      {
          yield 'not type hinted __unserialize method' => [new class {
 -            public function __unserialize($array)
 +            public function __unserialize($array): void
              {
              }
-@@ -192,5 +192,5 @@ class ProxyHelperTest extends TestCase
+@@ -193,5 +193,5 @@ class ProxyHelperTest extends TestCase
  
          yield 'type hinted __unserialize method' => [new class {
 -            public function __unserialize(array $array)
