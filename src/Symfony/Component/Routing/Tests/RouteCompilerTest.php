@@ -287,9 +287,9 @@ class RouteCompilerTest extends TestCase
     public static function getVariableNamesStartingWithADigit()
     {
         return [
-           ['09'],
-           ['123'],
-           ['1e2'],
+            ['09'],
+            ['123'],
+            ['1e2'],
         ];
     }
 
@@ -367,7 +367,7 @@ class RouteCompilerTest extends TestCase
     public function testRouteWithTooLongVariableName()
     {
         $this->expectException(\DomainException::class);
-        $route = new Route(sprintf('/{%s}', str_repeat('a', RouteCompiler::VARIABLE_MAXIMUM_LENGTH + 1)));
+        $route = new Route(\sprintf('/{%s}', str_repeat('a', RouteCompiler::VARIABLE_MAXIMUM_LENGTH + 1)));
         $route->compile();
     }
 
