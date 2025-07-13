@@ -513,6 +513,19 @@ TwigBundle
 
  * Make `TemplateCacheWarmer` class `final`
 
+TypeInfo
+--------
+
+ * Constructing a `CollectionType` instance as a list that is not an array throws an `InvalidArgumentException`
+ * Remove the third `$asList` argument of `TypeFactoryTrait::iterable()`, use `TypeFactoryTrait::list()` instead
+
+   ```diff
+    use Symfony\Component\TypeInfo\Type;
+
+   -$type = Type::iterable(Type::string(), asList: true);
+   +$type = Type::list(Type::string());
+   ```
+
 Validator
 ---------
 
