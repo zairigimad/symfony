@@ -23,6 +23,11 @@ DependencyInjection
 
  * Add argument `$target` to `ContainerBuilder::registerAliasForArgument()`
 
+DoctrineBridge
+--------------
+
+ * Deprecate `UniqueEntity::getRequiredOptions()` and `UniqueEntity::getDefaultOption()`
+
 FrameworkBundle
 ---------------
 
@@ -48,6 +53,8 @@ Security
 Validator
 ---------
 
+ * Deprecate `getRequiredOptions()` and `getDefaultOption()` methods of the `All`, `AtLeastOneOf`, `CardScheme`, `Collection`,
+   `CssColor`, `Expression`, `Regex`, `Sequentially`, `Type`, and `When` constraints
  * Deprecate evaluating options in the base `Constraint` class. Initialize properties in the constructor of the concrete constraint
    class instead.
 
