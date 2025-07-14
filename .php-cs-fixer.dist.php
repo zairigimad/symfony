@@ -30,6 +30,7 @@ return (new PhpCsFixer\Config())
         '@PHPUnit75Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
+        'phpdoc_var_annotation_correct_order' => true,
         'protected_to_private' => false,
         'no_superfluous_phpdoc_tags' => [
             'remove_inheritdoc' => true,
