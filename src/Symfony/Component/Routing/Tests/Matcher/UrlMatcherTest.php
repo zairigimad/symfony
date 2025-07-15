@@ -982,6 +982,30 @@ class UrlMatcherTest extends TestCase
         $this->assertEquals(['_route' => 'foo', 'bär' => 'baz', 'bäz' => 'foo'], $matcher->match('/foo/baz'));
     }
 
+    public function testParameterWithRequirementWithDefault()
+    {
+        $collection = new RouteCollection();
+
+        $route = new Route('/test/{foo}', ['foo' => 'foo-'], ['foo' => '\w+']);
+        $collection->add('test', $route);
+
+        $matcher = $this->getUrlMatcher($collection);
+
+        $result = $matcher->match('/test/foo');
+        $this->assertSame('test', $result['_route']);
+        $this->assertSame('foo', $result['foo']);
+
+        try {
+            $matcher->match('/test/foo-');
+        } catch (ResourceNotFoundException $e) {
+            $this->assertStringContainsString('No routes found', $e->getMessage());
+        }
+
+        $result = $matcher->match('/test');
+        $this->assertSame('test', $result['_route']);
+        $this->assertSame('foo-', $result['foo']);
+    }
+
     protected function getUrlMatcher(RouteCollection $routes, ?RequestContext $context = null)
     {
         return new UrlMatcher($routes, $context ?? new RequestContext());
