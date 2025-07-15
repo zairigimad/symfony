@@ -30,6 +30,7 @@ return (new PhpCsFixer\Config())
         '@PHPUnit75Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
+        'phpdoc_var_annotation_correct_order' => true,
         'protected_to_private' => false,
         'header_comment' => ['header' => $fileHeaderComment],
     ])
