@@ -34,6 +34,8 @@ jobs:
           - php: '8.3'
           - php: '8.4'
           - php: '8.5'
+            # to be removed when ext-zstd is ready for PHP 8.5
+            extensions: amqp,apcu,brotli,igbinary,intl,mbstring,memcached,redis,relay
             #mode: experimental
       fail-fast: false
 
@@ -234,7 +236,7 @@ jobs:
       - name: Run AssetMapper without ext-brotli nor ext-zstd
         if: "! matrix.mode"
         run: |
-          sudo rm /etc/php/*/cli/conf.d/*-{brotli,zstd}.ini
+          sudo rm -f /etc/php/*/cli/conf.d/*-{brotli,zstd}.ini
           ./phpunit src/Symfony/Component/AssetMapper
 
       - name: Run tests with SIGCHLD enabled PHP
