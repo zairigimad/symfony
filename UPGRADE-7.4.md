@@ -50,6 +50,11 @@ Security
  * Deprecate `AbstractListener::__invoke`
  * Deprecate `LazyFirewallContext::__invoke()`
 
+Translation
+-----------
+
+ * Deprecate `TranslatableMessage::__toString`
+
 Validator
 ---------
 
