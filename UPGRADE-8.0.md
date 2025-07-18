@@ -209,6 +209,7 @@ FrameworkBundle
  * Make `ConfigBuilderCacheWarmer` class `final`
  * Make `TranslationsCacheWarmer` class `final`
  * Make `ValidatorCacheWarmer` class `final`
+ * Remove autowiring aliases for `RateLimiterFactory`; use `RateLimiterFactoryInterface` instead
 
 HttpFoundation
 --------------
@@ -443,6 +444,7 @@ SecurityBundle
    +                        algorithms: ['RS256']
    +                        keyset: 'https://example.com/.well-known/jwks.json'
    ```
+ * Remove autowiring aliases for `RateLimiterFactory`; use `RateLimiterFactoryInterface` instead
 
 Serializer
 ----------
