@@ -210,6 +210,9 @@ FrameworkBundle
  * Make `TranslationsCacheWarmer` class `final`
  * Make `ValidatorCacheWarmer` class `final`
  * Remove autowiring aliases for `RateLimiterFactory`; use `RateLimiterFactoryInterface` instead
+ * Remove `session.sid_length` and `session.sid_bits_per_character` config options
+ * Remove the `router.cache_dir` config option
+ * Remove the `validation.cache` option
 
 HttpFoundation
 --------------
@@ -514,6 +517,7 @@ TwigBundle
 ----------
 
  * Make `TemplateCacheWarmer` class `final`
+ * Remove the `base_template_class` config option
 
 TypeInfo
 --------
