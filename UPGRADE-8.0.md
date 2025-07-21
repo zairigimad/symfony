@@ -408,7 +408,9 @@ Security
   +    return $data;
   +}
   ```
-
+ * Throw a `BadCredentialsException` when passing an empty string as `$userIdentifier` argument to `UserBadge` constructor
+ * Accept only `ExposeSecurityLevel` enums for `AuthenticatorManager`'s `$exposeSecurityErrors` argument
+ * Respectively accept only `AlgorithmManager` and `JWKSet` for `OidcTokenHandler`'s `$signatureAlgorithm` and `$signatureKeyset` arguments
  * Remove callable firewall listeners support, extend `AbstractListener` or implement `FirewallListenerInterface` instead
  * Remove `AbstractListener::__invoke`
  * Remove `LazyFirewallContext::__invoke()`
