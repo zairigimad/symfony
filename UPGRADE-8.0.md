@@ -249,6 +249,11 @@ Mailer
 
  * Remove `TransportFactoryTestCase`, extend `AbstractTransportFactoryTestCase` instead
 
+Messenger
+---------
+
+ * Remove `text` format when using the `messenger:stats` command
+
 Notifier
 --------
 
