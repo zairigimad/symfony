@@ -122,7 +122,7 @@ DependencyInjection
          public function __construct(#[AutowireIterator('app.my_tag')] private iterable $services) {}
     }
     ```
-
+ * Remove `!tagged` tag, use `!tagged_iterator` instead
  * Remove the `ContainerBuilder::getAutoconfiguredAttributes()` method, use `getAttributeAutoconfigurators()` instead to retrieve all the callbacks for a specific attribute class
 
 DoctrineBridge
