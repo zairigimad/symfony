@@ -19,6 +19,11 @@ Cache
 
  * Remove `CouchbaseBucketAdapter`, use `CouchbaseCollectionAdapter` instead
 
+Config
+------
+
+ * Add argument `$info` to `ArrayNodeDefinition::canBeDisabled()` and `canBeEnabled()`
+
 Console
 -------
 
@@ -56,7 +61,7 @@ Console
        // ...
    }
    ```
-
+ * Add argument `$finishedIndicator` to `ProgressIndicator::finish()`
  * Ensure closures set via `Command::setCode()` method have proper parameter and return types
 
    *Before*
@@ -124,6 +129,7 @@ DependencyInjection
     ```
  * Remove `!tagged` tag, use `!tagged_iterator` instead
  * Remove the `ContainerBuilder::getAutoconfiguredAttributes()` method, use `getAttributeAutoconfigurators()` instead to retrieve all the callbacks for a specific attribute class
+ * Add argument `$target` to `ContainerBuilder::registerAliasForArgument()`
 
 DoctrineBridge
 --------------
@@ -220,6 +226,9 @@ HttpFoundation
 
  * Remove the following deprecated session options from `NativeSessionStorage`: `referer_check`, `use_only_cookies`, `use_trans_sid`, `sid_length`, `sid_bits_per_character`, `trans_sid_hosts`, `trans_sid_tags`
  * Trigger PHP warning when using `Request::sendHeaders()` after headers have already been sent; use a `StreamedResponse` instead
+ * Add arguments `$v4Bytes` and `$v6Bytes` to `IpUtils::anonymize()`
+ * Add argument `$partitioned` to `ResponseHeaderBag::clearCookie()`
+ * Add argument `$expiration` to `UriSigner::sign()`
 
 HttpClient
 ----------
@@ -234,6 +243,7 @@ HttpKernel
  * Remove `Extension::getAnnotatedClassesToCompile()` and `Extension::addAnnotatedClassesToCompile()`
  * Remove `Kernel::getAnnotatedClassesToCompile()` and `Kernel::setAnnotatedClassCache()`
  * Make `ServicesResetter` class `final`
+ * Add argument `$logChannel` to `ErrorListener::logException()`
 
 Intl
 ----
@@ -415,6 +425,10 @@ Security
  * Remove `AbstractListener::__invoke`
  * Remove `LazyFirewallContext::__invoke()`
  * Remove `RememberMeToken::getSecret()`
+ * Add argument `$accessDecision` to `AccessDecisionManagerInterface::decide()` and `AuthorizationCheckerInterface::isGranted()`
+ * Add argument `$vote` to `VoterInterface::vote()` and `Voter::voteOnAttribute()`
+ * Add argument `$token` to `UserCheckerInterface::checkPostAuth()`
+ * Add argument `$attributes` to `UserAuthenticatorInterface::authenticateUser()`
 
 SecurityBundle
 --------------
@@ -541,6 +555,11 @@ TypeInfo
    +$type = Type::list(Type::string());
    ```
 
+Uid
+---
+
+ * Add argument `$format` to `Uuid::isValid()`
+
 Validator
 ---------
 
@@ -553,6 +572,11 @@ VarExporter
  * Remove `LazyGhostTrait` and `LazyProxyTrait`, use native lazy objects instead
  * Remove `ProxyHelper::generateLazyGhost()`, use native lazy objects instead
 
+Webhook
+-------
+
+ * Add argument `$request` to `RequestParserInterface::createSuccessfulResponse()` and `RequestParserInterface::createRejectedResponse()`
+
 WebProfilerBundle
 -----------------
 
@@ -561,6 +585,7 @@ WebProfilerBundle
 Workflow
 --------
 
+ * Add `$nbToken` argument to `Marking::mark()` and `Marking::unmark()`
  * Remove `Event::getWorkflow()` method
 
    *Before*
