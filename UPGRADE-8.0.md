@@ -139,7 +139,7 @@ DoctrineBridge
    ```php
    $type = $extractor->getType(Foo::class, 'property');
    ```
-
+ * Remove support for auto-mapping Doctrine entities to controller arguments; use explicit mapping instead
  * Make `ProxyCacheWarmer` class `final`
 
 ExpressionLanguage
