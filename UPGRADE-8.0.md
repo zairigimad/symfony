@@ -213,6 +213,7 @@ FrameworkBundle
  * Remove `session.sid_length` and `session.sid_bits_per_character` config options
  * Remove the `router.cache_dir` config option
  * Remove the `validation.cache` option
+ * Remove `TranslationUpdateCommand` in favor of `TranslationExtractCommand`
 
 HttpFoundation
 --------------
