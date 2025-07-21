@@ -512,7 +512,7 @@ Translation
    -$loader->setCsvControl(';', '"', '\\');
    +$loader->setCsvControl(';', '"');
    ```
-
+ * Remove `TranslatableMessage::__toString()` method, use `trans()` or `getMessage()` instead
  * Make `DataCollectorTranslator` class `final`
  * Remove `ProviderFactoryTestCase`, extend `AbstractProviderFactoryTestCase` instead
 
