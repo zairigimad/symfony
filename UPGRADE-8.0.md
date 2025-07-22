@@ -64,43 +64,26 @@ Console
  * Add argument `$finishedIndicator` to `ProgressIndicator::finish()`
  * Ensure closures set via `Command::setCode()` method have proper parameter and return types
 
-   *Before*
-   ```php
-   $command->setCode(function ($input, $output) {
-       // ...
-   });
+   ```diff
+   +use Symfony\Component\Console\Input\InputInterface;
+   +use Symfony\Component\Console\Output\OutputInterface;
+
+   -$command->setCode(function ($input, $output) {
+   +$command->setCode(function (InputInterface $input, OutputInterface $output): int {
+        // ...
+   +
+   +    return 0;
+    });
    ```
-
-   *After*
-   ```php
-   use Symfony\Component\Console\Input\InputInterface;
-   use Symfony\Component\Console\Output\OutputInterface;
-
-   $command->setCode(function (InputInterface $input, OutputInterface $output): int {
-       // ...
-
-       return 0;
-   });
-   ```
-
  * Add method `isSilent()` to `OutputInterface`
-
  * Remove deprecated `Symfony\Component\Console\Application::add()` method in favor of `Symfony\Component\Console\Application::addCommand()`
 
-   *Before*
-   ```php
-   use Symfony\Component\Console\Application;
+   ```diff
+    use Symfony\Component\Console\Application;
 
-   $application = new Application();
-   $application->add(new CreateUserCommand());
-   ```
-
-   *After*
-   ```php
-   use Symfony\Component\Console\Application;
-
-   $application = new Application();
-   $application->addCommand(new CreateUserCommand());
+    $application = new Application();
+   -$application->add(new CreateUserCommand());
+   +$application->addCommand(new CreateUserCommand());
    ```
 
 DependencyInjection
@@ -108,25 +91,16 @@ DependencyInjection
 
  * Replace `#[TaggedIterator]` and `#[TaggedLocator]` attributes with `#[AutowireLocator]` and `#[AutowireIterator]`
 
-    *Before*
-    ```php
-    use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+   ```diff
+   +use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+   -use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
     class MyService
     {
-         public function __construct(#[TaggedIterator('app.my_tag')] private iterable $services) {}
+   -     public function __construct(#[TaggedIterator('app.my_tag')] private iterable $services) {}
+   +     public function __construct(#[AutowireIterator('app.my_tag')] private iterable $services) {}
     }
-    ```
-
-    *After*
-    ```php
-    use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-
-    class MyService
-    {
-         public function __construct(#[AutowireIterator('app.my_tag')] private iterable $services) {}
-    }
-    ```
+   ```
  * Remove `!tagged` tag, use `!tagged_iterator` instead
  * Remove the `ContainerBuilder::getAutoconfiguredAttributes()` method, use `getAttributeAutoconfigurators()` instead to retrieve all the callbacks for a specific attribute class
  * Add argument `$target` to `ContainerBuilder::registerAliasForArgument()`
@@ -136,14 +110,9 @@ DoctrineBridge
 
  * Remove the `DoctrineExtractor::getTypes()` method, use `DoctrineExtractor::getType()` instead
 
-   *Before*
-   ```php
-   $types = $extractor->getTypes(Foo::class, 'property');
-   ```
-
-   *After*
-   ```php
-   $type = $extractor->getType(Foo::class, 'property');
+   ```diff
+   -$types = $extractor->getTypes(Foo::class, 'property');
+   +$type = $extractor->getType(Foo::class, 'property');
    ```
  * Remove support for auto-mapping Doctrine entities to controller arguments; use explicit mapping instead
  * Make `ProxyCacheWarmer` class `final`
@@ -182,7 +151,6 @@ Form
        'default_protocol' => 'http',
    ]);
    ```
-
  * Made `ResizeFormListener::postSetData()` method `final`
  * Remove the `VersionAwareTest` trait, use feature detection instead
  * Remove deprecated `ResizeFormListener::preSetData()` method, use `postSetData()` instead
@@ -191,24 +159,6 @@ FrameworkBundle
 ---------------
 
  * Remove `errors.xml` and `webhook.xml` routing configuration files (use their PHP equivalent instead)
- * Remove deprecated `Symfony\Bundle\FrameworkBundle\Console\Application::add()` method in favor of `Symfony\Bundle\FrameworkBundle\Console\Application::addCommand()`
-
-   *Before*
-   ```php
-   use Symfony\Bundle\FrameworkBundle\Console\Application;
-
-   $application = new Application($kernel);
-   $application->add(new CreateUserCommand());
-   ```
-
-   *After*
-   ```php
-   use Symfony\Bundle\FrameworkBundle\Console\Application;
-
-   $application = new Application($kernel);
-   $application->addCommand(new CreateUserCommand());
-   ```
-
  * Make `Router` class `final`
  * Make `SerializerCacheWarmer` class `final`
  * Make `Translator` class `final`
@@ -278,18 +228,11 @@ OptionsResolver
 
  * Remove support for nested options definition via `setDefault()`, use `setOptions()` instead
 
-   *Before*
-   ```php
-   $resolver->setDefault('option', function (OptionsResolver $resolver) {
-       // ...
-   });
-   ```
-
-   *After*
-   ```php
-   $resolver->setOptions('option', function (OptionsResolver $resolver) {
-       // ...
-   });
+   ```diff
+   -$resolver->setDefault('option', function (OptionsResolver $resolver) {
+   +$resolver->setOptions('option', function (OptionsResolver $resolver) {
+        // ...
+    });
    ```
 
 PropertyInfo
@@ -297,28 +240,16 @@ PropertyInfo
 
  * Remove the `PropertyTypeExtractorInterface::getTypes()` method, use `PropertyTypeExtractorInterface::getType()` instead
 
-   *Before*
-   ```php
-   $types = $extractor->getTypes(Foo::class, 'property');
+   ```diff
+   -$types = $extractor->getTypes(Foo::class, 'property');
+   +$type = $extractor->getType(Foo::class, 'property');
    ```
-
-   *After*
-   ```php
-   $type = $extractor->getType(Foo::class, 'property');
-   ```
-
  * Remove the `ConstructorArgumentTypeExtractorInterface::getTypesFromConstructor()` method, use `ConstructorArgumentTypeExtractorInterface::getTypeFromConstructor()` instead
 
-   *Before*
-   ```php
-   $types = $extractor->getTypesFromConstructor(Foo::class, 'property');
+   ```diff
+   -$types = $extractor->getTypesFromConstructor(Foo::class, 'property');
+   +$type = $extractor->getTypeFromConstructor(Foo::class, 'property');
    ```
-
-   *After*
-   ```php
-   $type = $extractor->getTypeFromConstructor(Foo::class, 'property');
-   ```
-
  * Remove the `Type` class, use `Symfony\Component\TypeInfo\Type` class from `symfony/type-info` instead
 
    *Before*
@@ -498,16 +429,11 @@ Serializer
  * Remove `AbstractNormalizerContextBuilder::withDefaultContructorArguments()`, use `withDefaultConstructorArguments()` instead
  * Change signature of `NameConverterInterface::normalize()` and `NameConverterInterface::denormalize()` methods:
 
-   *Before*
-   ```php
-   public function normalize(string $propertyName): string;
-   public function denormalize(string $propertyName): string;
-   ```
-
-   *After*
-   ```php
-   public function normalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string;
-   public function denormalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string;
+   ```diff
+   -public function normalize(string $propertyName): string;
+   -public function denormalize(string $propertyName): string;
+   +public function normalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string;
+   +public function denormalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string;
    ```
  * Remove `AdvancedNameConverterInterface`, use `NameConverterInterface` instead
  * Remove the `CompiledClassMetadataFactory` and `CompiledClassMetadataCacheWarmer` classes
