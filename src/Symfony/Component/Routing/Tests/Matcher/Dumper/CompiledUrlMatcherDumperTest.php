@@ -439,8 +439,8 @@ class CompiledUrlMatcherDumperTest extends TestCase
 
         /* test case 13 */
         $hostCollection = new RouteCollection();
-        $hostCollection->add('r1', (new Route('abc{foo}'))->setHost('{foo}.exampple.com'));
-        $hostCollection->add('r2', (new Route('abc{foo}'))->setHost('{foo}.exampple.com'));
+        $hostCollection->add('r1', (new Route('abc{foo}'))->setHost('{foo}.example.com'));
+        $hostCollection->add('r2', (new Route('abc{foo}'))->setHost('{foo}.example.com'));
 
         /* test case 14 */
         $fixedLocaleCollection = new RouteCollection();
