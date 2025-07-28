@@ -58,10 +58,11 @@ Translation
 Validator
 ---------
 
+ * Deprecate passing a list of choices to the first argument of the `Choice` constraint. Use the `choices` option instead
  * Deprecate `getRequiredOptions()` and `getDefaultOption()` methods of the `All`, `AtLeastOneOf`, `CardScheme`, `Collection`,
    `CssColor`, `Expression`, `Regex`, `Sequentially`, `Type`, and `When` constraints
  * Deprecate evaluating options in the base `Constraint` class. Initialize properties in the constructor of the concrete constraint
-   class instead.
+   class instead
 
    *Before*
 
@@ -97,7 +98,7 @@ Validator
    }
    ```
 
- * Deprecate the `getRequiredOptions()` method of the base `Constraint` class. Use mandatory constructor arguments instead.
+ * Deprecate the `getRequiredOptions()` method of the base `Constraint` class. Use mandatory constructor arguments instead
 
    *Before*
 
@@ -137,10 +138,10 @@ Validator
        }
    }
    ```
- * Deprecate the `normalizeOptions()` and `getDefaultOption()` methods of the base `Constraint` class without replacements.
-   Overriding them in child constraint will not have any effects starting with Symfony 8.0.
+ * Deprecate the `normalizeOptions()` and `getDefaultOption()` methods of the base `Constraint` class without replacements;
+   overriding them in child constraint will not have any effects starting with Symfony 8.0
  * Deprecate passing an array of options to the `Composite` constraint class. Initialize the properties referenced with `getNestedConstraints()`
-   in child classes before calling the constructor of `Composite`.
+   in child classes before calling the constructor of `Composite`
 
    *Before*
 
