@@ -6,6 +6,10 @@ on:
       package:
         required: true
         type: string
+      check_license:
+          required: false
+          type: boolean
+          default: false
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -139,10 +143,12 @@ jobs:
           PR_TITLE="${{ github.event.pull_request.title }}"
           PR_BODY="${{ github.event.pull_request.body }}"
 
-          if [[ ! "$PR_BODY" =~ \|\ License[\ ]+\|\ MIT ]]; then
-            echo "::error::You must add the standard contribution header in the PR description"
-            echo "See https://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request"
-            exit 1
+          if [[ "${{ inputs.check_license }}" == "true" ]]; then
+            if [[ ! "$PR_BODY" =~ \|\ License[\ ]+\|\ MIT ]]; then
+              echo "::error::You must add the standard contribution header in the PR description"
+              echo "See https://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request"
+              exit 1
+            fi
           fi
 
           if [[ "$PR_TITLE" =~ (feat|fix|docs|style|refactor|perf|test|chore|revert|build|ci|types?|wip)[:()] ]]; then
