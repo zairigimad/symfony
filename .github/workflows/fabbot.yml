@@ -1,0 +1,14 @@
+name: CS
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  call-fabbot:
+    name: Fabbot
+    uses: ./.github/workflows/callable-fabbot.yml
+    with:
+      package: Symfony
