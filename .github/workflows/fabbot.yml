@@ -9,7 +9,7 @@ permissions:
 jobs:
   call-fabbot:
     name: Fabbot
-    uses: ./.github/workflows/callable-fabbot.yml
+    uses: symfony-tools/fabbot/.github/workflows/fabbot.yml@main
     with:
       package: Symfony
       check_license: true
