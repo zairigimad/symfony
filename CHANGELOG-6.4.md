@@ -7,6 +7,38 @@ in 6.4 minor versions.
 To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v6.4.0...v6.4.1
 
+* 6.4.24 (2025-07-31)
+
+ * bug #61276 [DependencyInjection] Escape parameters before resolving env placeholders (MatTheCat)
+ * bug #61268 [Console] [Table] Fix unnecessary wrapping (schlndh)
+ * bug #61085 [Lock] Fix using fractional TTLs (manuelderuiter)
+ * bug #61271 [Messenger] disable detecting modified indexes with DBAL 4.3 (xabbuh)
+ * bug #61242 [Console] [Table] Fix invalid UTF-8 due to text wrapping (schlndh)
+ * bug #61234 [Cache] RedisTrait::doFetch should use pipeline with GET's instead of MGET for Relay\Cluster (dorrogeray)
+ * bug #61246 [VarDumper] Use unique identifier for `RequestContextProvider` (ToshY)
+ * bug #58995 [Config] Do not generate unreachable configuration paths (bobvandevijver)
+ * bug #60867 [WebProfilerBundle] Fix missing indent on non php files opended in the profiler (phcorp)
+ * bug #61223 [Mailer][Brevo] Update Webhook IPs (jarbey)
+ * bug #61201 [Console] Fix JSON description for negatable input flags (nicolas-grekas)
+ * bug #61220 [Cache] fix compatibility with different Relay versions (xabbuh)
+ * bug #61158 [FrameworkBundle] Add missing html5-allow-no-tld to XSD file (nicolas-grekas)
+ * bug #61144 [VarDumper] Fix dumping on systems that don't have a working iconv (nicolas-grekas)
+ * bug #61138 [Console] fix profiler with overridden `run()` method (vinceAmstoutz)
+ * bug #61079 [Config] Fix support for attributes on class constants and enum cases (ruudk)
+ * bug #61111 [Translation] fix support of `TranslatableInterface` in `IdentityTranslator` (VincentLanglet)
+ * bug #61117 [Validator] fix handling required options (xabbuh)
+ * bug #61106 Fix `@var` phpdoc (fabpot)
+ * bug #61091 [Lock] [MongoDB] Enforce readPreference=primary and writeConcern=majority (notrix)
+ * bug #61105 [FrameworkBundle] fix phpdoc in `MicroKernelTrait` (santysisi)
+ * bug #61076 [ExpressionLanguage] Fix dumping of null safe operator (ivantsepp)
+ * bug #61028 [Serializer] Fix `readonly` property initialization from incorrect scope (santysisi)
+ * bug #61073 [VarExporter] Dump implicit-nullable types as explicit to prevent the corresponding deprecation (nicolas-grekas)
+ * bug #61062 [Brevo Mailer] Webhook IP Addresses have changed (richardhj)
+ * bug #60975 [Form] Fix precision loss when rounding large integers in `NumberToLocalizedStringTransformer` (OskarStark)
+ * bug #60953 [DoctrineBridge] Restore compatibility with Doctrine ODM (pepeh)
+ * bug #60958 [Serializer] remove return type from `AbstractObjectNormalizer::getAllowedAttributes()` (xabbuh)
+ * bug #60507 [Console][Messenger] Fix: Allow `UnrecoverableExceptionInterface` to bypass retry in `RunCommandMessageHandler` (santysisi)
+
 * 6.4.23 (2025-06-28)
 
  * bug #60044 [Console] Table counts wrong column width when using colspan and `setColumnMaxWidth()` (vladimir-vv)
