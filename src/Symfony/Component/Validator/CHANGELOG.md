@@ -126,7 +126,8 @@ CHANGELOG
        }
    }
    ```
-
+ * Add Latitude and Longitude Constraints
+ 
 7.3
 ---
 

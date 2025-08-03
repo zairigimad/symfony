@@ -33,10 +33,11 @@ final class LatitudeValidator extends ConstraintValidator
         }
 
         // Accept only strings or numbers
-        if (!is_string($value) && !is_numeric($value)) {
+        if (!\is_string($value) && !is_numeric($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
+
             return;
         }
 

@@ -26,7 +26,7 @@ final class Longitude extends Constraint
         public string $mode = 'strict',
         public string $message = 'This value must contain valid longitude coordinates.',
         ?array $groups = null,
-        mixed $payload = null
+        mixed $payload = null,
     ) {
         parent::__construct(null, $groups, $payload);
     }
