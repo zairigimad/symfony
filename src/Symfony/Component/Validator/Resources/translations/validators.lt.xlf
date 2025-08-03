@@ -470,6 +470,14 @@
                 <source>This value is not a valid Twig template.</source>
                 <target state="needs-review-translation">Ši reikšmė nėra tinkamas „Twig“ šablonas.</target>
             </trans-unit>
+            <trans-unit id="122">
+                <source>This value must contain valid latitude coordinates.</source>
+                <target state="needs-translation">This value must contain valid latitude coordinates.</target>
+            </trans-unit>
+            <trans-unit id="123">
+                <source>This value must contain valid longitude coordinates.</source>
+                <target state="needs-translation">This value must contain valid longitude coordinates.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
