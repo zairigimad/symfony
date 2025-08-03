@@ -470,6 +470,14 @@
                 <source>This value is not a valid Twig template.</source>
                 <target>Cette valeur n'est pas un modèle Twig valide.</target>
             </trans-unit>
+            <trans-unit id="122">
+                <source>This value must contain valid latitude coordinates.</source>
+                <target>Cette valeur doit contenir des coordonnées de latitude valides.</target>
+            </trans-unit>
+            <trans-unit id="123">
+                <source>This value must contain valid longitude coordinates.</source>
+                <target>Cette valeur doit contenir des coordonnées de longitude valides.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

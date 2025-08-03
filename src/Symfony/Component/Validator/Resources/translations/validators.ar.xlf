@@ -470,6 +470,14 @@
                 <source>This value is not a valid Twig template.</source>
                 <target state="needs-review-translation">هذه القيمة ليست نموذج Twig صالح.</target>
             </trans-unit>
+            <trans-unit id="122">
+                <source>This value must contain valid latitude coordinates.</source>
+                <target>هذه القيمة يجب أن تحتوي على إحداثيات خط عرض صالحة.</target>
+            </trans-unit>
+            <trans-unit id="123">
+                <source>This value must contain valid longitude coordinates.</source>
+                <target>هذه القيمة يجب أن تحتوي على إحداثيات خط طول صالحة.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

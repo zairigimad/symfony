@@ -11,23 +11,23 @@
 
 namespace Symfony\Component\Validator\Tests\Constraints;
 
-use Symfony\Component\Validator\Constraints\Longitude;
-use Symfony\Component\Validator\Constraints\LongitudeValidator;
+use Symfony\Component\Validator\Constraints\Latitude;
+use Symfony\Component\Validator\Constraints\LatitudeValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class LongitudeValidatorTest extends ConstraintValidatorTestCase
+class LatitudeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected function createValidator(): LongitudeValidator
+    protected function createValidator(): LatitudeValidator
     {
-        return new LongitudeValidator();
+        return new LatitudeValidator();
     }
 
     /**
      * @dataProvider getValidValues
      */
-    public function testLongitudeIsValid($value)
+    public function testLatitudeIsValid($value)
     {
-        $this->validator->validate($value, new Longitude());
+        $this->validator->validate($value, new Latitude());
 
         $this->assertNoViolation();
     }
@@ -37,13 +37,13 @@ class LongitudeValidatorTest extends ConstraintValidatorTestCase
      */
     public function testInvalidValues($value)
     {
-        $constraint = new Longitude(message: 'myMessageTest');
+        $constraint = new Latitude(message: 'myMessageTest');
 
         $this->validator->validate($value, $constraint);
 
         $this->buildViolation('myMessageTest')
-            ->setParameter('{{ value }}', '"'.$value.'"')
-            ->setCode(Longitude::INVALID_LONGITUDE_ERROR)
+            ->setParameter('{{ value }}', $value)
+            ->setCode(Latitude::INVALID_LATITUDE_ERROR)
             ->assertRaised();
     }
 
@@ -54,38 +54,45 @@ class LongitudeValidatorTest extends ConstraintValidatorTestCase
             [''],
             ['0'],
             [0],
-            ['180'],
-            [180],
-            ['-180'],
-            [-180],
-            ['179.9999'],
-            [-179.9999],
             ['90'],
+            [90],
             ['-90'],
+            [-90],
+            ['89.9999'],
+            [-89.9999],
             ['45.123456'],
-            [-6.824053096868544],
+            [33.975738401584266],
             ['+45.0'],
             ['+0'],
-            ['+180.0'],
+            ['+90.0'],
             ['-0.0'],
+            ['0.0'],
+            ['45'],
+            ['-45'],
+            ['89'],
+            ['-89'],
         ];
     }
 
     public static function getInvalidValues()
     {
         return [
-            ['180.0001'],
-            ['-180.0001'],
+            ['90.0001'],
+            ['-90.0001'],
+            ['91'],
+            [-91],
+            ['180'],
+            ['-180'],
             ['200'],
             [-200],
             ['abc'],
             ['--45'],
             ['+'],
             [' '],
-            ['+180.1'],
-            ['-181'],
+            ['+90.1'],
+            ['-91'],
             ['1,23'],
-            ['179,999'],
+            ['89,999'],
         ];
     }
 }
